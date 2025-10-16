@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SidebarService } from './sidebar.service'; // Ajusta la ruta
+import { AuthService } from '../../features/UsuarioObstetra/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,7 +22,8 @@ export class Sidebar implements OnInit {
 
   constructor(
     private router: Router,
-    private sidebarService: SidebarService
+    private sidebarService: SidebarService,
+    private authService: AuthService
   ) {}
   
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class Sidebar implements OnInit {
 
   logout(): void {
     console.log('Usuario ha cerrado sesión.');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
