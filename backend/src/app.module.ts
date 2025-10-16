@@ -1,0 +1,42 @@
+// src/app.module.ts
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UsuarioModule } from './modules/usuario/usuario.module';
+
+@Module({
+  imports: [
+    // 1. PRIMERO: Cargar variables de entorno
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    
+    // 2. SEGUNDO: Usar las variables con ConfigService
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('DB_HOST'),
+        port: +configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+        logging: false,
+      }),
+      inject: [ConfigService],
+    }),
+    
+    UsuarioModule,
+    
+    // Aquí irán tus módulos
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+
