@@ -1,0 +1,22 @@
+/* Contenido principal cuando hay sidebar EXTENDIDO */
+.main-content {
+  margin-left: 250px;
+
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Contenido principal cuando hay sidebar MINIMIZADO */
+.main-content-minimized {
+  margin-left: 70px; /* Se mueve hacia la izquierda */
+
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Contenido principal sin sidebar (login) */
+.main-content-full {
+  margin-left: 0;
+  padding: 0;
+  min-height: 100vh;
+}
