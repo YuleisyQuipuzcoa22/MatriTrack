@@ -3,19 +3,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 
-export interface UserData {
-  id_usuario: string;
-  dni: string;
-  nombre: string;
-  apellido: string;
-  rol: 'Obstetra' | 'Administrador';
-  fecha_nacimiento: string;
-  correo_electronico: string;
-  telefono: string;
-  numero_colegiatura: string;
-  estado: 'A' | 'I';
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -32,7 +19,7 @@ export class AuthService {
         localStorage.setItem('user_role', response.rol);
         // Guardamos nombre y apellido para el sidebar
         localStorage.setItem('user_first_name', response.nombre);
-        localStorage.setItem('user_last_name', response.apellido)      
+        localStorage.setItem('user_last_name', response.apellido);
       })
     );
   }
