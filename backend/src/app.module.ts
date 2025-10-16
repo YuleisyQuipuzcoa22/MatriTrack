@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuarioModule } from './modules/usuario/usuario.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,9 +32,14 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
       inject: [ConfigService],
     }),
 
+    //AQUI SE DEBEN REGISTRAR LOS MODULOS
+
+    AuthModule,
     UsuarioModule,
 
-    // Aquí irán tus módulos
+    
+
+    
   ],
   controllers: [AppController],
   providers: [AppService],

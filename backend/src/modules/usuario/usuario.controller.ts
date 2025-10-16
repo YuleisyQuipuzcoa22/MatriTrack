@@ -1,9 +1,24 @@
 // src/modules/usuario/usuario.controller.ts
-import { Controller, Get, Post, Put, Body, Param, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Param,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolUsuario } from 'src/enums/RolUsuario';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -21,10 +36,13 @@ export class UsuarioController {
     };
   }
 
-  // REGISTRAR USUARIO (PROTEGIDA - la protegeremos después)
+  // REGISTRAR USUARIO (Solo admin)
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RolUsuario.ADMINISTRADOR)
   async registrar(@Body() createUsuarioDto: CreateUsuarioDto) {
-    const nuevoUsuario = await this.usuarioService.registrarUsuario(createUsuarioDto);
+    const nuevoUsuario =
+      await this.usuarioService.registrarUsuario(createUsuarioDto);
     return {
       message: 'Usuario registrado exitosamente',
       id_usuario: nuevoUsuario.id_usuario,
@@ -33,29 +51,42 @@ export class UsuarioController {
     };
   }
 
-  // LISTAR PERSONAL (PROTEGIDA - la protegeremos después)
+  // LISTAR PERSONAL
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RolUsuario.ADMINISTRADOR)
   async listarPersonal() {
     return this.usuarioService.listarPersonal();
   }
 
-  // OBTENER USUARIO POR ID (PROTEGIDA - la protegeremos después)
+  // OBTENER USUARIO POR ID
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RolUsuario.ADMINISTRADOR)
   async obtenerPorId(@Param('id') id: string) {
     return this.usuarioService.obtenerUsuarioPorId(id);
   }
 
-  // MODIFICAR USUARIO (PROTEGIDA - la protegeremos después)
+  // MODIFICAR USUARIO
   @Put(':id')
-  async modificar(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RolUsuario.ADMINISTRADOR)
+  async modificar(
+    @Param('id') id: string,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
+    @CurrentUser() user: any, // Ejemplo de cómo obtener el usuario actual
+  ) {
+    console.log('Usuario que modifica:', user); // Para debug
     await this.usuarioService.modificarUsuario(id, updateUsuarioDto);
     return {
       message: `Usuario ${id} actualizado correctamente`,
     };
   }
 
-  // INHABILITAR USUARIO (PROTEGIDA - la protegeremos después)
+  // INHABILITAR USUARIO
   @Put(':id/inhabilitar')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RolUsuario.ADMINISTRADOR)
   async inhabilitar(@Param('id') id: string) {
     const usuarioActualizado = await this.usuarioService.inhabilitarUsuario(id);
     return {
