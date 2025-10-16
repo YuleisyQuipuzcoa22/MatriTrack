@@ -8,13 +8,13 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 
 @Module({
   imports: [
-    // PRIMERO: Cargar variables de entorno
+    // 1. PRIMERO: Cargar variables de entorno
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    
-    // SEGUNDO: Usar las variables con ConfigService
+
+    // 2. SEGUNDO: Usar las variables con ConfigService
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -30,14 +30,12 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
       }),
       inject: [ConfigService],
     }),
-    
+
     UsuarioModule,
-    
-    // Aquí irán los módulos
-    UsuarioModule
+
+    // Aquí irán tus módulos
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
