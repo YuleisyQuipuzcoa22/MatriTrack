@@ -1,0 +1,172 @@
+/* Colores Clave Usados:
+    - #850e35 (Rojo/Vino Principal, Fondo)
+    - #670727 (Rojo/Vino Oscuro, Fondo Activo/Hover Principal)
+    - #dd386f (Rosado, Fondo Hover Submenú)
+    - #ffffff (Blanco, Texto)
+*/
+
+/* -------------------------------------------------------------------------- */
+/* BASE Y TRANSICIONES */
+/* -------------------------------------------------------------------------- */
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background-color: #850e35; /* Color principal */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 1rem 0.5rem;
+    transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
+    overflow-x: hidden;
+    z-index: 1030;
+}
+
+.sidebar.minimized {
+    width: 70px;
+    padding: 1rem 0.2rem;
+}
+
+/* Ocultar texto en estado minimizado */
+.sidebar.minimized .link-text,
+.sidebar.minimized .sidebar-title,
+.sidebar.minimized .bi-chevron-down,
+.sidebar.minimized .user-info { /* Oculta todo el bloque de info de usuario */
+    display: none !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* HEADER Y LOGOS */
+/* -------------------------------------------------------------------------- */
+
+.sidebar-header {
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-full, .logo-full-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.logo-minimized {
+    display: none; /* Oculto por defecto */
+}
+.sidebar.minimized .logo-minimized {
+    display: flex !important; /* Mostrar solo en minimizado */
+}
+.logo-minimized-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.sidebar .toggle-btn {
+    opacity: 0.8;
+}
+.sidebar.minimized .sidebar-header {
+    /* Oculta el header completo con logo extendido en minimizado */
+    display: none !important;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* ENLACES DE MENÚ (PRINCIPAL) */
+/* -------------------------------------------------------------------------- */
+
+.sidebar .nav-link {
+    padding: 10px 15px;
+    color: #ffffff;
+    border-radius: 5px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    opacity: 0.9;
+}
+
+/* 1. Estado Activo (Para Programas) y 2. Estado Clickeado (Para Pacientes, usando routerLinkActive) */
+.sidebar .nav-link.active,
+.sidebar .nav-link.clicked { 
+    background-color: #670727; /* Color oscuro para selección */
+    color: #ffffff;
+    opacity: 1;
+}
+
+/* Estado al pasar el mouse (hover) */
+.sidebar .nav-link:hover:not(.active):not(.clicked) { 
+    background-color: #670727; /* Usamos el mismo color oscuro para el hover */
+    color: #ffffff;
+    opacity: 1;
+}
+
+.sidebar.minimized .nav-link {
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.sidebar.minimized .nav-link i {
+    margin-right: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* SUBMENÚ (PROGRAMAS) */
+/* -------------------------------------------------------------------------- */
+
+.submenu {
+    padding-left: 40px;
+}
+
+/* Ítems del submenú */
+.submenu .nav-link {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hover Rosado Solicitado para Submenú */
+.submenu .nav-link:hover {
+    background-color: #dd386f; /* Color rosado */
+    color: #ffffff;
+}
+
+.sidebar.minimized .submenu {
+    display: none; /* Oculta el submenú en modo minimizado */
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* SECCIÓN DE USUARIO (BOTTOM) */
+/* -------------------------------------------------------------------------- */
+
+.user-section {
+    left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 1rem !important; /* Padding uniforme */
+}
+
+.user-section .user-toggle-area {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px; /* Reducir padding interno */
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none; /* Elimina subrayado */
+}
+
+/* Círculo de Iniciales */
+.user-initials-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #850e35; /* Texto oscuro sobre blanco */
+    background-color: #ffffff;
+    flex-shrink: 0; 
+}
+hollaaa
