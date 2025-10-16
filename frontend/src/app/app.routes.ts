@@ -7,6 +7,7 @@ import { ListadoObstetras } from './features/UsuarioObstetra/pages/listado-obste
 import { authGuard } from '../core/guards/auth.guard';
 import { roleGuard } from '../core/guards/role.guard';
 import { NoAutorizado } from './components/no-autorizado/no-autorizado';
+import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/listado-analisis';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -17,7 +18,7 @@ export const routes: Routes = [
 
   // Rutas protegidas (requieren autenticación)
   {
-    path: 'listaPacientes',
+    path: 'pacientes',
     component: ListadoPacientes,
     canActivate: [authGuard], // Requiere estar logueado
   },
@@ -36,6 +37,11 @@ export const routes: Routes = [
   {
     path: 'obstetras/editar/:id',
     component: RegisterEditarUser,
+    canActivate: [authGuard, roleGuard(['Administrador'])],
+  },
+   {
+    path: 'analisis',
+    component: ListadoAnalisis,
     canActivate: [authGuard, roleGuard(['Administrador'])],
   },
 

@@ -149,6 +149,7 @@ export class UsuarioService {
       );
     if (updateUsuarioDto.estado)
       usuarioAeditar.estado = updateUsuarioDto.estado;
+    if (updateUsuarioDto.rol) usuarioAeditar.rol = updateUsuarioDto.rol;
 
     try {
       return await this.usuarioRepository.save(usuarioAeditar);
@@ -231,6 +232,11 @@ export class UsuarioService {
       { expiresIn: '1h' },
     );
 
-    return { token, rol: usuario.rol };
+    return {
+      token,
+      rol: usuario.rol,
+      nombre: usuario.nombre,
+      apellido: usuario.apellido,
+    };
   }
 }

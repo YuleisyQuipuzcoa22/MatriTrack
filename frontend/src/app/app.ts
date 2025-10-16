@@ -21,9 +21,7 @@ export class App {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.showSidebar = !event.url.includes('/login');
-        //this.showSidebar = !event.url.includes('/notfound');
-
+        this.showSidebar = !event.url.includes('/login');        
       });
 
     // Suscribirse al estado del sidebar

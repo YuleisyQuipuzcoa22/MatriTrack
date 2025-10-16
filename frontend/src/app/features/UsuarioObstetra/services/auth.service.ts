@@ -30,18 +30,31 @@ export class AuthService {
         console.log('Login exitoso. Token y rol guardados.');
         localStorage.setItem('auth_token', response.token);
         localStorage.setItem('user_role', response.rol);
+        // Guardamos nombre y apellido para el sidebar
+        localStorage.setItem('user_first_name', response.nombre);
+        localStorage.setItem('user_last_name', response.apellido)      
       })
     );
   }
+  private getItem(key: string): string | null {
+    if (typeof window === 'undefined') return null; // SSR safety
+    return localStorage.getItem(key);
+  }
 
   getToken(): string | null {
-    if (typeof window === 'undefined') return null; // SSR safety
-    return localStorage.getItem('auth_token');
+    return this.getItem('auth_token');
   }
 
   getRole(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('user_role');
+    return this.getItem('user_role');
+  }
+
+  getFirstName(): string | null {
+    return this.getItem('user_first_name');
+  }
+
+  getLastName(): string | null {
+    return this.getItem('user_last_name');
   }
 
   isLoggedIn(): boolean {
@@ -49,15 +62,16 @@ export class AuthService {
     if (!token) return false;
 
     try {
+      // Usamos el token solo para validar la expiración, NO para obtener el ID.
       const payload = JSON.parse(atob(token.split('.')[1]));
       const exp = payload.exp * 1000;
       const isValid = Date.now() < exp;
-      
+
       if (!isValid) {
         console.warn('Token expirado. Limpiando sesión...');
         this.logout();
       }
-      
+
       return isValid;
     } catch (error) {
       console.error(' Error al validar token:', error);
@@ -69,6 +83,9 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_role');
+    localStorage.removeItem('user_first_name');
+    localStorage.removeItem('user_last_name');
+
     this.router.navigate(['/login']);
   }
 

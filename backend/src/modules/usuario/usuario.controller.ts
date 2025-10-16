@@ -33,6 +33,8 @@ export class UsuarioController {
       message: 'Inicio de sesión exitoso',
       token: result.token,
       rol: result.rol,
+      nombre: result.nombre,
+      apellido: result.apellido,
     };
   }
 

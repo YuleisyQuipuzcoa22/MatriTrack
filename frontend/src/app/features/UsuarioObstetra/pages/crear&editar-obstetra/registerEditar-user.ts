@@ -46,6 +46,7 @@ export class RegisterEditarUser implements OnInit {
       fecha_nacimiento: ['', Validators.required],
       correo_electronico: ['', [Validators.required, Validators.email]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9+ ]{9,15}$')]], // El control siempre existe; su validez cambia según el rol
+      direccion: ['', Validators.required],
       numero_colegiatura: ['', [Validators.minLength(6)]],
       contrasena: [this.authService.generateSimplePassword(), Validators.required],
     });
@@ -87,7 +88,8 @@ export class RegisterEditarUser implements OnInit {
           fecha_nacimiento: fechaNacimientoFormateada,
           correo_electronico: user.correo_electronico,
           telefono: user.telefono,
-          numero_colegiatura: user.numero_colegiatura, // <-- CORREGIDO: Usa el nombre de la interfaz/backend
+          direccion: user.direccion,
+          numero_colegiatura: user.numero_colegiatura,
         });
         this.handleRolChange(user.rol);
         this.isLoading = false;
@@ -136,15 +138,26 @@ export class RegisterEditarUser implements OnInit {
     }
 
     this.isLoading = true;
-    const formValues = this.registerForm.getRawValue();
+    // OBTENER VALORES DEL FORMULARIO
+    let formValues: any;
+    if (this.isEditMode) {
+      // Edición: Solo valores permitidos (sin DNI u otros q están deshabilitados)
+      formValues = this.registerForm.getRawValue(); // Obtén TODOS los valores
+      // Elimina campos que NO deben enviarse en edición
+      delete formValues.dni;
+      delete formValues.contrasena; // Ya no existe, pero por si acaso
+    } else {
+      //Registro: Todos los valores
+      formValues = this.registerForm.getRawValue();
+    }
     let request$: Observable<any>;
     let successMsg: string;
     if (this.isEditMode && this.obstetraId) {
-      // RF3/RF4: Edición - Llama al método PUT
+      // Edición
       request$ = this.obstetraService.modificarUsuario(this.obstetraId, formValues);
       successMsg = `Usuario ${this.obstetraId} actualizado exitosamente.`;
     } else {
-      // RF5: Registro - Llama al método POST
+      // Registro
       request$ = this.obstetraService.registrarUsuario(formValues);
       successMsg = `Usuario registrado exitosamente. Contraseña generada: ${
         this.registerForm.get('contrasena')?.value
@@ -168,6 +181,7 @@ export class RegisterEditarUser implements OnInit {
             fecha_nacimiento: '',
             correo_electronico: '',
             telefono: '',
+            direccion: '',
             numero_colegiatura: '',
           });
           this.handleRolChange('Obstetra');
@@ -178,6 +192,7 @@ export class RegisterEditarUser implements OnInit {
         }
       },
       error: (err) => {
+        console.error('Error en la operación:', err);
         this.errorMessage =
           err.error?.message || 'Error en la operación. Verifique los datos e intente de nuevo.';
         this.isLoading = false;

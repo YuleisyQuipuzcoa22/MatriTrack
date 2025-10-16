@@ -52,42 +52,41 @@ export class Login implements OnDestroy {
     }
   }
 
-// Inicialización del Componente (Solo Referencia Global) 
-ngOnInit(): void {
+  // Inicialización del Componente (Solo Referencia Global)
+  ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-        // Hacemos referencia a esta instancia para que la función global la encuentre
-        (window as any)['activeLoginComponent'] = this; 
+      // Hacemos referencia a esta instancia para que la función global la encuentre
+      (window as any)['activeLoginComponent'] = this;
     }
   }
-  
+
   //Esperamos a que el DOM esté listo
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-        // Envolvemos la inicialización en un setTimeout(0) para garantizar que el DOM esté 100% listo.
-        // Esto resuelve el error "reCAPTCHA placeholder element must be an element or id".
-        setTimeout(() => {
-            if ((window as any).grecaptcha && this.recaptchaWidgetId === null) {
-                this.renderRecaptchaWidget();
-            }
-        }, 0);
+      // Envolvemos la inicialización en un setTimeout(0) para garantizar que el DOM esté 100% listo.
+      // Esto resuelve el error "reCAPTCHA placeholder element must be an element or id".
+      setTimeout(() => {
+        if ((window as any).grecaptcha && this.recaptchaWidgetId === null) {
+          this.renderRecaptchaWidget();
+        }
+      }, 0);
     }
   }
 
-
-  //Inicialización Programática del Widget (Función Clave) 
+  //Inicialización Programática del Widget (Función Clave)
   public renderRecaptchaWidget(): void {
     // Verificamos si ya está renderizado
-    if (this.recaptchaWidgetId !== null) return; 
+    if (this.recaptchaWidgetId !== null) return;
 
     // Verificamos si estamos en el navegador y si grecaptcha está disponible
     if (isPlatformBrowser(this.platformId) && (window as any).grecaptcha) {
       try {
         // 1. Renderiza el widget en el div con id='recaptcha-widget'
         this.recaptchaWidgetId = (window as any).grecaptcha.render('recaptcha-widget', {
-            sitekey: this.siteKey,
-            // 2. El callback apunta a un método del componente para guardar el token
-            callback: (token: string) => this.handleRecaptcha(token),
-            'expired-callback': () => this.recaptchaToken = null
+          sitekey: this.siteKey,
+          // 2. El callback apunta a un método del componente para guardar el token
+          callback: (token: string) => this.handleRecaptcha(token),
+          'expired-callback': () => (this.recaptchaToken = null),
         });
         console.log('reCAPTCHA widget renderizado con ID:', this.recaptchaWidgetId);
       } catch (e) {
@@ -95,20 +94,28 @@ ngOnInit(): void {
       }
     }
   }
-  
+
   //Reseteo del Widget
   private resetRecaptcha(): void {
     // Usamos el ID del widget para resetear la instancia específica
-    if (isPlatformBrowser(this.platformId) && (window as any).grecaptcha && this.recaptchaWidgetId !== null) { 
-        try {
-            (window as any).grecaptcha.reset(this.recaptchaWidgetId); 
-            this.recaptchaToken = null;
-            console.log('reCAPTCHA widget reseteado.');
-        } catch (e) {
-            console.warn("reCAPTCHA no pudo ser reseteado. El widget puede no estar totalmente renderizado.", e);
-        }
+    if (
+      isPlatformBrowser(this.platformId) &&
+      (window as any).grecaptcha &&
+      this.recaptchaWidgetId !== null
+    ) {
+      try {
+        (window as any).grecaptcha.reset(this.recaptchaWidgetId);
+        this.recaptchaToken = null;
+        console.log('reCAPTCHA widget reseteado.');
+      } catch (e) {
+        console.warn(
+          'reCAPTCHA no pudo ser reseteado. El widget puede no estar totalmente renderizado.',
+          e
+        );
+      }
     }
-  }  handleRecaptcha(response: string): void {
+  }
+  handleRecaptcha(response: string): void {
     this.recaptchaToken = response;
     console.log('Recaptcha token capturado:', response);
   }
@@ -135,8 +142,10 @@ ngOnInit(): void {
 Google usa para que accedas a sus funciones de verificación desde el lado del cliente. 
 Es la única forma de obtener el token de reCAPTCHA */
 
-    if (!this.recaptchaToken) {
-      this.errorMessage = 'Por favor, complete la verificación reCAPTCHA no sea vago(a) c:';
+    if (!currentToken) {
+      // Modificado de `!this.recaptchaToken` a `!currentToken` para verificar el valor final.
+      this.errorMessage = 'Por favor, complete la verificación reCAPTCHA.';
+      return;
     }
 
     if (this.isBlocked) {
@@ -154,6 +163,9 @@ Es la única forma de obtener el token de reCAPTCHA */
         const apiMessage = err.error?.message || 'Credenciales inválidas.';
         this.handleFailedAttempt(apiMessage);
         this.contrasena = '';
+
+        // Reseteamos reCAPTCHA para un nuevo intento
+        this.resetRecaptcha();
       },
     });
   }
@@ -211,7 +223,7 @@ Es la única forma de obtener el token de reCAPTCHA */
       clearInterval(this.intervalId);
     }
     if (isPlatformBrowser(this.platformId) && (window as any)['activeLoginComponent'] === this) {
-        delete (window as any)['activeLoginComponent'];
+      delete (window as any)['activeLoginComponent'];
     }
   }
 }

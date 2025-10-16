@@ -15,32 +15,56 @@ export class Sidebar implements OnInit {
   isSidebarMinimized: boolean = false;
   isProgramasActive: boolean = false;
 
-  userFirstName: string = 'María';
-  userLastName: string = 'Flores';
-  userRole: string = 'Obstetra';
-  userInitials: string = '';
+  userFirstName: string = '';
+  userLastName: string = '';
+  userRole: string = 'Cargando...';
+  userInitials: string = '??';
 
   constructor(
     private router: Router,
     private sidebarService: SidebarService,
     private authService: AuthService
   ) {}
-  
+
   ngOnInit(): void {
-    this.userInitials = this.getInitials(this.userFirstName, this.userLastName);
+    //cargamos datos del usuario
+    this.loadUserDataFromSession();
+    //logica enrutamiento y estado sidebar
     this.checkProgramasActive(this.router.url);
-    
+
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         this.checkProgramasActive(event.url);
       });
 
     // Suscribirse al estado del sidebar
-    this.sidebarService.isMinimized$.subscribe(isMinimized => {
+    this.sidebarService.isMinimized$.subscribe((isMinimized) => {
       this.isSidebarMinimized = isMinimized;
     });
   }
+  //carga datos del usuario desde el localStorage/authservice (sesion)
+  loadUserDataFromSession(): void {
+    const firstName = this.authService.getFirstName();
+    const lastName = this.authService.getLastName();
+    const role = this.authService.getRole();
+
+    if (firstName && lastName) {
+      this.userFirstName = firstName;
+      this.userLastName = lastName;
+      this.userInitials = this.getInitials(firstName, lastName);
+    } 
+    
+    if (role) {
+        this.userRole = role;
+    }
+    
+    if (!firstName || !lastName || !role) {
+      
+      console.warn('Faltan datos de sesión en localStorage. Mostrando valores por defecto.');
+    }
+  }
+  
 
   checkProgramasActive(url: string): void {
     this.isProgramasActive = url.includes('/diagnostico') || url.includes('/puerperio');
@@ -50,12 +74,17 @@ export class Sidebar implements OnInit {
     this.sidebarService.toggleSidebar();
   }
 
+  //se queda con la primera inicial del nombre y apellido
   getInitials(firstName: string, lastName: string): string {
-    const firstInitial = firstName?.charAt(0) || '';
-    const lastInitial = lastName?.charAt(0) || '';
+    const cleanFirstName = firstName ? firstName.trim().split(' ')[0] : '';
+    const cleanLastName = lastName ? lastName.trim().split(' ')[0] : '';
+
+    const firstInitial = cleanFirstName.charAt(0) || '';
+    const lastInitial = cleanLastName.charAt(0) || '';
+    if (!firstInitial && !lastInitial) return '??';
+
     return (firstInitial + lastInitial).toUpperCase();
   }
-
   logout(): void {
     console.log('Usuario ha cerrado sesión.');
     this.authService.logout();
