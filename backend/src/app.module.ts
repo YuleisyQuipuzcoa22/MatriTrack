@@ -13,7 +13,7 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    
+
     // 2. SEGUNDO: Usar las variables con ConfigService
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -30,13 +30,12 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
       }),
       inject: [ConfigService],
     }),
-    
+
     UsuarioModule,
-    
+
     // Aquí irán tus módulos
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

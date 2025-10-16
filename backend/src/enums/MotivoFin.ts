@@ -3,5 +3,5 @@
 export enum MotivoFin {
   PARTO = 'PARTO',
   VOLUNTAD_PACIENTE = 'VOLUNTAD_PACIENTE',
-  OTROS = 'OTROS'
+  OTROS = 'OTROS',
 }
