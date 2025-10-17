@@ -1,7 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, map } from 'rxjs';
+
+interface LoginResponse {
+  message: string;
+  data: {
+    token: string;
+    rol: string;
+    nombre: string;
+    apellido: string;
+  };
+}
 
 @Injectable({
   providedIn: 'root',
@@ -12,19 +22,22 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(dni: string, contrasena: string, recaptchaToken: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { dni, contrasena, recaptchaToken }).pipe(
-      tap((response) => {
-        console.log('Login exitoso. Token y rol guardados.');
-        localStorage.setItem('auth_token', response.token);
-        localStorage.setItem('user_role', response.rol);
-        // Guardamos nombre y apellido para el sidebar
-        localStorage.setItem('user_first_name', response.nombre);
-        localStorage.setItem('user_last_name', response.apellido);
-      })
-    );
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/login`, { dni, contrasena, recaptchaToken })
+      .pipe(
+        map((response) => response.data), // ⭐ Extrae el data
+        tap((data) => {
+          console.log('Login exitoso. Token y rol guardados.');
+          localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('user_role', data.rol);
+          localStorage.setItem('user_first_name', data.nombre);
+          localStorage.setItem('user_last_name', data.apellido);
+        })
+      );
   }
+
   private getItem(key: string): string | null {
-    if (typeof window === 'undefined') return null; // SSR safety
+    if (typeof window === 'undefined') return null;
     return localStorage.getItem(key);
   }
 
@@ -49,7 +62,6 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      // Usamos el token solo para validar la expiración, NO para obtener el ID.
       const payload = JSON.parse(atob(token.split('.')[1]));
       const exp = payload.exp * 1000;
       const isValid = Date.now() < exp;
@@ -61,7 +73,7 @@ export class AuthService {
 
       return isValid;
     } catch (error) {
-      console.error(' Error al validar token:', error);
+      console.error('Error al validar token:', error);
       this.logout();
       return false;
     }
@@ -72,7 +84,6 @@ export class AuthService {
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_first_name');
     localStorage.removeItem('user_last_name');
-
     this.router.navigate(['/login']);
   }
 
@@ -80,7 +91,6 @@ export class AuthService {
     const length = 8;
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$';
     let password = '';
-
     password += this.getRandomChar('0123456789');
     password += this.getRandomChar('!@#$');
 
@@ -88,10 +98,7 @@ export class AuthService {
       password += this.getRandomChar(chars);
     }
 
-    return password
-      .split('')
-      .sort(() => 0.5 - Math.random())
-      .join('');
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
   }
 
   private getRandomChar(charSet: string): string {

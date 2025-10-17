@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 export interface UserData {
   id_usuario: string;
@@ -9,12 +9,18 @@ export interface UserData {
   nombre: string;
   apellido: string;
   rol: 'Obstetra' | 'Administrador';
-  fecha_nacimiento: string; // Se recibe como string (YYYY-MM-DDTHH:mm:ss.sssZ)
+  fecha_nacimiento: string;
   correo_electronico: string;
   telefono: string;
   numero_colegiatura: string;
-  estado: 'A' | 'I'; // A: Activo, I: Inactivo
+  estado: 'A' | 'I';
   direccion: string;
+}
+
+interface ApiResponse<T> {
+  message: string;
+  data: T;
+  total?: number;
 }
 
 @Injectable({
@@ -26,29 +32,32 @@ export class UserObstetraService {
   constructor(private http: HttpClient, private router: Router) {}
 
   listarObstetras(): Observable<UserData[]> {
-    // Llama al endpoint ListarObstetras del backend
-    return this.http.get<UserData[]>(this.apiUrl);
+    return this.http
+      .get<ApiResponse<UserData[]>>(this.apiUrl)
+      .pipe(map((response) => response.data));
   }
 
   registrarUsuario(userData: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, userData);
+    return this.http
+      .post<ApiResponse<any>>(this.apiUrl, userData)
+      .pipe(map((response) => response.data));
   }
-
-  //obtiene los datos de un usuario por su ID
 
   getUsuarioById(id: string): Observable<UserData> {
-    return this.http.get<UserData>(`${this.apiUrl}/${id}`);
+    return this.http
+      .get<ApiResponse<UserData>>(`${this.apiUrl}/${id}`)
+      .pipe(map((response) => response.data));
   }
-
-  //Modificar usuario
 
   modificarUsuario(id: string, userData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, userData);
+    return this.http
+      .put<ApiResponse<any>>(`${this.apiUrl}/${id}`, userData)
+      .pipe(map((response) => response.data));
   }
 
-  //Inhabilitar
-
   inhabilitarUsuario(id: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/inhabilitar`, {});
+    return this.http
+      .put<ApiResponse<any>>(`${this.apiUrl}/${id}/inhabilitar`, {})
+      .pipe(map((response) => response.data));
   }
 }

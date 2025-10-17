@@ -8,6 +8,8 @@ import { authGuard } from '../core/guards/auth.guard';
 import { roleGuard } from '../core/guards/role.guard';
 import { NoAutorizado } from './components/no-autorizado/no-autorizado';
 import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/listado-analisis';
+import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado-historialmedico/listado-historialmedico';
+import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -22,6 +24,19 @@ export const routes: Routes = [
     component: ListadoPacientes,
     canActivate: [authGuard], // Requiere estar logueado
   },
+  {
+    path: 'pacientes/registrar',
+    component: CrearPacienteHistorial,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+   {
+    path: 'historialmedico',
+    component: ListadoHistorialmedico,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+
+
 
   // Rutas protegidas (solo Administrador)
   {

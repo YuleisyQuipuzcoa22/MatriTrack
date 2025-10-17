@@ -4,12 +4,12 @@
       <div class="col-md-8">
         <h2>
           <i class="bi bi-person-badge"></i>
-          Lista de Pacientes
+          Consulta de Historial Médico
         </h2>
       </div>
       <div class="col-md-4 text-end">
-        
-          <button class="btn btn-agregar" [routerLink]="['registrar']"> 
+        <button class="btn btn-agregar">
+          <!--<button class="btn btn-agregar" [routerLink]="['registrar']"> !-->
           <i class="bi bi-plus-circle-fill me-2"></i>
           Agregar Nuevo
         </button>
@@ -76,43 +76,48 @@
   <!-- Resultados -->
   <p class="results-info">
     <i class="bi bi-list-ul me-2"></i>
-    {{ conteoResultados }} pacientes encontrados
+    {{ conteoResultados }} historial médico encontrados
   </p>
 
   <!-- Grid de Cards -->
   <div class="obstetras-grid">
-    @for (paciente of pacientesFiltrados; track paciente.id_paciente) {
+    @for (historial of historialesFiltrados; track historial.id_paciente) {
     <div class="obstetra-card">
       <div class="card-header-custom">
         <h6 class="obstetra-name">
           <i class="bi bi-person-circle"></i>
-          {{ paciente.nombre }} {{ paciente.apellido }}
+          {{ historial.nombre }} {{ historial.apellido }}
         </h6>
-        <small class="obstetra-id">ID: {{ paciente.id_paciente }}</small>
+        <div class="row">
+          <small class="obstetra-id"
+            >ID historial médico: {{ historial.historial_medico.id_historialmedico }}</small
+          >
+          <small class="obstetra-id">ID paciente: {{ historial.id_paciente }}</small>
+        </div>
       </div>
       <div class="card-body-custom">
         <div class="info-item">
           <i class="bi bi-credit-card-2-front"></i>
-          <strong>DNI:</strong> {{ paciente.dni }}
+          <strong>DNI:</strong> {{ historial.dni }}
         </div>
         <div class="info-item">
           <i class="bi bi-envelope"></i>
-          <strong>Correo:</strong> {{ paciente.correo_electronico }}
+          <strong>Correo:</strong> {{ historial.correo_electronico }}
         </div>
         <div class="info-item">
           <i class="bi bi-telephone"></i>
-          <strong>Teléfono:</strong> {{ paciente.telefono }}
+          <strong>Teléfono:</strong> {{ historial.telefono }}
         </div>
       </div>
       <div class="card-footer-custom">
-        <span [ngClass]="getEstadoClase(paciente.estado)">
-          {{ getEstadoTexto(paciente.estado) }}
+        <span [ngClass]="getEstadoClase(historial.estado)">
+          {{ getEstadoTexto(historial.estado) }}
         </span>
         <div class="actions-group">
           <button
             class="btn-action btn-info-action"
             title="Ver Info"
-            (click)="mostrarInfoPaciente(paciente.id_paciente)"
+            (click)="mostrarInfoHistorial(historial.id_paciente)"
             data-bs-toggle="modal"
             data-bs-target="#modalInfo"
           >
@@ -121,34 +126,17 @@
           <button
             class="btn-action btn-edit-action"
             title="Editar"
-            [routerLink]="['editar', paciente.id_paciente]"
+            [routerLink]="['editar', historial.id_paciente]"
           >
             <i class="bi bi-pencil-square"></i>
           </button>
-          @if (paciente.estado === 'A') {
-          <button
-            class="btn-action btn-danger-action"
-            title="Inactivar"
-            (click)="cambiarEstado(paciente.id_paciente, 'I')"
-          >
-            <i class="bi bi-toggle-off"></i>
-          </button>
-          } @else {
-          <button
-            class="btn-action btn-success-action"
-            title="Activar"
-            (click)="cambiarEstado(paciente.id_paciente, 'A')"
-          >
-            <i class="bi bi-toggle-on"></i>
-          </button>
-          }
         </div>
       </div>
     </div>
     } @empty{
     <div class="no-results">
       <i class="bi bi-people-fill"></i>
-      <h4>0 pacientes encontrados</h4>
+      <h4>0 historiales médicos encontrados</h4>
       <p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
     </div>
     }
@@ -168,7 +156,7 @@
       </div>
       <div class="modal-body">
         <div class="info-row">
-          <strong>Estado:</strong>
+          <strong>Estado de paciente:</strong>
           <span [ngClass]="getEstadoClase(pacienteSeleccionado.estado)" class="ms-2">
             {{ getEstadoTexto(pacienteSeleccionado.estado) }}
           </span>
@@ -176,8 +164,13 @@
         @if(pacienteSeleccionado.fecha_inhabilitacion && pacienteSeleccionado.estado === 'I') {
         <div class="info-row">
           <strong>Fecha inhabilitación:</strong> {{ pacienteSeleccionado.fecha_inhabilitacion }}
-        </div>}
-        <div class="info-row"><strong>ID:</strong> {{ pacienteSeleccionado.id_paciente }}</div>
+        </div>
+        }
+        <div class="info-row">
+          <strong>Fecha de inicio historial:</strong>
+          {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial }}
+        </div>
+
         <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
         <div class="info-row"><strong>Sexo:</strong> {{ pacienteSeleccionado.sexo }}</div>
         <div class="info-row">
@@ -188,9 +181,20 @@
         <div class="info-row">
           <strong>Correo:</strong> {{ pacienteSeleccionado.correo_electronico }}
         </div>
-        
+        <div class="info-row">
+          <strong>Antecedentes médicos:</strong>
+          {{ pacienteSeleccionado.historial_medico.antecedente_medico || 'No tiene' }}
+        </div>
+        <div class="info-row">
+          <strong>Alergia:</strong>
+          {{ pacienteSeleccionado.historial_medico.alergia || 'No tiene' }}
+        </div>
+        <div class="info-row">
+          <strong>Tipo de sangre:</strong>
+          {{ pacienteSeleccionado.historial_medico.tipo_sangre || 'No especificado' }}
+        </div>
 
-        
+        <!--fin-->
       </div>
 
       <div class="modal-footer">

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Paciente } from './model/paciente.entity';
-import {DataSource, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { Estado } from 'src/enums/Estado';
 import { HistorialMedico } from '../historial-medico/model/historial_medico.entity';
@@ -161,6 +161,9 @@ export class PacienteService {
       paciente,
       updatePacienteDto,
     );
+    if (pacienteActualizado.estado === Estado.ACTIVO) {
+      pacienteActualizado.fecha_inhabilitacion = null;
+    }
 
     try {
       //ya actualizado, guardalo en la base de datos
@@ -194,6 +197,7 @@ export class PacienteService {
       throw new ConflictException('El paciente ya está inactivo');
     }
     paciente.estado = Estado.INACTIVO;
+    paciente.fecha_inhabilitacion = new Date();
     const pacienteInhabilitado = await this.pacienteRepository.save(paciente);
     return PacienteMapper.toResponseDto(pacienteInhabilitado, true);
   }

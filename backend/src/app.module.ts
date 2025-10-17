@@ -50,6 +50,7 @@ import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-
         ],
         synchronize: true,
         logging: false,
+        timezone: '-05:00', 
       }),
       inject: [ConfigService],
     }),
