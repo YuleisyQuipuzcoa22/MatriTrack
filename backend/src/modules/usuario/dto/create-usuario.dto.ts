@@ -1,11 +1,11 @@
-import { 
-  IsNotEmpty, 
-  IsString, 
-  IsEmail, 
-  IsEnum, 
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsEnum,
   IsDateString,
   Length,
-  IsOptional 
+  IsOptional,
 } from 'class-validator';
 import { RolUsuario } from '../../../enums/RolUsuario';
 
@@ -53,6 +53,8 @@ export class CreateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  @Length(1, 20, { message: 'El número de colegiatura debe tener máximo 20 caracteres' })
+  @Length(1, 20, {
+    message: 'El número de colegiatura debe tener máximo 20 caracteres',
+  })
   numero_colegiatura?: string;
 }

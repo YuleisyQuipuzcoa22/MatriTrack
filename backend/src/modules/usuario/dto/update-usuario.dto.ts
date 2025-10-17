@@ -1,13 +1,16 @@
 // src/modules/usuario/dto/update-usuario.dto.ts
-import { IsOptional, IsString, IsDateString, IsEnum, Length } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsDateString,
+  IsEnum,
+  Length,
+} from 'class-validator';
 import { Estado } from '../../../enums/Estado';
 import { RolUsuario } from 'src/enums/RolUsuario';
 import { Exclude } from 'class-transformer';
 
 export class UpdateUsuarioDto {
-
-  
-
   @IsOptional()
   @IsString()
   @Length(1, 50)

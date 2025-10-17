@@ -196,6 +196,7 @@ export class UsuarioService {
     // Desestructuramos la data y la tratamos como el tipo definido
     const { success, 'error-codes': errorCodes } =
       googleResponse.data as RecaptchaResponse;
+    console.log('Resultado de reCAPTCHA (success):', success); // <--- DEBE SER TRUE
 
     if (!success) {
       console.error('Error de verificación reCAPTCHA:', errorCodes);
@@ -210,7 +211,7 @@ export class UsuarioService {
       .addSelect('usuario.contrasena')
       .where('usuario.dni = :dni', { dni })
       .getOne();
-
+    console.log('Usuario encontrado:', usuario ? usuario.dni : 'null');
     if (!usuario || usuario.estado === Estado.INACTIVO) {
       throw new UnauthorizedException(
         'Credenciales inválidas o usuario inactivo',

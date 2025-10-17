@@ -36,10 +36,6 @@ import { AuthModule } from './auth/auth.module';
 
     AuthModule,
     UsuarioModule,
-
-    
-
-    
   ],
   controllers: [AppController],
   providers: [AppService],
