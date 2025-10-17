@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrearEditarPaciente } from './crear-editar-paciente';
+import { CrearPacienteHistorial } from './crear-paciente-historial';
 
-describe('CrearEditarPaciente', () => {
-  let component: CrearEditarPaciente;
-  let fixture: ComponentFixture<CrearEditarPaciente>;
+describe('CrearPacienteHistorial', () => {
+  let component: CrearPacienteHistorial;
+  let fixture: ComponentFixture<CrearPacienteHistorial>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CrearEditarPaciente]
+      imports: [CrearPacienteHistorial]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CrearEditarPaciente);
+    fixture = TestBed.createComponent(CrearPacienteHistorial);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

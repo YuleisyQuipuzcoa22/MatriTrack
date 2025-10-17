@@ -18,7 +18,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolUsuario } from 'src/enums/RolUsuario';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -31,10 +30,12 @@ export class UsuarioController {
     const result = await this.usuarioService.login(loginDto);
     return {
       message: 'Inicio de sesión exitoso',
-      token: result.token,
-      rol: result.rol,
-      nombre: result.nombre,
-      apellido: result.apellido,
+      data: {
+        token: result.token,
+        rol: result.rol,
+        nombre: result.nombre,
+        apellido: result.apellido,
+      },
     };
   }
 
@@ -43,13 +44,15 @@ export class UsuarioController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RolUsuario.ADMINISTRADOR)
   async registrar(@Body() createUsuarioDto: CreateUsuarioDto) {
-    const nuevoUsuario =
-      await this.usuarioService.registrarUsuario(createUsuarioDto);
+    const nuevoUsuario = await this.usuarioService.registrarUsuario(createUsuarioDto);
     return {
       message: 'Usuario registrado exitosamente',
-      id_usuario: nuevoUsuario.id_usuario,
-      nombre: nuevoUsuario.nombre,
-      rol: nuevoUsuario.rol,
+      data: {
+        id_usuario: nuevoUsuario.id_usuario,
+        nombre: nuevoUsuario.nombre,
+        apellido: nuevoUsuario.apellido,
+        rol: nuevoUsuario.rol,
+      },
     };
   }
 
@@ -58,7 +61,12 @@ export class UsuarioController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RolUsuario.ADMINISTRADOR)
   async listarPersonal() {
-    return this.usuarioService.listarPersonal();
+    const usuarios = await this.usuarioService.listarPersonal();
+    return {
+      message: 'Personal obtenido exitosamente',
+      data: usuarios,
+      total: usuarios.length,
+    };
   }
 
   // OBTENER USUARIO POR ID
@@ -66,7 +74,11 @@ export class UsuarioController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RolUsuario.ADMINISTRADOR)
   async obtenerPorId(@Param('id') id: string) {
-    return this.usuarioService.obtenerUsuarioPorId(id);
+    const usuario = await this.usuarioService.obtenerUsuarioPorId(id);
+    return {
+      message: 'Usuario obtenido exitosamente',
+      data: usuario,
+    };
   }
 
   // MODIFICAR USUARIO
@@ -76,12 +88,11 @@ export class UsuarioController {
   async modificar(
     @Param('id') id: string,
     @Body() updateUsuarioDto: UpdateUsuarioDto,
-    @CurrentUser() user: any, // Ejemplo de cómo obtener el usuario actual
   ) {
-    console.log('Usuario que modifica:', user); // Para debug
-    await this.usuarioService.modificarUsuario(id, updateUsuarioDto);
+    const usuarioActualizado = await this.usuarioService.modificarUsuario(id, updateUsuarioDto);
     return {
-      message: `Usuario ${id} actualizado correctamente`,
+      message: 'Usuario actualizado correctamente',
+      data: usuarioActualizado,
     };
   }
 
@@ -92,8 +103,8 @@ export class UsuarioController {
   async inhabilitar(@Param('id') id: string) {
     const usuarioActualizado = await this.usuarioService.inhabilitarUsuario(id);
     return {
-      message: `Usuario ${id} inhabilitado correctamente`,
-      estado: usuarioActualizado.estado,
+      message: 'Usuario inhabilitado correctamente',
+      data: usuarioActualizado,
     };
   }
 }

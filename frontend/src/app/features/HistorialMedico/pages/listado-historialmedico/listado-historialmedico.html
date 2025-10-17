@@ -1,0 +1,206 @@
+<div class="header-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2>
+          <i class="bi bi-person-badge"></i>
+          Consulta de Historial Médico
+        </h2>
+      </div>
+      <div class="col-md-4 text-end">
+        <button class="btn btn-agregar">
+          <!--<button class="btn btn-agregar" [routerLink]="['registrar']"> !-->
+          <i class="bi bi-plus-circle-fill me-2"></i>
+          Agregar Nuevo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Filtros -->
+  <div class="filters-section">
+    <div class="filters-title">
+      <span>
+        <i class="bi bi-funnel-fill me-2"></i>
+        Filtros de Búsqueda
+      </span>
+      @if (hayFiltroActivo) {
+      <button class="btn btn-clear-filters" (click)="limpiarFiltros()">
+        <i class="bi bi-x-circle me-1"></i>
+        Limpiar
+      </button>
+      }
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="input-group filter-input">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre y Apellido"
+            [(ngModel)]="filtroNombreApellido"
+            (ngModelChange)="filtrarPacientes()"
+          />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="input-group filter-input">
+          <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="DNI"
+            [(ngModel)]="filtroDNI"
+            (ngModelChange)="filtrarPacientes()"
+          />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select
+          class="form-select filter-input"
+          [(ngModel)]="filtroEstado"
+          (ngModelChange)="filtrarPacientes()"
+        >
+          <option value="todos">Estado (Todos)</option>
+          <option value="A">Activo</option>
+          <option value="I">Inactivo</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <p class="results-info">
+    <i class="bi bi-list-ul me-2"></i>
+    {{ conteoResultados }} historial médico encontrados
+  </p>
+
+  <!-- Grid de Cards -->
+  <div class="obstetras-grid">
+    @for (historial of historialesFiltrados; track historial.id_paciente) {
+    <div class="obstetra-card">
+      <div class="card-header-custom">
+        <h6 class="obstetra-name">
+          <i class="bi bi-person-circle"></i>
+          {{ historial.nombre }} {{ historial.apellido }}
+        </h6>
+        <div class="row">
+          <small class="obstetra-id"
+            >ID historial médico: {{ historial.historial_medico.id_historialmedico }}</small
+          >
+          <small class="obstetra-id">ID paciente: {{ historial.id_paciente }}</small>
+        </div>
+      </div>
+      <div class="card-body-custom">
+        <div class="info-item">
+          <i class="bi bi-credit-card-2-front"></i>
+          <strong>DNI:</strong> {{ historial.dni }}
+        </div>
+        <div class="info-item">
+          <i class="bi bi-envelope"></i>
+          <strong>Correo:</strong> {{ historial.correo_electronico }}
+        </div>
+        <div class="info-item">
+          <i class="bi bi-telephone"></i>
+          <strong>Teléfono:</strong> {{ historial.telefono }}
+        </div>
+      </div>
+      <div class="card-footer-custom">
+        <span [ngClass]="getEstadoClase(historial.estado)">
+          {{ getEstadoTexto(historial.estado) }}
+        </span>
+        <div class="actions-group">
+          <button
+            class="btn-action btn-info-action"
+            title="Ver Info"
+            (click)="mostrarInfoHistorial(historial.id_paciente)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalInfo"
+          >
+            <i class="bi bi-info-circle-fill"></i>
+          </button>
+          <button
+            class="btn-action btn-edit-action"
+            title="Editar"
+            [routerLink]="['editar', historial.id_paciente]"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    } @empty{
+    <div class="no-results">
+      <i class="bi bi-people-fill"></i>
+      <h4>0 historiales médicos encontrados</h4>
+      <p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalInfo" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      @if (pacienteSeleccionado) {
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ pacienteSeleccionado.nombre }} {{ pacienteSeleccionado.apellido }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="info-row">
+          <strong>Estado de paciente:</strong>
+          <span [ngClass]="getEstadoClase(pacienteSeleccionado.estado)" class="ms-2">
+            {{ getEstadoTexto(pacienteSeleccionado.estado) }}
+          </span>
+        </div>
+        @if(pacienteSeleccionado.fecha_inhabilitacion && pacienteSeleccionado.estado === 'I') {
+        <div class="info-row">
+          <strong>Fecha inhabilitación:</strong> {{ pacienteSeleccionado.fecha_inhabilitacion }}
+        </div>
+        }
+        <div class="info-row">
+          <strong>Fecha de inicio historial:</strong>
+          {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial }}
+        </div>
+
+        <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
+        <div class="info-row"><strong>Sexo:</strong> {{ pacienteSeleccionado.sexo }}</div>
+        <div class="info-row">
+          <strong>F. Nacimiento:</strong> {{ pacienteSeleccionado.fecha_nacimiento }}
+        </div>
+        <div class="info-row"><strong>Dirección:</strong> {{ pacienteSeleccionado.direccion }}</div>
+        <div class="info-row"><strong>Teléfono:</strong> {{ pacienteSeleccionado.telefono }}</div>
+        <div class="info-row">
+          <strong>Correo:</strong> {{ pacienteSeleccionado.correo_electronico }}
+        </div>
+        <div class="info-row">
+          <strong>Antecedentes médicos:</strong>
+          {{ pacienteSeleccionado.historial_medico.antecedente_medico || 'No tiene' }}
+        </div>
+        <div class="info-row">
+          <strong>Alergia:</strong>
+          {{ pacienteSeleccionado.historial_medico.alergia || 'No tiene' }}
+        </div>
+        <div class="info-row">
+          <strong>Tipo de sangre:</strong>
+          {{ pacienteSeleccionado.historial_medico.tipo_sangre || 'No especificado' }}
+        </div>
+
+        <!--fin-->
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+      }
+    </div>
+  </div>
+</div>

@@ -13,12 +13,12 @@ import { Exclude } from 'class-transformer';
 export class UpdateUsuarioDto {
   @IsOptional()
   @IsString()
-  @Length(1, 50)
+  @Length(2, 50)
   nombre?: string;
 
   @IsOptional()
   @IsString()
-  @Length(1, 50)
+  @Length(2, 50)
   apellido?: string;
 
   @IsOptional()
@@ -28,17 +28,17 @@ export class UpdateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  @Length(1, 15)
+  @Length(9, 15)
   telefono?: string;
 
   @IsOptional()
   @IsString()
-  @Length(0, 100)
+  @Length(6, 100)
   direccion?: string;
 
   @IsOptional()
   @IsString()
-  @Length(1, 20)
+  @Length(6, 10)
   numero_colegiatura?: string;
 
   @IsOptional()

@@ -14,7 +14,7 @@ import {
 
 @Entity('historial_medico')
 export class HistorialMedico {
-  // PK: char(6). Se usa '!' porque el valor se genera en el Controller.
+
   @PrimaryColumn({ type: 'char', length: 6 })
   id_historialmedico!: string;
 
@@ -38,15 +38,15 @@ export class HistorialMedico {
   @Column({ type: 'varchar', length: 500, nullable: true })
   alergia: string | null = null;
 
-  @Column({ type: 'enum', enum: TipoSangre, nullable: true })
-  tipo_sangre: TipoSangre | null = null;
+  @Column({ type: 'enum', enum: TipoSangre, nullable: false })
+  tipo_sangre: TipoSangre;
 
   //relacion inversa, 1 historial medico puede tener muchos programas de diagnostico
 
   @OneToMany(() => ProgramaDiagnostico, (programa) => programa.historialMedico)
   programasDiagnostico?: ProgramaDiagnostico[];
 
-  //1 historial medico puede tener muchos programas de puerperio
+  //relacion inversa, historial medico puede tener muchos programas de puerperio
   @OneToMany(() => ProgramaPuerperio, (programa) => programa.historialMedico)
   programasPuerperio?: ProgramaPuerperio[];
 }

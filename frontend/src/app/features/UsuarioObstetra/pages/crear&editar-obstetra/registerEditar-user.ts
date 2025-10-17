@@ -7,22 +7,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserData, UserObstetraService } from '../../services/user-obstetra.service';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-registerEditar-user',
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registerEditar-user.html',
   styleUrl: './registerEditar-user.css',
-  standalone: true, // Asumimos que es un componente standalone
+  standalone: true,
 })
 export class RegisterEditarUser implements OnInit {
   registerForm!: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
-  isLoading = false; // Nuevo: Para mostrar un spinner // Roles que el Administrador puede asignar (Admin no puede registrarse a sí mismo)
+  isLoading = false;
 
   roles = ['Obstetra', 'Administrador'];
 
@@ -45,7 +45,7 @@ export class RegisterEditarUser implements OnInit {
       rol: ['Obstetra', Validators.required],
       fecha_nacimiento: ['', Validators.required],
       correo_electronico: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9+ ]{9,15}$')]], // El control siempre existe; su validez cambia según el rol
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9+ ]{9,15}$')]],
       direccion: ['', Validators.required],
       numero_colegiatura: ['', [Validators.minLength(6)]],
       contrasena: [this.authService.generateSimplePassword(), Validators.required],
@@ -57,17 +57,17 @@ export class RegisterEditarUser implements OnInit {
       // Si estamos en modo edición, cargamos datos y deshabilitamos campos clave.
       this.loadUserData(this.obstetraId!);
       this.disableRegistrationFields();
-    } // Ajusta validadores dinámicamente según el rol
+    }
 
     this.registerForm.get('rol')?.valueChanges.subscribe((rol) => {
       this.handleRolChange(rol);
-    }); // Aplicar reglas iniciales
+    });
 
     this.handleRolChange(this.registerForm.get('rol')?.value);
   }
-  /**
-   * Deshabilita campos que no deben modificarse después del registro (solo si es edición).
-   */
+
+  //Deshabilita campos que no deben modificarse después del registro (solo si es edición).
+
   private disableRegistrationFields(): void {
     this.registerForm.get('dni')?.disable(); // Removemos la contraseña del formulario de Edición
 
@@ -100,7 +100,7 @@ export class RegisterEditarUser implements OnInit {
         this.isLoading = false;
       },
     });
-  } // Cambia validadores sin remover el control (evita errores de control huérfano)
+  }
 
   private handleRolChange(rol: string): void {
     const colegiaturaControl = this.registerForm.get('numero_colegiatura');
@@ -117,16 +117,17 @@ export class RegisterEditarUser implements OnInit {
     Object.keys(this.registerForm.controls).forEach((k) =>
       this.registerForm.get(k)?.updateValueAndValidity({ emitEvent: false })
     );
-  } // Genera nueva contraseña y la muestra en el formulario
+  }
+  // Genera nueva contraseña y la muestra en el formulario
 
   regeneratePassword(): void {
-    // Solo si está en modo registro, no en edición (ya que se elimina el control)
     if (this.registerForm.get('contrasena')) {
       this.registerForm.patchValue({
         contrasena: this.authService.generateSimplePassword(),
       });
     }
-  } // Envío del formulario
+  }
+  // Envío del formulario
 
   onSubmit(): void {
     this.successMessage = null;
@@ -185,7 +186,7 @@ export class RegisterEditarUser implements OnInit {
             numero_colegiatura: '',
           });
           this.handleRolChange('Obstetra');
-        } // Si es Edición, podríamos navegar de vuelta a la lista
+        }
 
         if (this.isEditMode) {
           setTimeout(() => this.router.navigate(['/obstetras']), 1500);

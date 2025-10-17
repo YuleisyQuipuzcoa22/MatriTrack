@@ -1,10 +1,10 @@
 import { Estado } from 'src/enums/Estado';
 import { Sexo } from 'src/enums/Sexo';
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { HistorialMedico } from 'src/modules/historial-medico/model/historial_medico.entity';
+import { Entity, PrimaryColumn, Column, OneToOne } from 'typeorm';
 
 @Entity('paciente')
 export class Paciente {
-  // PK: char(6). Se usa '!' porque el valor se genera en el Controller.
   @PrimaryColumn({ type: 'char', length: 6 })
   id_paciente!: string;
 
@@ -44,4 +44,20 @@ export class Paciente {
   // Fecha de inhabilitación: puede ser null si el paciente está activo
   @Column({ type: 'date', nullable: true })
   fecha_inhabilitacion: Date | null = null;
+
+  calcularEdad(): number {
+    const hoy = new Date();
+    const fechaNac = new Date(this.fecha_nacimiento);
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mes = hoy.getMonth() - fechaNac.getMonth();
+
+    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+      edad--;
+    }
+
+    return edad;
+  }
+  //relacion inversa uno a uno con historial medico
+  @OneToOne(() => HistorialMedico, (historial) => historial.paciente)
+  historial_medico?: HistorialMedico;
 }

@@ -1,21 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
-// Usamos numero_colegiatura para ser consistentes con el campo de la BD
 export interface UserData {
   id_usuario: string;
   dni: string;
   nombre: string;
   apellido: string;
   rol: 'Obstetra' | 'Administrador';
-  fecha_nacimiento: string; // Se recibe como string (YYYY-MM-DDTHH:mm:ss.sssZ)
+  fecha_nacimiento: string;
   correo_electronico: string;
   telefono: string;
-  numero_colegiatura: string; // <-- Corregido para ser consistente con el backend
-  estado: 'A' | 'I'; // A: Activo, I: Inactivo
+  numero_colegiatura: string;
+  estado: 'A' | 'I';
   direccion: string;
+}
+
+interface ApiResponse<T> {
+  message: string;
+  data: T;
+  total?: number;
 }
 
 @Injectable({
@@ -24,35 +29,35 @@ export interface UserData {
 export class UserObstetraService {
   private apiUrl = 'http://localhost:3000/api/usuarios';
 
-  constructor(private http: HttpClient, private router: Router) {} //GET /api/usuarios (Listar Obstetras y Administradores)
+  constructor(private http: HttpClient, private router: Router) {}
 
   listarObstetras(): Observable<UserData[]> {
-    // Llama al endpoint ListarObstetras del backend
-    return this.http.get<UserData[]>(this.apiUrl);
-  } // RF5: POST /api/usuarios
+    return this.http
+      .get<ApiResponse<UserData[]>>(this.apiUrl)
+      .pipe(map((response) => response.data));
+  }
 
   registrarUsuario(userData: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, userData);
+    return this.http
+      .post<ApiResponse<any>>(this.apiUrl, userData)
+      .pipe(map((response) => response.data));
   }
-  /**
-   * RF6: Obtiene los datos de un usuario por su ID (GET /api/usuarios/:id)
-   */
 
   getUsuarioById(id: string): Observable<UserData> {
-    return this.http.get<UserData>(`${this.apiUrl}/${id}`);
+    return this.http
+      .get<ApiResponse<UserData>>(`${this.apiUrl}/${id}`)
+      .pipe(map((response) => response.data));
   }
-  /**
-   * RF3/RF4: PUT /api/usuarios/:id (Modificar usuario)
-   */
 
   modificarUsuario(id: string, userData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, userData);
+    return this.http
+      .put<ApiResponse<any>>(`${this.apiUrl}/${id}`, userData)
+      .pipe(map((response) => response.data));
   }
-  /**
-   * RF8: Inhabilitar (PUT /api/usuarios/:id/inhabilitar)
-   */
 
   inhabilitarUsuario(id: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/inhabilitar`, {});
+    return this.http
+      .put<ApiResponse<any>>(`${this.apiUrl}/${id}/inhabilitar`, {})
+      .pipe(map((response) => response.data));
   }
 }
