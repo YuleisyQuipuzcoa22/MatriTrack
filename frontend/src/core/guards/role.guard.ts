@@ -21,6 +21,7 @@ export const roleGuard: (allowedRoles: string[]) => CanActivateFn = (allowedRole
     }
 
     // Rol insuficiente
+    //este aparece en la consola del navegador
     console.warn(`Acceso denegado. Rol requerido: ${allowedRoles.join(', ')}. Rol actual: ${userRole}`);
     router.navigate(['/no-autorizado']); // Opcional: crear página de acceso denegado
     return false;

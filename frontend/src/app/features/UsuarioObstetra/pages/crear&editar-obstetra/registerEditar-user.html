@@ -1,7 +1,7 @@
 <div class="fondo d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card-container">
+  <div class="card-container-wide">
     <div class="header text-center">
-      <h2 class="titulo">{{ isEditMode ? 'EDITAR USUARIO' : 'CREAR CUENTA' }}</h2>
+      <h2 class="titulo">{{ isEditMode ? 'EDITAR OBSTETRA' : 'REGISTRAR OBSTETRA' }}</h2>
       <p class="subtitulo">
         {{
           isEditMode ? 'Modifica los datos del usuario seleccionado' : 'Registra un nuevo usuario'
@@ -24,18 +24,16 @@
     } @else {
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="formulario">
       <div class="row">
-        <!-- DNI (Deshabilitado en Edición) -->
-        <div class="col-md-6 mb-3">
+        <!-- FILA 1: DNI, Rol, Colegiatura -->
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">DNI</label>
-          <!-- Usamos [readonly]="isEditMode" para mejor UX, pero el disable en TS es más seguro -->
           <input type="text" formControlName="dni" class="form-control" placeholder="DNI" />
           @if (registerForm.get('dni')?.invalid && registerForm.get('dni')?.touched) {
           <small class="text-danger">El DNI debe tener 8 dígitos numéricos.</small>
           }
         </div>
 
-        <!-- Rol -->
-        <div class="col-md-6 mb-3">
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Rol</label>
           <select
             formControlName="rol"
@@ -48,8 +46,22 @@
             }
           </select>
         </div>
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">N° Colegiatura</label>
+          <input
+            type="text"
+            formControlName="numero_colegiatura"
+            class="form-control"
+            placeholder="N° Colegiatura"
+          />
+          @if (registerForm.get('numero_colegiatura')?.invalid &&
+          registerForm.get('numero_colegiatura')?.touched) {
+          <small class="text-danger">Debe tener al menos 6 caracteres.</small>
+          }
+        </div>
 
-        <div class="col-md-6 mb-3">
+        <!-- FILA 2: Nombre, Apellido, Correo -->
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Nombre(s)</label>
           <input
             type="text"
@@ -61,8 +73,7 @@
           <small class="text-danger">El nombre es obligatorio.</small>
           }
         </div>
-
-        <div class="col-md-6 mb-3">
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Apellido(s)</label>
           <input
             type="text"
@@ -75,8 +86,7 @@
           }
         </div>
 
-        <!-- Correo Electrónico -->
-        <div class="col-md-6 mb-3">
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Correo Electrónico</label>
           <input
             type="email"
@@ -91,7 +101,8 @@
           }
         </div>
 
-        <div class="col-md-6 mb-3">
+        <!-- FILA 3: Telefono, Fecha Nacimiento, Dirección -->
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Teléfono</label>
           <input
             type="text"
@@ -103,8 +114,7 @@
           <small class="text-danger">Ingrese un número válido.</small>
           }
         </div>
-
-        <div class="col-md-6 mb-3">
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Fecha de Nacimiento</label>
           <input type="date" formControlName="fecha_nacimiento" class="form-control" />
           @if (registerForm.get('fecha_nacimiento')?.invalid &&
@@ -113,8 +123,7 @@
           }
         </div>
 
-        <!-- Dirección: Nuevo campo obligatorio -->
-         <div class="col-md-6 mb-3">
+        <div class="col-lg-4 col-md-6 mb-3">
           <label class="label">Dirección</label>
           <input
             type="text"
@@ -127,29 +136,11 @@
           }
         </div>
 
-        <!-- N° Colegiatura: Mantenemos la lógica de visibilidad/validación según el rol -->
-        
-        <div class="col-md-6 mb-3">
-          <label class="label">N° Colegiatura</label>
-          <input
-            type="text"
-            formControlName="numero_colegiatura"
-            class="form-control"
-            placeholder="N° Colegiatura"
-          />
-          @if (registerForm.get('numero_colegiatura')?.invalid &&
-          registerForm.get('numero_colegiatura')?.touched) {
-          <small class="text-danger">Debe tener al menos 6 caracteres.</small>
-          }
-        </div>
-
-        
-
-        <!-- Contraseña: SOLO visible en modo Registro -->
+        <!-- FILA 4: Contraseña (solo en modo registro) - Ocupa todo el ancho -->
         @if (!isEditMode) {
-        <div class="col-12 mb-3 password-group">
+        <div class="col-12 password-group">
           <label class="label">Contraseña</label>
-          <div class="input-group">
+          <div class="input-group password-input-wrapper">
             <input
               type="text"
               formControlName="contrasena"
@@ -165,7 +156,7 @@
         }
       </div>
 
-      <div class="text-center mt-4">
+      <div class="text-center mt-4 button-group">
         <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || isLoading">
           @if (isLoading) {
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -182,6 +173,6 @@
       <div class="alert alert-success mt-3 text-center">{{ successMessage }}</div>
       }
     </form>
-    }  
+    }
   </div>
 </div>

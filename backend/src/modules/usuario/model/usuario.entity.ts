@@ -1,15 +1,8 @@
 import { Estado } from 'src/enums/Estado';
 import { RolUsuario } from 'src/enums/RolUsuario';
-import {
-  Entity,
-  PrimaryColumn,
-  Column,
-  // Importamos BeforeInsert solo si se va a usar un hook
-} from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 // import * as bcrypt from 'bcryptjs'; // Comentado por ahora
-
-// ENUMS para roles y estados
 
 @Entity('usuario')
 export class Usuario {
@@ -28,7 +21,7 @@ export class Usuario {
   @Column({ type: 'varchar', length: 50, nullable: false })
   apellido!: string;
 
-  // Contraseña: Se marca select: false para que TypeORM no la traiga por defecto.
+  // Contraseña: Se marca select: false para que TypeORM no la traiga por defecto cuando se consulta un usuario, por seguridad
 
   @Column({ type: 'varchar', length: 64, nullable: false, select: false })
   contrasena!: string;
@@ -58,8 +51,7 @@ export class Usuario {
   @Column({ type: 'varchar', length: 15, nullable: false })
   telefono!: string;
 
-  //nuevo atributo
-  @Column({ type: 'varchar', length: 100, nullable: true }) // NUEVO
+  @Column({ type: 'varchar', length: 100, nullable: true })
   direccion?: string;
 
   // Puede ser null para el Administrador

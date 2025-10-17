@@ -4,7 +4,7 @@ import { RolUsuario } from '../../enums/RolUsuario';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector) {}//para leer los metadatos de los roles
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.get<RolUsuario[]>('roles', context.getHandler());

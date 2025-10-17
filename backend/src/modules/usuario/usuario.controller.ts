@@ -76,7 +76,7 @@ export class UsuarioController {
   async modificar(
     @Param('id') id: string,
     @Body() updateUsuarioDto: UpdateUsuarioDto,
-    @CurrentUser() user: any, // Ejemplo de cómo obtener el usuario actual
+    @CurrentUser() user: any, // Ejemplo de cómo obtener el usuario autenticado actual
   ) {
     console.log('Usuario que modifica:', user); // Para debug
     await this.usuarioService.modificarUsuario(id, updateUsuarioDto);

@@ -61,7 +61,7 @@ export class Sidebar implements OnInit {
     
     if (!firstName || !lastName || !role) {
       
-      console.warn('Faltan datos de sesión en localStorage. Mostrando valores por defecto.');
+      console.warn('Faltan datos, aun no se inicia sesión o hay un problema:)');
     }
   }
   

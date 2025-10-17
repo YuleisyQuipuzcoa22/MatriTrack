@@ -7,13 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserData, UserObstetraService } from '../../services/user-obstetra.service';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-registerEditar-user',
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registerEditar-user.html',
   styleUrl: './registerEditar-user.css',
   standalone: true,

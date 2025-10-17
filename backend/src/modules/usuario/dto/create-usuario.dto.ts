@@ -17,12 +17,12 @@ export class CreateUsuarioDto {
 
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
   @IsString()
-  @Length(1, 50, { message: 'El nombre debe tener máximo 50 caracteres' })
+  @Length(2, 50, { message: 'El nombre debe tener máximo 50 caracteres' })
   nombre: string;
 
   @IsNotEmpty({ message: 'El apellido es obligatorio' })
   @IsString()
-  @Length(1, 50, { message: 'El apellido debe tener máximo 50 caracteres' })
+  @Length(2, 50, { message: 'El apellido debe tener máximo 50 caracteres' })
   apellido: string;
 
   @IsNotEmpty({ message: 'La contraseña es obligatoria' })
@@ -43,16 +43,16 @@ export class CreateUsuarioDto {
 
   @IsNotEmpty({ message: 'El teléfono es obligatorio' })
   @IsString()
-  @Length(1, 15, { message: 'El teléfono debe tener máximo 15 caracteres' })
+  @Length(9, 15, { message: 'El teléfono debe tener máximo 15 caracteres' })
   telefono: string;
 
   @IsOptional()
   @IsString()
-  @Length(0, 100)
+  @Length(6, 100)
   direccion?: string;
 
   @IsOptional()
   @IsString()
-  @Length(1, 20, { message: 'El número de colegiatura debe tener máximo 20 caracteres' })
+  @Length(6, 10, { message: 'El número de colegiatura debe tener máximo 10 caracteres' })
   numero_colegiatura?: string;
 }

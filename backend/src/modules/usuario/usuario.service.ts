@@ -23,9 +23,9 @@ export class UsuarioService {
   private readonly RECAPTCHA_SECRET: string;
 
   constructor(
-    @InjectRepository(Usuario)
+    @InjectRepository(Usuario) //acceso a la base de datos con metodos CRUD
     private usuarioRepository: Repository<Usuario>,
-    private configService: ConfigService,
+    private configService: ConfigService, //leer variables de entorno
   ) {
     this.JWT_SECRET =
       this.configService.get<string>('JWT_SECRET') || 'tu_clave_secreta_fuerte';
@@ -56,6 +56,7 @@ export class UsuarioService {
   async registrarUsuario(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     try {
       const nuevoUsuario = new Usuario();
+      //copiar datos del dto al nuevo usuario
       Object.assign(nuevoUsuario, createUsuarioDto);
       nuevoUsuario.fecha_nacimiento = new Date(
         createUsuarioDto.fecha_nacimiento,
@@ -149,14 +150,15 @@ export class UsuarioService {
       );
     if (updateUsuarioDto.estado)
       usuarioAeditar.estado = updateUsuarioDto.estado;
-    if (updateUsuarioDto.rol) usuarioAeditar.rol = updateUsuarioDto.rol;
+    if (updateUsuarioDto.rol) 
+      usuarioAeditar.rol = updateUsuarioDto.rol;
 
     try {
       return await this.usuarioRepository.save(usuarioAeditar);
     } catch (error: any) {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException(
-          'El DNI o N° de Colegiatura ya están registrados',
+          'El DNI,correo o N° de Colegiatura ya están registrados',
         );
       }
       throw error;
@@ -173,7 +175,7 @@ export class UsuarioService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    usuarioAInhabilitar.estado = Estado.INACTIVO; // Corregí: era ACTIVO en tu código
+    usuarioAInhabilitar.estado = Estado.INACTIVO; 
     return await this.usuarioRepository.save(usuarioAInhabilitar);
   }
 
@@ -206,9 +208,10 @@ export class UsuarioService {
 
     // Buscar usuario
     const usuario = await this.usuarioRepository
-      .createQueryBuilder('usuario')
-      .addSelect('usuario.contrasena')
-      .where('usuario.dni = :dni', { dni })
+    //es como hacer un SELECT * FROM usuario WHERE dni = 'dni'
+      .createQueryBuilder('usuario')//usuario es un alias
+      .addSelect('usuario.contrasena')//seleccionar la contraseña que por defecto no se selecciona
+      .where('usuario.dni = :dni', { dni })//filtrar por dni
       .getOne();
 
     if (!usuario || usuario.estado === Estado.INACTIVO) {
