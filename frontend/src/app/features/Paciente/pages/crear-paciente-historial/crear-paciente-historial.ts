@@ -64,7 +64,7 @@ export class CrearPacienteHistorial implements OnInit {
 
     this.isLoading = true;
 
-    // ⭐ ENVÍA TAL CUAL (estructura anidada)
+    //ENVÍA TAL CUAL (estructura anidada)
     const dataToSend = this.registerForm.value;
 
     console.log('📤 Datos a enviar:', JSON.stringify(dataToSend, null, 2));
@@ -84,7 +84,7 @@ export class CrearPacienteHistorial implements OnInit {
 
         // Opcional: redirigir después de 2 segundos
         setTimeout(() => {
-          this.router.navigate(['/historialmedico']);
+          this.router.navigate(['/pacientes']);
         }, 2000);
       },
       error: (err) => {

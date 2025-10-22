@@ -15,6 +15,7 @@ import { ResponsePacienteDto } from './dto/response-paciente.dto';
 import { PacienteMapper } from './mapper/paciente.mapper';
 import { HistorialMedicoMapper } from '../historial-medico/mapper/historialMedico.mapper';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
+import { QueryPacienteDto } from './dto/QueryPaciente.dto';
 
 @Injectable()
 export class PacienteService {
@@ -122,13 +123,65 @@ export class PacienteService {
     }
   }
 
-  //listar pacientes con historial medico
-  async listarPacientes(): Promise<ResponsePacienteDto[]> {
-    const pacientes = await this.pacienteRepository.find({
-      relations: ['historial_medico'],
-      order: { id_paciente: 'DESC' },
-    });
-    return PacienteMapper.toResponseDtoList(pacientes, true);
+  //listar pacientes con historial medico con paginación y filtros
+  async listarPacientes(queryDto: QueryPacienteDto) {
+    const {
+      page = 1,
+      limit = 9,
+      nombreApellido,
+      dni,
+      estado,
+      sortBy,
+      order,
+    } = queryDto;
+
+    // Calcular offset para paginación
+    const skip = (page - 1) * limit;
+
+    // Crear query builder
+    const queryBuilder = this.pacienteRepository
+      .createQueryBuilder('paciente')
+      .leftJoinAndSelect('paciente.historial_medico', 'historial_medico');
+
+    // Aplicar filtros si existen
+    if (nombreApellido) {
+      queryBuilder.andWhere(
+        '(paciente.nombre LIKE :nombre OR paciente.apellido LIKE :nombreApellido)',
+        { nombreApellido: `%${nombreApellido}%` },
+      );
+    }
+
+    if (dni) {
+      queryBuilder.andWhere('paciente.dni LIKE :dni', { dni: `%${dni}%` });
+    }
+
+    if (estado) {
+      queryBuilder.andWhere('paciente.estado = :estado', { estado });
+    }
+
+    // Aplicar ordenamiento
+    queryBuilder.orderBy(`paciente.${sortBy}`, order);
+
+    // Obtener resultados paginados
+    const [pacientes, total] = await queryBuilder
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
+
+    // Mapear a DTOs
+    const data = PacienteMapper.toResponseDtoList(pacientes, true);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1,
+      },
+    };
   }
 
   //obtener paciente por id con historial medico

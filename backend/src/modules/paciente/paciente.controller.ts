@@ -8,11 +8,13 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
 import { PacienteService } from './paciente.service';
+import { QueryPacienteDto } from './dto/QueryPaciente.dto';
 
 @Controller('pacientes')
 export class PacienteController {
@@ -22,7 +24,8 @@ export class PacienteController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async registrarPaciente(@Body() createPacienteDto: CreatePacienteDto) {
-    const paciente = await this.pacienteService.registrarPaciente(createPacienteDto);
+    const paciente =
+      await this.pacienteService.registrarPaciente(createPacienteDto);
     return {
       message: 'Paciente registrado exitosamente',
       data: paciente,
@@ -31,19 +34,19 @@ export class PacienteController {
 
   //OBTENER TODOS LOS PACIENTES
 
-   @Get()
+  @Get()
   @HttpCode(HttpStatus.OK)
-  async listarPacientes() {
-    const pacientes = await this.pacienteService.listarPacientes();
+  async listarPacientes(@Query() queryDto: QueryPacienteDto) {
+    const result = await this.pacienteService.listarPacientes(queryDto);
+
     return {
       message: 'Pacientes obtenidos exitosamente',
-      data: pacientes,
-      total: pacientes.length,
+     ...result, //se refiere a data y meta
     };
   }
 
   //OBTENER PACIENTE POR ID
-   @Get(':id')
+  @Get(':id')
   @HttpCode(HttpStatus.OK)
   async obtenerPacientePorId(@Param('id') id: string) {
     const paciente = await this.pacienteService.obtenerPacientePorId(id);
@@ -54,13 +57,16 @@ export class PacienteController {
   }
 
   //ACTUALIZAR PACIENTE
-   @Put(':id')
+  @Put(':id')
   @HttpCode(HttpStatus.OK)
   async modificarPaciente(
     @Param('id') id: string,
     @Body() updatePacienteDto: UpdatePacienteDto,
   ) {
-    const paciente = await this.pacienteService.modificarPaciente(id, updatePacienteDto);
+    const paciente = await this.pacienteService.modificarPaciente(
+      id,
+      updatePacienteDto,
+    );
     return {
       message: 'Paciente modificado exitosamente',
       data: paciente,
