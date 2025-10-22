@@ -1,3 +1,5 @@
+/*ESTRUCTURA GENERAL*/
+
 .fondo {
   /* Degradado suave que contrasta con el sidebar vino */
   background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
@@ -5,7 +7,7 @@
   padding: 20px;
 }
 
-/* CAMBIO: Contenedor más ancho para 3 columnas */
+/* Contenedor más ancho para formularios de 3 columnas */
 .card-container-wide {
   background-color: #fff;
   border-radius: 20px;
@@ -14,6 +16,8 @@
   padding: 35px 45px;
   box-shadow: 0 10px 40px rgba(133, 14, 53, 0.15);
   border: 1px solid rgba(133, 14, 53, 0.08);
+  margin: 30px auto; /* Centrar y añadir margen superior */
+  animation: fadeInUp 0.4s ease-out; /* Animación de carga */
 }
 
 .header {
@@ -21,7 +25,7 @@
 }
 
 .titulo {
-  color: #850e35;
+  color: var(--color-vino);
   font-weight: 800;
   letter-spacing: 1px;
   font-size: 1.75rem;
@@ -38,19 +42,30 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  border: 3px solid #850e35;
+  border: 3px solid var(--color-vino);
   padding: 2px;
+  object-fit: cover;
 }
 
-/* SOLUCIÓN: Altura mínima ajustada para diseño compacto */
+/* | FORMULARIO Y CAMPOS*/
+
+.section-title {
+  color: var(--color-vino-claro);
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding-bottom: 5px;
+  border-bottom: 2px solid rgba(133, 14, 53, 0.1);
+  margin-bottom: 20px !important;
+}
+
 .mb-3 {
   margin-bottom: 1rem;
-  min-height: 88px; /* Ligeramente más compacto */
+  min-height: 88px; /* Altura mínima para alinear los campos con mensajes de error */
 }
 
 .label {
   font-weight: 600;
-  color: #850e35;
+  color: var(--color-vino);
   margin-bottom: 5px;
   display: block;
   font-size: 0.88rem;
@@ -68,14 +83,16 @@
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #850e35;
+  border-color: var(--color-vino);
   box-shadow: 0 0 0 3px rgba(133, 14, 53, 0.1);
   background-color: #fff;
   outline: none;
 }
 
+/* Estilos para campos deshabilitados/solo lectura */
 .form-control:disabled,
-.form-control[readonly] {
+.form-control[readonly],
+.form-select[disabled] {
   background-color: #f5f5f5;
   cursor: not-allowed;
   opacity: 0.7;
@@ -91,12 +108,14 @@
   line-height: 1.2;
 }
 
-/* Campo de contraseña ajustado */
+/* GRUPO DE CONTRASEÑA (Solo si se usa*/
+
 .password-group {
   min-height: 88px;
 }
 
 .password-input-wrapper {
+  /* El max-width se debe definir en el componente para responsive, pero lo mantengo */
   max-width: 500px;
   margin: 0 auto;
 }
@@ -111,7 +130,7 @@
 }
 
 .btn-generate {
-  background: linear-gradient(135deg, #b05c6d 0%, #943a4d 100%);
+  background: linear-gradient(135deg, var(--color-vino-claro) 0%, var(--color-vino) 100%);
   color: #fff;
   border: none;
   padding: 0 18px;
@@ -124,24 +143,27 @@
 }
 
 .btn-generate:hover {
-  background: linear-gradient(135deg, #943a4d 0%, #7b2434 100%);
+  background: linear-gradient(135deg, var(--color-vino) 0%, var(--color-vino-oscuro) 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(133, 14, 53, 0.3);
 }
+
+/*BOTONES DE ACCIÓN*/
 
 .button-group {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 15px; /* Estándarizado a 15px */
   flex-wrap: wrap;
+  margin-top: 30px;
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #850e35 0%, #a22b51 100%);
+  background: linear-gradient(135deg, var(--color-vino) 0%, var(--color-vino-claro) 100%);
   color: white;
   border: none;
-  padding: 12px 30px;
+  padding: 12px 35px; /* Estandarizado a 35px */
   font-size: 1rem;
   font-weight: 700;
   border-radius: 10px;
@@ -151,7 +173,7 @@
 }
 
 .btn-submit:hover:not([disabled]) {
-  background: linear-gradient(135deg, #a22b51 0%, #c23767 100%);
+  background: linear-gradient(135deg, var(--color-vino-claro) 0%, #c23767 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(133, 14, 53, 0.4);
 }
@@ -165,21 +187,24 @@
 
 .btn-volver {
   display: inline-block;
-  color: #850e35;
+  color: var(--color-vino);
   text-decoration: none;
   font-weight: 600;
   padding: 12px 20px;
   transition: all 0.2s ease;
   border-radius: 8px;
+  /* Estandarizado para que todos tengan un borde sutil, como en los formularios de Paciente */
+  border: 1px solid rgba(133, 14, 53, 0.2);
 }
 
 .btn-volver:hover {
-  color: #a22b51;
+  color: var(--color-vino-claro);
   text-decoration: none;
   background-color: rgba(133, 14, 53, 0.05);
 }
 
-/* Alertas mejoradas */
+/* FEEDBACK Y ALERTA*/
+
 .alert {
   border-radius: 10px;
   border: none;
@@ -190,7 +215,7 @@
 
 .alert-danger {
   background-color: #fee;
-  color: #c33;
+  color: var(--color-rojo);
 }
 
 .alert-success {
@@ -199,20 +224,33 @@
 }
 
 /* Loading spinner */
-.spinner-border {
+.spinner-border,
+.spinner-border-sm {
   width: 1.2rem;
   height: 1.2rem;
   border-width: 2px;
+  color: var(--color-vino-claro);
 }
 
 .spinner-border-sm {
   width: 1rem;
   height: 1rem;
-  border-width: 2px;
   margin-right: 8px;
 }
 
-/* Responsive */
+/*RESPONSIVE DESIGN (Media Queries)Estandarizado para todos los formularios.*/
+
+/* Mejorar el espaciado entre filas */
+.row {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.row > [class*='col-'] {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 @media (max-width: 1200px) {
   .card-container-wide {
     width: 900px;
@@ -223,17 +261,27 @@
   .card-container-wide {
     width: 750px;
   }
-  
+
   /* En tablets, volver a 2 columnas */
-  .col-lg-4 {
+  .col-lg-4,
+  .col-lg-8,
+  .col-md-6 {
     flex: 0 0 50%;
     max-width: 50%;
+  }
+
+  /* Las columnas más grandes ocupan el 100% en tablets para no ser aplastadas */
+  .col-lg-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .card-container-wide {
     padding: 25px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .titulo {
@@ -249,8 +297,10 @@
     min-height: 85px;
   }
 
-  /* En móvil, volver a 1 columna */
-  .col-lg-4 {
+  /* En móvil, 1 columna */
+  .col-lg-4,
+  .col-lg-8,
+  .col-md-6 {
     flex: 0 0 100%;
     max-width: 100%;
   }
@@ -260,32 +310,12 @@
   }
 
   .btn-volver {
-    margin-left: 0;
     width: 100%;
     text-align: center;
   }
-
-  .password-input-wrapper {
-    max-width: 100%;
-  }
 }
 
-/* Ajuste para el select de rol */
-.form-select option:disabled {
-  color: #999;
-}
-
-/* Mejora visual para inputs deshabilitados */
-.form-select[disabled] {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* Animación suave al cargar */
-.card-container-wide {
-  animation: fadeInUp 0.4s ease-out;
-}
+/*  ANIMACIONES*/
 
 @keyframes fadeInUp {
   from {
@@ -296,15 +326,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Mejorar el espaciado entre filas */
-.row {
-  margin-left: -8px;
-  margin-right: -8px;
-}
-
-.row > [class*='col-'] {
-  padding-left: 8px;
-  padding-right: 8px;
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { ApiResponse } from '../../../../core/API_Response-interfaces/api-response.model';
 
 export interface UserData {
   id_usuario: string;
@@ -15,12 +16,6 @@ export interface UserData {
   numero_colegiatura: string;
   estado: 'A' | 'I';
   direccion: string;
-}
-
-interface ApiResponse<T> {
-  message: string;
-  data: T;
-  total?: number;
 }
 
 @Injectable({

@@ -1,16 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { PacienteData } from '../model/paciente-historial';
+import {
+  ApiResponse,
+  BasePaginationParams,
+  PaginatedApiResponse,
+} from '../../../../core/API_Response-interfaces/api-response.model';
 
-
-
-// ⭐ Interfaz para la respuesta del backend
-interface ApiResponse<T> {
-  message: string;
-  data: T;
-  total?: number;
+export interface PacienteFilters extends BasePaginationParams {
+  nombreApellido?: string;
+  dni?: string;
+  estado?: 'A' | 'I';
 }
 
 @Injectable({
@@ -21,10 +23,18 @@ export class PacienteService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  listarPacientes(): Observable<PacienteData[]> {
-    return this.http
-      .get<ApiResponse<PacienteData[]>>(this.apiUrl)
-      .pipe(map((response) => response.data)); // Extrae solo el data
+  listarPacientes(filters?: PacienteFilters): Observable<PaginatedApiResponse<PacienteData>> {
+    let params = new HttpParams();
+    if (filters) {
+      if (filters.nombreApellido) params = params.set('nombreApellido', filters.nombreApellido);
+      if (filters.dni) params = params.set('dni', filters.dni);
+      if (filters.estado) params = params.set('estado', filters.estado);
+      if (filters.page) params = params.set('page', filters.page.toString());
+      if (filters.limit) params = params.set('limit', filters.limit.toString());
+      if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
+      if (filters.order) params = params.set('order', filters.order);
+    }
+    return this.http.get<PaginatedApiResponse<PacienteData>>(this.apiUrl, { params });
   }
 
   registrarPaciente(pacienteData: any): Observable<PacienteData> {

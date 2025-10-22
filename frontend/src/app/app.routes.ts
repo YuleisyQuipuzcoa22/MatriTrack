@@ -10,6 +10,7 @@ import { NoAutorizado } from './components/no-autorizado/no-autorizado';
 import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/listado-analisis';
 import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado-historialmedico/listado-historialmedico';
 import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
+import { EditarPaciente } from './features/Paciente/pages/editar-paciente/editar-paciente';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -27,6 +28,11 @@ export const routes: Routes = [
   {
     path: 'pacientes/registrar',
     component: CrearPacienteHistorial,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+  {
+    path: 'pacientes/editar/:id',
+    component: EditarPaciente,
     canActivate: [authGuard], // Requiere estar logueado
   },
    {

@@ -1,12 +1,34 @@
 <div class="fondo d-flex justify-content-center align-items-center min-vh-100">
   <div class="card-container-wide">
     <div class="header text-center">
-      <h2 class="titulo">REGISTRO DE NUEVO PACIENTE</h2>
-      <p class="subtitulo">Complete los datos personales y el historial médico inicial.</p>
+      <h2 class="titulo">EDITAR PACIENTE</h2>
+      <p class="subtitulo">Modifique los datos personales necesarios.</p>
       <!-- Placeholder para el logo -->
-      <img src="https://yt3.googleusercontent.com/dSnqcXzoOXSJp35-I_9lPnUTa3M9qOuck07IS_UlvCz3lmBRQ8uohBfqb5GRzeOAdZjWKmeD=s900-c-k-c0x00ffffff-no-rj" alt="Logo" class="logo" />
+      <img
+        src="https://yt3.googleusercontent.com/dSnqcXzoOXSJp35-I_9lPnUTa3M9qOuck07IS_UlvCz3lmBRQ8uohBfqb5GRzeOAdZjWKmeD=s900-c-k-c0x00ffffff-no-rj"
+        alt="Logo"
+        class="logo"
+      />
     </div>
 
+    @if (errorMessage && !successMessage) {
+    <div class="alert alert-danger mt-3 text-center">{{ errorMessage }}</div>
+    } @if (successMessage) {
+    <div class="alert alert-success mt-3 text-center">{{ successMessage }}</div>
+    }
+
+    <!-- Mostrar Spinner mientras carga -->
+    @if (isLoading && !successMessage) {
+    <div class="text-center p-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-primary">Cargando datos del paciente...</p>
+    </div>
+    }
+
+    <!-- Formulario de Edición (solo visible si no está cargando o ya hay éxito) -->
+    @if (!isLoading || successMessage) {
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="formulario">
       <!-- SECCIÓN DE DATOS PERSONALES -->
       <h3 class="section-title mt-4 mb-3">1. Datos Personales</h3>
@@ -19,10 +41,10 @@
             formControlName="dni"
             class="form-control"
             placeholder="8 dígitos numéricos"
+            disable
           />
-          @if (registerForm.get('dni')?.invalid && registerForm.get('dni')?.touched) {
-          <small class="text-danger">El DNI debe tener 8 dígitos numéricos.</small>
-          }
+          <!-- El DNI está deshabilitado y se muestra solo como referencia -->
+          <small class="text-info">El DNI no puede ser modificado.</small>
         </div>
 
         <div class="col-lg-4 col-md-6 mb-3">
@@ -34,7 +56,7 @@
             placeholder="Nombre(s) del paciente"
           />
           @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
-          <small class="text-danger">El nombre es obligatorio.</small>
+          <small class="text-danger">{{ getErrorMessage('nombre') }}</small>
           }
         </div>
         <div class="col-lg-4 col-md-6 mb-3">
@@ -46,7 +68,7 @@
             placeholder="Apellido(s) del paciente"
           />
           @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
-          <small class="text-danger">El apellido es obligatorio.</small>
+          <small class="text-danger">{{ getErrorMessage('apellido') }}</small>
           }
         </div>
 
@@ -56,7 +78,7 @@
           <input type="date" formControlName="fecha_nacimiento" class="form-control" />
           @if (registerForm.get('fecha_nacimiento')?.invalid &&
           registerForm.get('fecha_nacimiento')?.touched) {
-          <small class="text-danger">La fecha es obligatoria.</small>
+          <small class="text-danger">{{ getErrorMessage('fecha_nacimiento') }}</small>
           }
         </div>
 
@@ -68,7 +90,7 @@
             <option value="F">Femenino</option>
           </select>
           @if (registerForm.get('sexo')?.invalid && registerForm.get('sexo')?.touched) {
-          <small class="text-danger">El sexo es obligatorio.</small>
+          <small class="text-danger">{{ getErrorMessage('sexo') }}</small>
           }
         </div>
 
@@ -81,7 +103,7 @@
             placeholder="Teléfono de contacto"
           />
           @if (registerForm.get('telefono')?.invalid && registerForm.get('telefono')?.touched) {
-          <small class="text-danger">Ingrese un número válido (9 a 15 caracteres).</small>
+          <small class="text-danger">{{ getErrorMessage('telefono') }}</small>
           }
         </div>
 
@@ -96,7 +118,7 @@
           />
           @if (registerForm.get('correo_electronico')?.invalid &&
           registerForm.get('correo_electronico')?.touched) {
-          <small class="text-danger">Ingrese un correo válido.</small>
+          <small class="text-danger">{{ getErrorMessage('correo_electronico') }}</small>
           }
         </div>
 
@@ -109,68 +131,21 @@
             placeholder="Dirección de residencia"
           />
           @if (registerForm.get('direccion')?.invalid && registerForm.get('direccion')?.touched) {
-          <small class="text-danger">La dirección es obligatoria.</small>
+          <small class="text-danger">{{ getErrorMessage('direccion') }}</small>
           }
         </div>
       </div>
 
-      <!-- SECCIÓN DE HISTORIAL MÉDICO -->
-      <h3 class="section-title mt-4 mb-3">2. Historial Médico Inicial</h3>
-      <!-- Formulario anidado para el historial_medico -->
-      <div formGroupName="historial_medico" class="row">
-        <!-- FILA 4: Tipo de Sangre -->
-        <div class="col-lg-4 col-md-6 mb-3">
-              <label class="label">Tipo de Sangre</label>
-              <select formControlName="tipo_sangre" class="form-select">
-                <option value="" disabled>Seleccione Tipo</option>
-                @for (ts of tiposSangre; track ts) {
-                <option [value]="ts">{{ ts }}</option>
-                }
-              </select>
-              @if (registerForm.get('historial_medico.tipo_sangre')?.invalid && registerForm.get('historial_medico.tipo_sangre')?.touched) {
-                <small class="text-danger">El tipo de sangre es obligatorio.</small>
-              }
-            </div>
-
-        <!-- FILA 4: Antecedente Médico (Opcional) -->
-        <div class="col-lg-4 col-md-6 mb-3">
-          <label class="label">Antecedente Médico</label>
-          <input
-            type="text"
-            formControlName="antecedente_medico"
-            class="form-control"
-            placeholder="Ej: Diabetes, Hipertensión, Cirugía previa..."
-          />
-        </div>
-
-        <!-- FILA 4: Alergias (Opcional) -->
-        <div class="col-lg-4 col-md-6 mb-3">
-          <label class="label">Alergias</label>
-          <input
-            type="text"
-            formControlName="alergia"
-            class="form-control"
-            placeholder="Ej: Penicilina, polen, alimentos..."
-          />
-        </div>
-      </div>
-      <!-- FIN SECCIÓN HISTORIAL MÉDICO -->
-
+      <!-- BOTONES DE ACCIÓN -->
       <div class="text-center mt-4 button-group">
         <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || isLoading">
           @if (isLoading) {
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Registrando... } @else { Registrar Paciente }
+          Guardando... } @else { Guardar Cambios }
         </button>
-        <!-- Puedes cambiar este enlace a la ruta que muestre el listado de pacientes -->
-        <a routerLink="/pacientes" class="btn-volver">← Ir a Inicio</a>
+        <a routerLink="/pacientes" class="btn-volver">← Ir al Listado</a>
       </div>
-
-      @if (errorMessage) {
-      <div class="alert alert-danger mt-3 text-center">{{ errorMessage }}</div>
-      } @if (successMessage) {
-      <div class="alert alert-success mt-3 text-center">{{ successMessage }}</div>
-      }
     </form>
+    }
   </div>
 </div>
