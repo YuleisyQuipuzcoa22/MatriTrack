@@ -10,7 +10,7 @@ import {
 } from '../../../../core/API_Response-interfaces/api-response.model';
 
 export interface PacienteFilters extends BasePaginationParams {
-  nombre?: string;
+  nombreApellido?: string;
   dni?: string;
   estado?: 'A' | 'I';
 }
@@ -26,7 +26,7 @@ export class PacienteService {
   listarPacientes(filters?: PacienteFilters): Observable<PaginatedApiResponse<PacienteData>> {
     let params = new HttpParams();
     if (filters) {
-      if (filters.nombre) params = params.set('nombre', filters.nombre);
+      if (filters.nombreApellido) params = params.set('nombreApellido', filters.nombreApellido);
       if (filters.dni) params = params.set('dni', filters.dni);
       if (filters.estado) params = params.set('estado', filters.estado);
       if (filters.page) params = params.set('page', filters.page.toString());

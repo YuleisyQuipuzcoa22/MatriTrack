@@ -1,1 +1,151 @@
-<p>editar-paciente works!</p>
+<div class="fondo d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card-container-wide">
+    <div class="header text-center">
+      <h2 class="titulo">EDITAR PACIENTE</h2>
+      <p class="subtitulo">Modifique los datos personales necesarios.</p>
+      <!-- Placeholder para el logo -->
+      <img
+        src="https://yt3.googleusercontent.com/dSnqcXzoOXSJp35-I_9lPnUTa3M9qOuck07IS_UlvCz3lmBRQ8uohBfqb5GRzeOAdZjWKmeD=s900-c-k-c0x00ffffff-no-rj"
+        alt="Logo"
+        class="logo"
+      />
+    </div>
+
+    @if (errorMessage && !successMessage) {
+    <div class="alert alert-danger mt-3 text-center">{{ errorMessage }}</div>
+    } @if (successMessage) {
+    <div class="alert alert-success mt-3 text-center">{{ successMessage }}</div>
+    }
+
+    <!-- Mostrar Spinner mientras carga -->
+    @if (isLoading && !successMessage) {
+    <div class="text-center p-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-primary">Cargando datos del paciente...</p>
+    </div>
+    }
+
+    <!-- Formulario de Edición (solo visible si no está cargando o ya hay éxito) -->
+    @if (!isLoading || successMessage) {
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="formulario">
+      <!-- SECCIÓN DE DATOS PERSONALES -->
+      <h3 class="section-title mt-4 mb-3">1. Datos Personales</h3>
+      <div class="row">
+        <!-- FILA 1: DNI, Nombre, Apellido -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">DNI</label>
+          <input
+            type="text"
+            formControlName="dni"
+            class="form-control"
+            placeholder="8 dígitos numéricos"
+            disable
+          />
+          <!-- El DNI está deshabilitado y se muestra solo como referencia -->
+          <small class="text-info">El DNI no puede ser modificado.</small>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Nombre(s)</label>
+          <input
+            type="text"
+            formControlName="nombre"
+            class="form-control"
+            placeholder="Nombre(s) del paciente"
+          />
+          @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('nombre') }}</small>
+          }
+        </div>
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Apellido(s)</label>
+          <input
+            type="text"
+            formControlName="apellido"
+            class="form-control"
+            placeholder="Apellido(s) del paciente"
+          />
+          @if (registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('apellido') }}</small>
+          }
+        </div>
+
+        <!-- FILA 2: Fecha Nacimiento, Sexo, Teléfono -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Fecha de Nacimiento</label>
+          <input type="date" formControlName="fecha_nacimiento" class="form-control" />
+          @if (registerForm.get('fecha_nacimiento')?.invalid &&
+          registerForm.get('fecha_nacimiento')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('fecha_nacimiento') }}</small>
+          }
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Sexo</label>
+          <select formControlName="sexo" class="form-select">
+            <option value="" disabled>Seleccione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+          @if (registerForm.get('sexo')?.invalid && registerForm.get('sexo')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('sexo') }}</small>
+          }
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Teléfono</label>
+          <input
+            type="text"
+            formControlName="telefono"
+            class="form-control"
+            placeholder="Teléfono de contacto"
+          />
+          @if (registerForm.get('telefono')?.invalid && registerForm.get('telefono')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('telefono') }}</small>
+          }
+        </div>
+
+        <!-- FILA 3: Correo, Dirección -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <label class="label">Correo Electrónico</label>
+          <input
+            type="email"
+            formControlName="correo_electronico"
+            class="form-control"
+            placeholder="email@ejemplo.com"
+          />
+          @if (registerForm.get('correo_electronico')?.invalid &&
+          registerForm.get('correo_electronico')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('correo_electronico') }}</small>
+          }
+        </div>
+
+        <div class="col-lg-8 col-md-6 mb-3">
+          <label class="label">Dirección</label>
+          <input
+            type="text"
+            formControlName="direccion"
+            class="form-control"
+            placeholder="Dirección de residencia"
+          />
+          @if (registerForm.get('direccion')?.invalid && registerForm.get('direccion')?.touched) {
+          <small class="text-danger">{{ getErrorMessage('direccion') }}</small>
+          }
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN -->
+      <div class="text-center mt-4 button-group">
+        <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || isLoading">
+          @if (isLoading) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Guardando... } @else { Guardar Cambios }
+        </button>
+        <a routerLink="/pacientes" class="btn-volver">← Ir al Listado</a>
+      </div>
+    </form>
+    }
+  </div>
+</div>

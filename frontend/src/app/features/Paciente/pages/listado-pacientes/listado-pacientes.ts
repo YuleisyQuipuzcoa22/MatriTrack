@@ -11,7 +11,7 @@ import { PacienteData } from '../../model/paciente-historial';
   selector: 'app-listado-pacientes',
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './listado-pacientes.html',
-  styleUrl: './listado-pacientes.css',
+  styleUrl: '../../../../styles/styleListadoCRUD.css',
 })
 export class ListadoPacientes implements OnInit {
   pacientes: PacienteData[] = [];
@@ -45,7 +45,7 @@ export class ListadoPacientes implements OnInit {
       limit: this.pageSize,
     };
     if (this.filtroNombreApellido.trim()) {
-      filters.nombre = this.filtroNombreApellido.trim();
+      filters.nombreApellido = this.filtroNombreApellido.trim();
     }
     if (this.filtroDNI.trim()) {
       filters.dni = this.filtroDNI.trim();
@@ -99,7 +99,7 @@ export class ListadoPacientes implements OnInit {
       this.cargarPacientes();
     }
   }
-  // Cambiar tamaño de página
+  // Cambiar tamaño de página o sea mostrar 9,10,20
   cambiarTamanoPagina(): void {
     this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
     this.cargarPacientes();

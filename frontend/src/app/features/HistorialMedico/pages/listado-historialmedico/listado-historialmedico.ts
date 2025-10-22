@@ -46,7 +46,7 @@ export class ListadoHistorialmedico implements OnInit {
       limit: this.pageSize,
     };
     if (this.filtroNombreApellido.trim()) {
-      filters.nombre = this.filtroNombreApellido.trim();
+      filters.nombreApellido = this.filtroNombreApellido.trim();
     }
     if (this.filtroDNI.trim()) {
       filters.dni = this.filtroDNI.trim();
@@ -62,7 +62,7 @@ export class ListadoHistorialmedico implements OnInit {
         this.totalItems = response.meta.total;
         this.totalPages = response.meta.totalPages;
         this.currentPage = response.meta.page;
-        this.conteoResultados = response.data.length;
+        this.conteoResultados = this.totalItems;
         this.actualizarBotonLimpiar();
         this.isLoading = false;
       },

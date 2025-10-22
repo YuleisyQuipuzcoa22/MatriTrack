@@ -146,8 +146,9 @@ export class PacienteService {
     // Aplicar filtros si existen
     if (nombreApellido) {
       queryBuilder.andWhere(
-        '(paciente.nombre LIKE :nombre OR paciente.apellido LIKE :nombreApellido)',
-        { nombreApellido: `%${nombreApellido}%` },
+        //upper: insesible a mayusculas/minuscula
+        '(UPPER(paciente.nombre) LIKE :nombreApellido OR UPPER(paciente.apellido) LIKE :nombreApellido)',
+        {  nombreApellido: `%${nombreApellido.toUpperCase()}%` },
       );
     }
 

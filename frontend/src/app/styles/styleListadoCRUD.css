@@ -1,19 +1,26 @@
+
+
 body {
-  background-color: #f8f9fa;
+  background-color: var(--color-background);
 }
 
-/* HEADER */
+/* CARGANDO */
+.spinner-border {
+  color: var(--color-rosado);
+}
+
+/* ------------------ HEADER ------------------ */
 
 .header-section {
   background: linear-gradient(135deg, #f3f2f2 0%, #ffffff 100%);
   padding: 2rem 0;
-  box-shadow: 0 1px 10px #850e35;
+  box-shadow: 0 1px 10px var(--color-vino);
   margin-bottom: 2rem;
-  border-bottom: 1px solid #850e35;
+  border-bottom: 1px solid var(--color-vino);
 }
 
 .header-section h2 {
-  color: #850e35 !important;
+  color: var(--color-vino) !important;
   margin: 0;
   display: flex;
   align-items: center;
@@ -22,9 +29,9 @@ body {
 }
 
 .btn-agregar {
-  background-color: #850e35 !important;
+  background-color: var(--color-vino) !important;
   color: white !important;
-  border: 2px solid #850e35 !important;
+  border: 2px solid var(--color-vino) !important;
   transition: all 0.3s;
   font-weight: 600;
   border-radius: 0.75rem;
@@ -33,13 +40,13 @@ body {
 }
 
 .btn-agregar:hover {
-  background-color: #670727 !important;
-  border-color: #670727 !important;
+  background-color: var(--color-vino-oscuro) !important;
+  border-color: var(--color-vino-oscuro) !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(133, 14, 53, 0.3);
 }
 
-/* FILTROS */
+/* ------------------ FILTROS ------------------ */
 
 .filters-section {
   background-color: white;
@@ -50,7 +57,7 @@ body {
 }
 
 .filters-title {
-  color: #850e35;
+  color: var(--color-vino);
   font-weight: 700;
   margin-bottom: 1.5rem;
   display: flex;
@@ -69,20 +76,20 @@ body {
 
 .filter-input .form-control:focus,
 .filter-input .form-select:focus {
-  border-color: #ee6983;
+  border-color: var(--color-rosado);
   box-shadow: 0 0 0 0.2rem rgba(238, 105, 131, 0.15);
 }
 
 .filter-input .input-group-text {
-  background-color: #ffc4c4;
-  border: 2px solid #ffc4c4;
-  color: #850e35;
+  background-color: var(--color-rosado-bebe);
+  border: 2px solid var(--color-rosado-bebe);
+  color: var(--color-vino);
   border-radius: 0.5rem 0 0 0.5rem;
 }
 
 .btn-clear-filters {
   color: white !important;
-  background-color: #ee6983 !important;
+  background-color: var(--color-rosado) !important;
   border: none !important;
   font-weight: 500;
   border-radius: 0.5rem;
@@ -91,13 +98,11 @@ body {
 }
 
 .btn-clear-filters:hover {
-  background-color: #850e35 !important;
+  background-color: var(--color-vino) !important;
   transform: scale(1.05);
 }
 
-
-/* RESULTADOS Y GRID */
-
+/* ------------------ RESULTADOS Y GRID GENERALES ------------------ */
 
 .results-info {
   color: #6c757d;
@@ -107,18 +112,16 @@ body {
   font-size: 0.95rem;
 }
 
-.obstetras-grid {
+/* CLASE GENÉRICA PARA EL CONTENEDOR DE TARJETAS */
+.list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
-
-/* CARDS DE OBSTETRAS */
-
-
-.obstetra-card {
+/* CLASE GENÉRICA PARA LAS TARJETAS */
+.list-card {
   background: white;
   border-radius: 1rem;
   border: 2px solid #e9ecef;
@@ -127,20 +130,20 @@ body {
   position: relative;
 }
 
-.obstetra-card::before {
+.list-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #850e35, #ee6983);
+  background: linear-gradient(90deg, var(--color-vino), var(--color-rosado));
 }
 
-.obstetra-card:hover {
+.list-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(133, 14, 53, 0.15);
-  border-color: #ee6983;
+  border-color: var(--color-rosado);
 }
 
 .card-header-custom {
@@ -149,8 +152,11 @@ body {
   border-bottom: 1px solid #e9ecef;
 }
 
-.obstetra-name {
-  color: #850e35;
+/* Las clases como .item-name, .item-id, .card-body-custom, .info-item, etc.,
+   ya son lo suficientemente genéricas. Solo renombramos las clases de alto nivel. */
+
+.item-name {
+  color: var(--color-vino);
   font-weight: 700;
   font-size: 1.1rem;
   margin: 0 0 0.25rem 0;
@@ -159,7 +165,7 @@ body {
   gap: 0.5rem;
 }
 
-.obstetra-id {
+.item-id {
   color: #6c757d;
   font-size: 0.85rem;
   font-weight: 500;
@@ -178,7 +184,7 @@ body {
 }
 
 .info-item i {
-  color: #ee6983;
+  color: var(--color-rosado);
   width: 24px;
   margin-right: 0.75rem;
   font-size: 1rem;
@@ -199,12 +205,10 @@ body {
   border-top: 1px solid #e9ecef;
 }
 
-
-/* BADGES DE ESTADO */
-
+/* BADGES DE ESTADO (Ya son genéricos) */
 
 .badge-activo {
-  background-color: #28a745;
+  background-color: var(--color-verde);
   color: white;
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
@@ -213,7 +217,7 @@ body {
 }
 
 .badge-inactivo {
-  background-color: #dc3545;
+  background-color: var(--color-rojo);
   color: white;
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
@@ -221,9 +225,7 @@ body {
   font-weight: 600;
 }
 
-/* ========================================================================== */
-/* BOTONES DE ACCIÓN */
-/* ========================================================================== */
+/* BOTONES DE ACCIÓN (Ya son genéricos) */
 
 .actions-group {
   display: flex;
@@ -264,28 +266,26 @@ body {
 }
 
 .btn-danger-action {
-  background-color: #dc3545;
+  background-color: var(--color-rojo);
   color: white;
 }
 
 .btn-danger-action:hover {
-  background-color: #c82333;
+  background-color: var(--color-rojo-oscuro);
   transform: scale(1.1);
 }
 
 .btn-success-action {
-  background-color: #28a745;
+  background-color: var(--color-verde);
   color: white;
 }
 
 .btn-success-action:hover {
-  background-color: #1e7e34;
+  background-color: var(--color-verde-oscuro);
   transform: scale(1.1);
 }
 
-/* ========================================================================== */
-/* NO RESULTADOS */
-/* ========================================================================== */
+/* NO RESULTADOS (Ya es genérico) */
 
 .no-results {
   text-align: center;
@@ -298,12 +298,12 @@ body {
 
 .no-results i {
   font-size: 4rem;
-  color: #ffc4c4;
+  color: var(--color-rosado-bebe);
   margin-bottom: 1rem;
 }
 
 .no-results h4 {
-  color: #850e35;
+  color: var(--color-vino);
   margin-bottom: 0.5rem;
   font-weight: 700;
 }
@@ -313,12 +313,10 @@ body {
   margin: 0;
 }
 
-/* ========================================================================== */
 /* MODAL */
-/* ========================================================================== */
 
 .modal-header {
-  background: linear-gradient(135deg, #850e35 0%, #ee6983 100%);
+  background: linear-gradient(135deg, var(--color-vino) 0%, var(--color-rosado) 100%);
   color: white !important;
   border-bottom: none;
 }
@@ -345,14 +343,11 @@ body {
 }
 
 .modal-body .info-row strong {
-  color: #850e35;
+  color: var(--color-vino);
   font-weight: 600;
 }
 
-.modal-footer {
-  border-top: 1px solid #e9ecef;
-  padding: 1rem 1.5rem;
-}
+
 
 .btn-secondary {
   background-color: #6c757d;
@@ -363,16 +358,12 @@ body {
   background-color: #5a6268;
   border-color: #545b62;
 }
-
-/* ========================================================================== */
-/* RESPONSIVE */
-/* ========================================================================== */
+/* RESPSONSIVE */
 
 @media (max-width: 768px) {
-  .obstetras-grid {
+  .list-grid {
     grid-template-columns: 1fr;
   }
-
   .header-section {
     padding: 1.5rem 0;
   }
@@ -406,8 +397,7 @@ body {
 }
 
 @media (min-width: 1400px) {
-  .obstetras-grid {
+  .list-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
-

@@ -11,8 +11,7 @@ interface Obstetra extends UserData {}
   selector: 'app-listado-obstetras',
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './listado-obstetras.html',
-  styleUrl: './listado-obstetras.css',
-  standalone: true,
+  styleUrl: '../../../../styles/styleListadoCRUD.css',
 })
 export class ListadoObstetras implements OnInit {
   obstetrasData: Obstetra[] = [];
@@ -23,6 +22,7 @@ export class ListadoObstetras implements OnInit {
   filtroNombreApellido: string = '';
   filtroDNI: string = '';
   filtroEstado: 'todos' | 'A' | 'I' = 'todos';
+  isLoading = false;
 
   hayFiltroActivo: boolean = false;
   obstetraSeleccionado: Obstetra | null = null;
@@ -36,13 +36,17 @@ export class ListadoObstetras implements OnInit {
   //Carga la lista de obstetras y administradores desde el backend.
 
   cargarObstetras(): void {
+    this.isLoading = true;
+
     this.obstetraService.listarObstetras().subscribe({
       next: (data) => {
         this.obstetrasData = data as Obstetra[];
         this.filtrarObstetras();
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error al cargar la lista de obstetras:', err);
+        this.isLoading = false;
       },
     });
   }
