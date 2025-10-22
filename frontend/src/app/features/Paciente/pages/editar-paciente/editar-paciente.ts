@@ -15,7 +15,6 @@ import { PacienteData } from '../../model/paciente-historial';
   selector: 'app-editar-paciente',
   imports: [FormsModule, CommonModule, ReactiveFormsModule,RouterLink],
   templateUrl: './editar-paciente.html',
-  styleUrl: './editar-paciente.css',
 })
 export class EditarPaciente implements OnInit {
   registerForm!: FormGroup;

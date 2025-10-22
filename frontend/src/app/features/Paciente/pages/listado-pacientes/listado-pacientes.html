@@ -191,7 +191,7 @@
         <div class="info-row"><strong>ID:</strong> {{ pacienteSeleccionado.id_paciente }}</div>
         <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
 
-        <!-- >>> APLICACIÓN DE LA FUNCIÓN getSexoTexto() AQUI <<< -->
+
         <div class="info-row">
           <strong>Sexo:</strong>
           {{ getSexoTexto(pacienteSeleccionado.sexo) }}
@@ -199,6 +199,9 @@
 
         <div class="info-row">
           <strong>F. Nacimiento:</strong> {{ pacienteSeleccionado.fecha_nacimiento }}
+        </div>
+        <div class="info-row">
+          <strong>Edad:</strong> {{ pacienteSeleccionado.edad }}
         </div>
         <div class="info-row"><strong>Dirección:</strong> {{ pacienteSeleccionado.direccion }}</div>
         <div class="info-row"><strong>Teléfono:</strong> {{ pacienteSeleccionado.telefono }}</div>

@@ -6,14 +6,7 @@
           <i class="bi bi-person-badge"></i>
           Consulta de Historial Médico
         </h2>
-      </div>
-      <div class="col-md-4 text-end">
-        <button class="btn btn-agregar">
-          <!--<button class="btn btn-agregar" [routerLink]="['registrar']"> !-->
-          <i class="bi bi-plus-circle-fill me-2"></i>
-          Agregar Nuevo
-        </button>
-      </div>
+      </div>      
     </div>
   </div>
 </div>
@@ -170,12 +163,14 @@
           <strong>Fecha de inicio historial:</strong>
           {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial }}
         </div>
-
         <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
-        <div class="info-row"><strong>Sexo:</strong> {{ getSexoTexto(pacienteSeleccionado.sexo) }}</div>
+        <div class="info-row">
+          <strong>Sexo:</strong> {{ getSexoTexto(pacienteSeleccionado.sexo) }}
+        </div>
         <div class="info-row">
           <strong>F. Nacimiento:</strong> {{ pacienteSeleccionado.fecha_nacimiento }}
         </div>
+        <div class="info-row"><strong>Edad:</strong> {{ pacienteSeleccionado.edad }}</div>
         <div class="info-row"><strong>Dirección:</strong> {{ pacienteSeleccionado.direccion }}</div>
         <div class="info-row"><strong>Teléfono:</strong> {{ pacienteSeleccionado.telefono }}</div>
         <div class="info-row">
@@ -193,12 +188,6 @@
           <strong>Tipo de sangre:</strong>
           {{ pacienteSeleccionado.historial_medico.tipo_sangre || 'No especificado' }}
         </div>
-
-        <!--fin-->
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
       }
     </div>
@@ -206,15 +195,16 @@
 </div>
 <!-- Controles de paginación -->
 <div class="container mt-4 mb-5">
-  <div class="pagination-controls-v2 d-flex flex-column flex-md-row justify-content-between align-items-center p-3">
-    
+  <div
+    class="pagination-controls-v2 d-flex flex-column flex-md-row justify-content-between align-items-center p-3"
+  >
     <!-- Información de Resultados -->
     <div class="pagination-info mb-2 mb-md-0 me-md-4 text-center text-md-start">
-      Mostrando 
-      <span class="fw-bold">{{ (currentPage - 1) * pageSize + 1 }}</span> 
-      - 
-      <span class="fw-bold">{{ Math.min(currentPage * pageSize, totalItems) }}</span> 
-      de 
+      Mostrando
+      <span class="fw-bold">{{ (currentPage - 1) * pageSize + 1 }}</span>
+      -
+      <span class="fw-bold">{{ Math.min(currentPage * pageSize, totalItems) }}</span>
+      de
       <span class="fw-bold">{{ totalItems }}</span> resultados
     </div>
 
@@ -229,9 +219,9 @@
       </button>
 
       <span class="page-indicator mx-3">
-        Página 
-        <span class="fw-bold">{{ currentPage }}</span> 
-        de 
+        Página
+        <span class="fw-bold">{{ currentPage }}</span>
+        de
         <span class="fw-bold">{{ totalPages }}</span>
       </span>
 
@@ -246,18 +236,20 @@
 
     <!--Selector de Tamaño de Página -->
     <div class="d-flex align-items-center">
-        <label for="pageSizeSelect" class="form-label mb-0 me-2 d-none d-md-block text-nowrap">Por página:</label>
-        <select
-            id="pageSizeSelect"
-            class="form-select form-select-sm page-size-select"
-            [(ngModel)]="pageSize"
-            (change)="cambiarTamanoPagina()"
-        >
-            <option [value]="9">9</option>
-            <option [value]="10">10</option>
-            <option [value]="20">20</option>
-            <option [value]="50">50</option>
-        </select>
+      <label for="pageSizeSelect" class="form-label mb-0 me-2 d-none d-md-block text-nowrap"
+        >Por página:</label
+      >
+      <select
+        id="pageSizeSelect"
+        class="form-select form-select-sm page-size-select"
+        [(ngModel)]="pageSize"
+        (change)="cambiarTamanoPagina()"
+      >
+        <option [value]="9">9</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
     </div>
   </div>
 </div>

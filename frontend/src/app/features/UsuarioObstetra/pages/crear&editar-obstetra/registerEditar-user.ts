@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
   selector: 'app-registerEditar-user',
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registerEditar-user.html',
-  styleUrl: './registerEditar-user.css',
   standalone: true,
 })
 export class RegisterEditarUser implements OnInit {
