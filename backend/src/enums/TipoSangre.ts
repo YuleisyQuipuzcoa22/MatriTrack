@@ -6,5 +6,5 @@ export enum TipoSangre {
   AB_POSITIVO = 'AB+',
   AB_NEGATIVO = 'AB-',
   O_POSITIVO = 'O+',
-  O_NEGATIVO = 'O-'
+  O_NEGATIVO = 'O-',
 }

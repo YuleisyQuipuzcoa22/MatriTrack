@@ -1,22 +1,21 @@
 import { ProgramaDiagnostico } from 'src/modules/programa-diagnostico/model/programa_diagnostico.entity';
+import { ResultadoAnalisis } from 'src/modules/resultado-analisis/model/resultado-analisis.entity';
 import { Usuario } from 'src/modules/usuario/model/usuario.entity';
-import { 
-    Entity, 
-    PrimaryColumn, 
-    Column,
-    ManyToOne,
-    JoinColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
-
-@Entity('control_diagnostico') 
+@Entity('control_diagnostico')
 export class ControlDiagnostico {
-
   // PK: char(7). Se usa '!' porque el valor se genera en el Controller.
   @PrimaryColumn({ type: 'char', length: 7 })
-  id_control_diagnostico!: string; 
+  id_control_diagnostico!: string;
 
   // Relación Many-to-One con ProgramaDiagnostico
   // Un programa puede tener muchos controles médicos
@@ -39,35 +38,40 @@ export class ControlDiagnostico {
 
   // Fecha de control se establece automáticamente al crear
   @CreateDateColumn({ type: 'datetime' })
-  fecha_controldiagnostico!: Date; 
+  fecha_controldiagnostico!: Date;
 
   // Fecha de modificación se actualiza automáticamente
   @UpdateDateColumn({ type: 'datetime' })
-  fecha_modificacion!: Date; 
+  fecha_modificacion!: Date;
 
   // Columnas normales
   @Column({ type: 'int', nullable: false })
-  semana_gestacion!: number; 
+  semana_gestacion!: number;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: false })
-  peso!: number; 
+  peso!: number;
 
   @Column({ type: 'decimal', precision: 4, scale: 2, nullable: false })
-  talla!: number; 
+  talla!: number;
 
   @Column({ type: 'varchar', length: 10, nullable: false })
-  presion_arterial!: string; 
+  presion_arterial!: string;
 
   @Column({ type: 'decimal', precision: 4, scale: 1, nullable: false })
-  altura_uterina!: number; 
+  altura_uterina!: number;
 
   @Column({ type: 'int', nullable: false })
-  fcf!: number; 
+  fcf!: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  observacion: string | null = null; 
+  observacion: string | null = null;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  recomendacion: string | null = null; 
+  recomendacion: string | null = null;
 
+  @ManyToOne(
+    () => ResultadoAnalisis,
+    (resultado) => resultado.controlMedicoDiagnostico,
+  )
+  resultadoAnalisis?: ResultadoAnalisis[];
 }

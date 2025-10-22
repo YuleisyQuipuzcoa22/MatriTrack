@@ -1,0 +1,12 @@
+@if(showSidebar){
+<app-sidebar></app-sidebar>
+
+}
+
+<div [ngClass]="{
+  'main-content': showSidebar && !isSidebarMinimized,
+  'main-content-minimized': showSidebar && isSidebarMinimized,
+  'main-content-full': !showSidebar
+}">
+  <router-outlet></router-outlet>
+</div>

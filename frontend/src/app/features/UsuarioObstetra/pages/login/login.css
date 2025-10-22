@@ -1,0 +1,68 @@
+.fondo {
+  background-color: #850e35;
+}
+
+.card {
+  width: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.card-header {
+  border-bottom: #850e35 2px solid;
+}
+
+.titulosesion {
+  color: #850e35;
+  font-family: 'Franklin Gothic Medium';
+}
+
+.card-body img {
+  border-radius: 50%;
+}
+
+.input-group {
+  border-radius: 8px;
+  overflow: hidden; 
+  margin-top: 15px;
+}
+
+.input-group-text,
+.input-group .form-control,
+.input-group .btn {
+  border: none;
+  box-shadow: none;
+}
+
+.input-group-text {
+  background-color: #fff;
+  color: #850e35;
+}
+
+.input-group:focus-within {
+  border: 1px solid #ee6983;
+  box-shadow: 0 0 0 0.2rem rgba(238, 105, 131, 0.25);
+}
+
+/* ===== Botón del ojito ===== */
+.btn-toggle {
+  background-color: #000000;
+  color: white;
+  border: none;
+}
+
+.btn-toggle:hover {
+  background-color: #850e35;
+  color: white;
+}
+
+/* ===== Botón principal ===== */
+.btnIS {
+  background-color: #ee6983;
+  color: white;
+  border-radius: 15px;
+  border: none;
+}
+
+.btnIS:hover {
+  background-color: #850e35;
+}

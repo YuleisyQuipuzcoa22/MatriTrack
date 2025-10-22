@@ -1,0 +1,267 @@
+/* =======================*/
+/* SIDEBAR BASE */
+/* ======================= */
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  background-color: #850e35;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0.5rem;
+  transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
+  overflow-x: hidden;
+  z-index: 1030;
+}
+
+.sidebar.minimized {
+  width: 70px;
+  padding: 1rem 0.2rem;
+}
+
+/* ======================== */
+/* HEADER Y LOGOS */
+/* ======================= */
+
+.sidebar-header {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  color: white;
+}
+
+.sidebar.minimized .sidebar-header {
+  justify-content: center !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.logo-full {
+  background-color: white;
+  padding: 3px;
+}
+
+.sidebar.minimized .logo-full,
+.sidebar.minimized .sidebar-title,
+.sidebar.minimized .link-text,
+.sidebar.minimized .bi-chevron-down {
+  display: none !important;
+}
+
+.sidebar .logo-minimized {
+  display: none;
+  opacity: 0;
+}
+
+.logo-minimized img {
+  border-radius: 50%;
+  padding: 5px;
+  width: 100%;
+  max-width: 70px;
+  height: auto;
+}
+
+.sidebar.minimized .logo-minimized {
+  display: block !important;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* ======================= */
+/* MENÚ PRINCIPAL */
+/* ======================= */
+
+.sidebar .nav-link {
+  padding: 10px 15px;
+  color: #ffffff;
+  border-radius: 5px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.sidebar > ul > li > .nav-link.active {
+  background-color: #670727 !important;
+  color: #ffffff !important;
+}
+
+.sidebar .nav-link:hover:not(.active) { 
+  background-color: #670727;
+  color: #ffffff;
+}
+
+.sidebar.minimized .nav-link {
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.sidebar.minimized .nav-link i {
+  margin-right: 0 !important;
+}
+
+.nav-link span.link-text {
+  line-height: 1.2;
+}
+
+/* =====================*/
+/* SUBMENÚ */
+/* ======================*/
+
+.submenu {
+  padding-left: 40px;
+}
+
+.submenu .nav-link {
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.submenu .nav-link.active {
+  background-color: #dd386f !important;
+  color: #ffffff !important;
+}
+
+.submenu .nav-link:hover:not(.active) {
+  background-color: #dd386f;
+  color: #ffffff;
+}
+
+.sidebar.minimized .submenu {
+  display: none;
+}
+
+/* ======================= */
+/* SECCIÓN DE USUARIO */
+/* ========================*/
+
+.user-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #850e35;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem 0.5rem;
+}
+
+.user-toggle-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.user-toggle-area:hover {
+  background-color: #670727;
+}
+
+.user-initials-circle {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: #850e35;
+  background-color: #ffc4c4;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 10px;
+}
+
+.user-name-role {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: #ffffff;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Usuario en modo minimizado */
+.sidebar.minimized .user-section {
+  padding: 0.75rem 0.2rem;
+}
+
+.sidebar.minimized .user-toggle-area {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.sidebar.minimized .user-info {
+  display: none;
+}
+
+.sidebar.minimized .user-initials-circle {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+}
+
+/* =================== */
+/* DROPDOWN */
+/* =================== */
+
+.dropup .dropdown-menu {
+  bottom: 100%;
+  margin-bottom: 0.5rem;
+  min-width: 200px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #333;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #d50808;
+  color: #ffffff;
+}
+
+.dropdown-menu .dropdown-item i {
+  font-size: 1rem;
+}
+
+/* Dropdown en modo minimizado */
+.sidebar.minimized .dropup .dropdown-menu {
+  position: fixed !important;
+  left: 10px !important;
+  bottom: 0.75rem !important;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}

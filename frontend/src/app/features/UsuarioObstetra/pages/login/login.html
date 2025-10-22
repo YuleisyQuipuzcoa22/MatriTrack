@@ -1,0 +1,114 @@
+<div class="fondo">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg">
+      <div class="card-header text-center bg-white py-3">
+        <h2 class="titulosesion mb-0">INICIAR SESIÓN</h2>
+      </div>
+      <div class="card-body px-4" style="background-color: #e7cfd7">
+        <div class="text-center">
+          <img
+            src="https://yt3.googleusercontent.com/dSnqcXzoOXSJp35-I_9lPnUTa3M9qOuck07IS_UlvCz3lmBRQ8uohBfqb5GRzeOAdZjWKmeD=s900-c-k-c0x00ffffff-no-rj"
+            alt="Logo"
+            class="img-fluid mx-auto d-block mb-2"
+            style="max-width: 120px"
+          />
+          <p class="fw-bold mb-0" style="color: #861137">
+            Bienvenido al sistema del área de obstetricia
+          </p>
+          <p class="fw-medium">Ingresa tu usuario y contraseña para iniciar sesión</p>
+        </div>
+        
+        <form #f="ngForm" (ngSubmit)="onSubmit(f)"> 
+          
+          <div class="input-group mb-0">
+            <span class="input-group-text"> <i class="bi bi-person-fill"></i> </span>
+            <input
+              type="text"
+              class="form-control"
+              id="dni"
+              placeholder="Usuario (DNI)"
+              name="dni" 
+              [(ngModel)]="dni" 
+              required
+              [disabled]="isBlocked"
+              #dniInput="ngModel"
+            />
+          </div>
+          @if (dniInput.invalid && (dniInput.touched || submitted)) {
+          <div class="text-danger small">El usuario (DNI) es obligatorio.</div>
+          }
+
+          <div class="input-group mb-0">
+            <span class="input-group-text"> <i class="bi bi-key-fill"></i> </span>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              id="contrasena"
+              placeholder="Contraseña"
+              name="contrasena" 
+              [(ngModel)]="contrasena" 
+              required
+              [disabled]="isBlocked"
+              #contrasenaInput="ngModel"
+            />
+            <button
+              class="btn btn-toggle"
+              type="button"
+              (click)="togglePassword()"
+              tabindex="-1"
+              [disabled]="isBlocked"
+            >
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          @if (contrasenaInput.invalid && (contrasenaInput.touched || submitted)) {
+          <div class="text-danger small">La contraseña es obligatoria.</div>
+          }
+
+          @if (errorMessage && !isBlocked) {
+          <div class="alert alert-danger mt-3 text-center">
+            {{ errorMessage }}
+          </div>
+          }
+
+          @if (isBlocked) {
+          <div class="alert alert-danger mt-3 text-center">
+            Demasiados intentos fallidos. Intenta de nuevo en
+            <strong>{{ remainingTime }}</strong> segundos.
+          </div>
+          } 
+         
+          <!--
+          @if (!isBlocked && attempts > 0 && attempts < maxAttempts) {
+          <div class="alert alert-warning mt-3 text-center">
+            Intentos fallidos: <strong>{{ attempts }}</strong> / <strong>{{ maxAttempts }}</strong>
+          </div>
+          }
+-->
+
+          <!--RECAPTCHA-->
+          <div class="d-flex justify-content-center my-3">
+            <div id="recaptcha-widget"></div>
+          </div>
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="checkDefault" name="privacy" [(ngModel)]="privacy" required/>
+            <label class="form-check-label" for="checkDefault">
+              Aceptar políticas de privacidad (<span class="text-danger fw-medium">requerido</span>)
+            </label>
+          </div>
+          
+          @if (!privacy && submitted) {
+          <div class="text-danger small">Debes aceptar las políticas de privacidad.</div>
+          }
+
+          <div class="d-grid pt-4">
+            <button type="submit" class="btnIS btn fw-bold" [disabled]="isBlocked || f.invalid">
+              Iniciar sesión
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

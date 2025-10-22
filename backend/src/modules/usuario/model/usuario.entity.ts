@@ -1,63 +1,62 @@
 import { Estado } from 'src/enums/Estado';
 import { RolUsuario } from 'src/enums/RolUsuario';
-import { 
-    Entity, 
-    PrimaryColumn, 
-    Column, 
-    // Importamos BeforeInsert solo si se va a usar un hook
-} from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 // import * as bcrypt from 'bcryptjs'; // Comentado por ahora
 
-// ENUMS para roles y estados
-
-
-
-@Entity('usuario') 
+@Entity('usuario')
 export class Usuario {
-
   // PK: char(6). Se usa '!' porque el valor se genera en el Controller.
   //clave primaria
   @PrimaryColumn({ type: 'char', length: 6 })
-  id_usuario!: string; 
+  id_usuario!: string;
 
   //columnas normales
   @Column({ type: 'char', length: 8, unique: true, nullable: false })
-  dni!: string; 
+  dni!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
-  nombre!: string; 
+  nombre!: string;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
-  apellido!: string; 
-  
-  // Contraseña: Se marca select: false para que TypeORM no la traiga por defecto.
-  
-  @Column({ type: 'varchar', length: 64, nullable: false, select: false }) 
-  contrasena!: string; 
+  apellido!: string;
 
-  @Column({ type: 'enum', enum: RolUsuario, nullable: false, default: RolUsuario.OBSTETRA })
-  rol!: RolUsuario; 
-  
-  @Column({ type: 'enum', enum: Estado, nullable: false, default: Estado.ACTIVO })
-  estado!: Estado; 
+  // Contraseña: Se marca select: false para que TypeORM no la traiga por defecto cuando se consulta un usuario, por seguridad
+
+  @Column({ type: 'varchar', length: 64, nullable: false, select: false })
+  contrasena!: string;
+
+  @Column({
+    type: 'enum',
+    enum: RolUsuario,
+    nullable: false,
+    default: RolUsuario.OBSTETRA,
+  })
+  rol!: RolUsuario;
+
+  @Column({
+    type: 'enum',
+    enum: Estado,
+    nullable: false,
+    default: Estado.ACTIVO,
+  })
+  estado!: Estado;
 
   @Column({ type: 'date', nullable: false })
-  fecha_nacimiento!: Date; 
+  fecha_nacimiento!: Date;
 
   @Column({ type: 'varchar', length: 254, unique: true, nullable: false })
-  correo_electronico!: string; 
+  correo_electronico!: string;
 
   @Column({ type: 'varchar', length: 15, nullable: false })
-  telefono!: string; 
+  telefono!: string;
 
-  //nuevo atributo
-  @Column({ type: 'varchar', length: 100, nullable: true }) // NUEVO
+  @Column({ type: 'varchar', length: 100, nullable: true })
   direccion?: string;
-  
+
   // Puede ser null para el Administrador
   @Column({ type: 'varchar', length: 20, unique: true, nullable: true })
-  numero_colegiatura: string | null = null; 
+  numero_colegiatura: string | null = null;
 
   /*
   // TEMPORALMENTE DESACTIVADO PARA DESARROLLO (Contraseña en texto plano)
@@ -65,5 +64,4 @@ export class Usuario {
   /*@BeforeInsert() async hashPassword() 
   { const salt = await bcrypt.genSalt(10); 
    this.contrasena = await bcrypt.hash(this.contrasena, salt); }*/
-  
 }
