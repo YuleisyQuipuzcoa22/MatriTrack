@@ -16,6 +16,7 @@ import { LoginDto } from './dto/login.dto';
 import { RolUsuario } from '../../enums/RolUsuario';
 import { Estado } from '../../enums/Estado';
 import { Usuario } from './model/usuario.entity';
+import { QueryUsuarioDto } from './dto/QueryUsuario.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -101,24 +102,85 @@ export class UsuarioService {
   }
 
   //LISTAR PERSONAL (OBSTETRAS Y ADMINS)
-  async listarPersonal(): Promise<Usuario[]> {
-    return this.usuarioRepository.find({
-      where: [{ rol: RolUsuario.OBSTETRA }, { rol: RolUsuario.ADMINISTRADOR }],
-      select: [
-        'id_usuario',
-        'dni',
-        'nombre',
-        'apellido',
-        'correo_electronico',
-        'telefono',
-        'numero_colegiatura',
-        'fecha_nacimiento',
-        'estado',
-        'rol',
-        'direccion',
-      ],
-    });
+async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta: any }> {
+  const {
+    page = 1,
+    limit = 9,
+    nombreApellido,
+    dni,
+    estado,
+    sortBy = 'id_usuario', 
+    order = 'DESC', 
+  } = queryDto;
+
+  const skip = (page - 1) * limit;
+
+  const queryBuilder = this.usuarioRepository.createQueryBuilder('usuario');
+
+  // Filtro obligatorio: OBSTETRA y ADMINISTRADOR
+  queryBuilder.where(
+    'usuario.rol IN (:...roles)',
+    { roles: [RolUsuario.OBSTETRA, RolUsuario.ADMINISTRADOR] }
+  );
+
+  //Filtro de nombre Y apellido
+  if (nombreApellido) {
+    const search = nombreApellido.trim().toUpperCase();
+    queryBuilder.andWhere(
+      "CONCAT(UPPER(usuario.nombre), ' ', UPPER(usuario.apellido)) LIKE :nombreApellido",
+      { nombreApellido: `%${search}%` }
+    );
   }
+
+  //Filtro de DNI (búsqueda exacta si tiene 8 dígitos, parcial si tiene menos)
+  if (dni) {
+    const dniTrimmed = dni.trim();
+    if (dniTrimmed.length === 8) {
+      queryBuilder.andWhere('usuario.dni = :dni', { dni: dniTrimmed });
+    } else {
+      queryBuilder.andWhere('usuario.dni LIKE :dni', { dni: `${dniTrimmed}%` });
+    }
+  }
+
+  //Filtro de estado (ya normalizado en el DTO)
+  if (estado) {
+    queryBuilder.andWhere('usuario.estado = :estado', { estado });
+  }
+  
+  // Ordenamiento
+  queryBuilder.orderBy(`usuario.${sortBy}`, order);
+
+  // Obtener resultados paginados
+  const [usuarios, total] = await queryBuilder
+    .skip(skip)
+    .take(limit)
+    .select([
+      'usuario.id_usuario',
+      'usuario.dni',
+      'usuario.nombre',
+      'usuario.apellido',
+      'usuario.correo_electronico',
+      'usuario.telefono',
+      'usuario.numero_colegiatura',
+      'usuario.fecha_nacimiento',
+      'usuario.estado',
+      'usuario.rol',
+      'usuario.direccion',
+    ])
+    .getManyAndCount();
+
+  return {
+    data: usuarios,
+    meta: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      hasNextPage: page < Math.ceil(total / limit),
+      hasPrevPage: page > 1,
+    },
+  };
+}
 
   //MODIFICAR USUARIO
   async modificarUsuario(
@@ -150,8 +212,7 @@ export class UsuarioService {
       );
     if (updateUsuarioDto.estado)
       usuarioAeditar.estado = updateUsuarioDto.estado;
-    if (updateUsuarioDto.rol) 
-      usuarioAeditar.rol = updateUsuarioDto.rol;
+    if (updateUsuarioDto.rol) usuarioAeditar.rol = updateUsuarioDto.rol;
 
     try {
       return await this.usuarioRepository.save(usuarioAeditar);
@@ -175,7 +236,7 @@ export class UsuarioService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    usuarioAInhabilitar.estado = Estado.INACTIVO; 
+    usuarioAInhabilitar.estado = Estado.INACTIVO;
     return await this.usuarioRepository.save(usuarioAInhabilitar);
   }
 
@@ -208,10 +269,10 @@ export class UsuarioService {
 
     // Buscar usuario
     const usuario = await this.usuarioRepository
-    //es como hacer un SELECT * FROM usuario WHERE dni = 'dni'
-      .createQueryBuilder('usuario')//usuario es un alias
-      .addSelect('usuario.contrasena')//seleccionar la contraseña que por defecto no se selecciona
-      .where('usuario.dni = :dni', { dni })//filtrar por dni
+      //es como hacer un SELECT * FROM usuario WHERE dni = 'dni'
+      .createQueryBuilder('usuario') //usuario es un alias
+      .addSelect('usuario.contrasena') //seleccionar la contraseña que por defecto no se selecciona
+      .where('usuario.dni = :dni', { dni }) //filtrar por dni
       .getOne();
 
     if (!usuario || usuario.estado === Estado.INACTIVO) {
