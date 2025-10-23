@@ -8,9 +8,10 @@ import {
 } from 'class-validator';
 import { Estado } from '../../../enums/Estado';
 import { RolUsuario } from 'src/enums/RolUsuario';
-import { Exclude } from 'class-transformer';
+
 
 export class UpdateUsuarioDto {
+
   @IsOptional()
   @IsString()
   @Length(2, 50)

@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { UserObstetraService, UserData } from '../../services/user-obstetra.service';
+import {
+  UserObstetraService,
+  UserData,
+  UsuarioFilters,
+} from '../../services/user-obstetra.service';
 
 // Usaremos la interfaz UserData del servicio para consistencia
 interface Obstetra extends UserData {}
@@ -15,77 +19,83 @@ interface Obstetra extends UserData {}
 })
 export class ListadoObstetras implements OnInit {
   obstetrasData: Obstetra[] = [];
-
-  obstetrasFiltrados: Obstetra[] = [];
-  conteoResultados: number = 0; // Modelos para el NgModel (filtros)
-
-  filtroNombreApellido: string = '';
-  filtroDNI: string = '';
-  filtroEstado: 'todos' | 'A' | 'I' = 'todos';
-  isLoading = false;
-
-  hayFiltroActivo: boolean = false;
   obstetraSeleccionado: Obstetra | null = null;
+  currentPage = 1;
+  pageSize = 9;
+  totalItems = 0;
+  totalPages = 0;
+  public Math = Math;
+  conteoResultados = 0;
+
+  // Filtros
+  filtroNombreApellido = '';
+  filtroDNI = '';
+  filtroEstado: 'todos' | 'A' | 'I' = 'todos';
+
+  isLoading = false;
+  hayFiltroActivo = false;
 
   constructor(private obstetraService: UserObstetraService) {}
 
   ngOnInit(): void {
-    this.cargarObstetras(); // Carga la lista de obstetras desde el backend
+    this.cargarObstetras();
   }
-
-  //Carga la lista de obstetras y administradores desde el backend.
 
   cargarObstetras(): void {
     this.isLoading = true;
+    const filters: UsuarioFilters = {
+      page: this.currentPage,
+      limit: this.pageSize,
+    };
+    if (this.filtroNombreApellido.trim()) {
+      filters.nombreApellido = this.filtroNombreApellido.trim();
+    }
+    if (this.filtroDNI.trim()) {
+      filters.dni = this.filtroDNI.trim();
+    }
+    if (this.filtroEstado !== 'todos') {
+      filters.estado = this.filtroEstado;
+    }
 
-    this.obstetraService.listarObstetras().subscribe({
-      next: (data) => {
-        this.obstetrasData = data as Obstetra[];
-        this.filtrarObstetras();
+    this.obstetraService.listarObstetras(filters).subscribe({
+      next: (response) => {
+        this.obstetrasData = response.data;
+        this.totalItems = response.meta.total;
+        this.totalPages = response.meta.totalPages;
+        this.currentPage = response.meta.page;
+        this.conteoResultados = this.totalItems;
+        this.actualizarBotonLimpiar();
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error al cargar la lista de obstetras:', err);
+        console.error('Error al cargar obstetras:', err);
         this.isLoading = false;
       },
     });
   }
 
-  // Aplica todos los filtros a la lista de obstetras y actualiza la vista.
-
+  // Aplica todos los filtros
   filtrarObstetras(): void {
-    const nombreApellido = this.filtroNombreApellido.toLowerCase().trim();
-    const dni = this.filtroDNI.toLowerCase().trim();
-    const estado = this.filtroEstado;
-
-    this.obstetrasFiltrados = this.obstetrasData.filter((obstetra) => {
-      const nombreCompleto = `${obstetra.nombre} ${obstetra.apellido}`.toLowerCase();
-
-      const cumpleNombreApellido = nombreCompleto.includes(nombreApellido);
-      const cumpleDNI = obstetra.dni.toLowerCase().includes(dni);
-      const cumpleEstado = estado === 'todos' || obstetra.estado === estado;
-
-      return cumpleNombreApellido && cumpleDNI && cumpleEstado;
-    });
-
-    this.conteoResultados = this.obstetrasFiltrados.length;
-    this.actualizarBotonLimpiar();
+    this.currentPage = 1; // Reiniciar a página 1 cuando cambian filtros
+    this.cargarObstetras();
   }
 
-  //Determina si se debe mostrar el botón de "Borrar Filtros".
-
+  //Determina si se debe mostrar el botón de "Borrar Filtros"
   actualizarBotonLimpiar(): void {
     this.hayFiltroActivo =
-      !!this.filtroNombreApellido || !!this.filtroDNI || this.filtroEstado !== 'todos';
+      !!this.filtroNombreApellido.trim() ||
+      !!this.filtroDNI.trim() ||
+      this.filtroEstado !== 'todos';
   }
 
-  // Limpia todos los campos de filtro y refresca la lista.
-
+  // Limpia todos los campos de filtro y refresca la lista
   limpiarFiltros(): void {
     this.filtroNombreApellido = '';
     this.filtroDNI = '';
     this.filtroEstado = 'todos';
-    this.filtrarObstetras();
+    this.currentPage = 1;
+
+    this.cargarObstetras();
   }
   /**
    * @param id ID del usuario a modificar.
@@ -135,5 +145,18 @@ export class ListadoObstetras implements OnInit {
 
   getEstadoTexto(estado: 'A' | 'I'): string {
     return estado === 'A' ? 'Activo' : 'Inactivo';
+  }
+
+  // Navegar entre páginas
+  irAPagina(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.cargarObstetras();
+    }
+  }
+  // Cambiar tamaño de página o sea mostrar 9,10,20
+  cambiarTamanoPagina(): void {
+    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+    this.cargarObstetras();
   }
 }

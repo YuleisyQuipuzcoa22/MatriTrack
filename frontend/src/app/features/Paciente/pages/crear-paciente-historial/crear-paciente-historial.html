@@ -9,7 +9,7 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="formulario">
       <!-- SECCIÓN DE DATOS PERSONALES -->
-      <h3 class="section-title mt-4 mb-3">1. Datos Personales</h3>
+      <h3 class="section-title mb-2">Datos Personales</h3>
       <div class="row">
         <!-- FILA 1: DNI, Nombre, Apellido -->
         <div class="col-lg-4 col-md-6 mb-3">
@@ -115,7 +115,7 @@
       </div>
 
       <!-- SECCIÓN DE HISTORIAL MÉDICO -->
-      <h3 class="section-title mt-4 mb-3">2. Historial Médico Inicial</h3>
+      <h3 class="section-title mt-4 mb-2">Historial Médico Inicial</h3>
       <!-- Formulario anidado para el historial_medico -->
       <div formGroupName="historial_medico" class="row">
         <!-- FILA 4: Tipo de Sangre -->

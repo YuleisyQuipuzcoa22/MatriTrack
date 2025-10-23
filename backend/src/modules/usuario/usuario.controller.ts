@@ -9,6 +9,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolUsuario } from 'src/enums/RolUsuario';
+import { QueryUsuarioDto } from './dto/QueryUsuario.dto';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -60,12 +62,11 @@ export class UsuarioController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RolUsuario.ADMINISTRADOR)
-  async listarPersonal() {
-    const usuarios = await this.usuarioService.listarPersonal();
+  async listarPersonal(@Query() queryDto: QueryUsuarioDto) {
+    const usuarios = await this.usuarioService.listarPersonal(queryDto);
     return {
       message: 'Personal obtenido exitosamente',
-      data: usuarios,
-      total: usuarios.length,
+      ...usuarios, 
     };
   }
 
