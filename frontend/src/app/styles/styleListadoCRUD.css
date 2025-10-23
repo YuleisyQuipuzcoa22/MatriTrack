@@ -152,8 +152,6 @@ body {
   border-bottom: 1px solid #e9ecef;
 }
 
-/* Las clases como .item-name, .item-id, .card-body-custom, .info-item, etc.,
-   ya son lo suficientemente genéricas. Solo renombramos las clases de alto nivel. */
 
 .item-name {
   color: var(--color-vino);
