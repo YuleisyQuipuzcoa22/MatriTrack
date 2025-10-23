@@ -1,0 +1,63 @@
+<div class="fondo d-flex justify-content-center align-items-center min-vh-100">
+	<div class="card-container">
+		<div class="header text-center">
+			<h2 class="titulo">{{ formData.id_programapuerperio ? 'EDITAR PROGRAMA' : 'CREAR PROGRAMA' }}</h2>
+			<p class="subtitulo">{{ formData.id_programapuerperio ? 'Modifica los datos del programa' : 'Registra un nuevo programa de puerperio' }}</p>
+		</div>
+
+		<div *ngIf="formData && formData.id_programapuerperio && false" class="text-center p-3">
+			<!-- placeholder spinner if needed -->
+			<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+		</div>
+
+		<form (ngSubmit)="guardar()" class="formulario">
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					<label class="label">ID Programa</label>
+					<input type="text" class="form-control" [(ngModel)]="formData.id_programapuerperio" name="id_programapuerperio" />
+				</div>
+
+				<div class="col-md-6 mb-3">
+					<label class="label">Historial Médico</label>
+					<input type="text" class="form-control" [(ngModel)]="formData.HistorialMedico_id_historialmedico" name="historial" />
+				</div>
+
+				<div class="col-md-6 mb-3">
+					<label class="label">Fecha Inicio</label>
+					<input type="date" class="form-control" [(ngModel)]="formData.fecha_inicio" name="fecha_inicio" />
+				</div>
+
+				<div class="col-md-6 mb-3">
+					<label class="label">Tipo de Parto</label>
+					<input type="text" class="form-control" [(ngModel)]="formData.tipo_parto" name="tipo_parto" />
+				</div>
+
+				<div class="col-12 mb-3">
+					<label class="label">Observación</label>
+					<textarea class="form-control" [(ngModel)]="formData.observacion" name="observacion"></textarea>
+				</div>
+
+				<div class="col-md-6 mb-3">
+					<label class="label">Complicación</label>
+					<input type="text" class="form-control" [(ngModel)]="formData.complicacion" name="complicacion" />
+				</div>
+
+				<div class="col-md-6 mb-3">
+					<label class="label">Estado</label>
+					<select class="form-select" [(ngModel)]="formData.estado" name="estado">
+						<option value="A">Activo</option>
+						<option value="I">Inactivo</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="text-center mt-4">
+				<button type="submit" class="btn-submit">{{ formData.id_programapuerperio ? 'Guardar Cambios' : 'Crear Programa' }}</button>
+				<button type="button" class="btn-volver ms-3" (click)="router.navigate(['/puerperio'])">← Volver</button>
+			</div>
+
+			<div *ngIf="false" class="mt-3 alert alert-danger text-center">Error ficticio</div>
+			<div *ngIf="false" class="mt-3 alert alert-success text-center">Operación exitosa</div>
+		</form>
+	</div>
+</div>
