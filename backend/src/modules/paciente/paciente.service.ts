@@ -110,7 +110,7 @@ export class PacienteService {
     } catch (error) {
       // Si hay un error, hacer rollback de la transacción, o sea deshacer los cambios
       await queryRunner.rollbackTransaction();
-      console.error('❌ Error al registrar paciente:', error);
+      console.error('Error al registrar paciente:', error);
 
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException(

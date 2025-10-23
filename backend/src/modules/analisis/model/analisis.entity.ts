@@ -7,7 +7,7 @@ export class Analisis {
   @PrimaryColumn({ type: 'char', length: 6 })
   id_analisis!: string;
 
-  @Column({ type: 'varchar', length: 55, nullable: false })
+  @Column({ type: 'varchar', length: 55, nullable: false, unique: true})
   nombre_analisis!: string;
 
   @Column({ type: 'varchar', length: 155, nullable: true })
