@@ -11,6 +11,11 @@ import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/list
 import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado-historialmedico/listado-historialmedico';
 import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
 import { EditarPaciente } from './features/Paciente/pages/editar-paciente/editar-paciente';
+import { ListarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/listar-programapuerperio/listar-programapuerperio';
+import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/crear-editar-programapuerperio/crear-editar-programapuerperio';
+import { ListarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio';
+import { CrearEditarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/crear-editar-controlpuerperio/crear-editar-controlpuerperio';
+import { AnalisisControl } from './features/Puerperio/ControlPuerperio/Pages/analisis-control/analisis-control';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -41,7 +46,47 @@ export const routes: Routes = [
     canActivate: [authGuard], // Requiere estar logueado
   },
 
+  { 
+  path: 'puerperio', 
+    component: ListarProgramapuerperio ,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
 
+  { 
+    path: 'puerperio/crear', 
+    component: CrearEditarProgramapuerperio,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+  { 
+    path: 'puerperio/editar/:id', 
+    component: CrearEditarProgramapuerperio,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+  { 
+    path: 'puerperio/:id/controles', 
+    component: ListarControlpuerperio,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+  { 
+    path: 'puerperio/:id/controles/crear', 
+    component: CrearEditarControlpuerperio,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+  { 
+    path: 'puerperio/:id/controles/editar/:cid', 
+    component: CrearEditarControlpuerperio,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
+
+  { 
+    path: 'puerperio/:id/controles/:cid/analisis', 
+    component: AnalisisControl,
+    canActivate: [authGuard], // Requiere estar logueado
+  },
 
 
   // Rutas protegidas (solo Administrador)
@@ -66,9 +111,13 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['Administrador'])],
   },
 
+
+
+
   //no autorizado
   { path: 'no-autorizado', component: NoAutorizado },
 
   // Página 404 (debe ir al final)
   { path: '**', component: Notfound },
+
 ];

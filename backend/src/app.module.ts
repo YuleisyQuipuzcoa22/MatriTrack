@@ -17,6 +17,8 @@ import { ControlDiagnostico } from './modules/control-diagnostico/model/control_
 import { ControlPuerperio } from './modules/control-puerperio/model/control_puerperio.entity';
 import { Analisis } from './modules/analisis/model/analisis.entity';
 import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-analisis.entity';
+import { ProgramaPuerperioModule } from './modules/programa-puerperio/programa-puerperio.module';
+import { ControlPuerperioModule } from './modules/control-puerperio/control-puerperio.module';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-
     UsuarioModule,
     PacienteModule,
     HistorialMedicoModule,
+    ProgramaPuerperioModule,
+    ControlPuerperioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

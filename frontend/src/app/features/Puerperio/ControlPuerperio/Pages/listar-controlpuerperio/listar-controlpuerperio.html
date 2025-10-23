@@ -1,0 +1,47 @@
+<div class="fondo d-flex justify-content-center align-items-start min-vh-100 py-4">
+	<div class="card-container w-100">
+			<div class="header d-flex justify-content-between align-items-center">
+				<div>
+					<h3 class="titulo">Controles Médicos - Programa {{ programaId }}</h3>
+					<p class="subtitulo">Listado de controles para el programa seleccionado</p>
+				</div>
+				<div>
+					<button class="btn btn-agregar me-2" (click)="crearControl()">Nuevo Control</button>
+					<button class="btn-volver" (click)="volver()">← Volver</button>
+				</div>
+			</div>
+
+		<div *ngIf="controles.length === 0" class="text-center p-4">
+			<p>No hay controles registrados para este programa.</p>
+		</div>
+
+		<div class="controls-list">
+					<div *ngFor="let c of controles" class="control-card mb-3">
+				<div class="card-row">
+					<div class="col-left">
+						<h4>{{ c.id_control_puerperio }} <span class="badge">{{ c.fecha_controlpuerperio }}</span></h4>
+						<p><strong>Peso:</strong> {{ c.peso ?? '-' }} kg — <strong>Talla:</strong> {{ c.talla ?? '-' }} m</p>
+						<p><strong>Presión:</strong> {{ c.presion_arterial ?? '-' }}</p>
+						<p><strong>Involución uterina:</strong> {{ c.involucion_uterina ?? '-' }}</p>
+						<p><strong>Cicatrización:</strong> {{ c.cicatrizacion ?? '-' }}</p>
+						<p><strong>Estado mamas / lactancia:</strong> {{ c.estado_mamas_lactancia ?? '-' }}</p>
+					</div>
+					<div class="col-right">
+						<p><strong>Estado emocional:</strong> {{ c.estado_emocional ?? '-' }}</p>
+						<p><strong>Observación:</strong> {{ c.observacion ?? '-' }}</p>
+						<p><strong>Recomendación:</strong> {{ c.recomendacion ?? '-' }}</p>
+									<div class="text-end mt-2">
+										<button class="btn-action btn-edit-action me-2" title="Editar" (click)="editarControl(c.id_control_puerperio)">
+											<i class="bi bi-pencil-square"></i>
+										</button>
+										<button class="btn-action btn-success-action" title="Análisis" (click)="verAnalisis(c.id_control_puerperio)">
+											<i class="bi bi-file-earmark-medical"></i>
+										</button>
+									</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
