@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 export interface ControlPuerperioData {
   id_control_puerperio: string;
@@ -15,69 +16,46 @@ export interface ControlPuerperioData {
   estado_emocional?: string | null;
   observacion?: string | null;
   recomendacion?: string | null;
+  usuario_id_usuario?: string | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class Controlpuerperio {
-  private data: ControlPuerperioData[] = [
-    {
-      id_control_puerperio: 'C00001',
-      Programa_Puerperio_id_programapuerperio: 'P000001',
-      fecha_controlpuerperio: '2025-10-02',
-      fecha_modificacion: null,
-      peso: 62.5,
-      talla: 1.63,
-      presion_arterial: '120/80',
-      involucion_uterina: 'Adecuada',
-      cicatrizacion: 'Normal',
-      estado_mamas_lactancia: 'Buena',
-      estado_emocional: 'Estable',
-      observacion: 'Sin complicaciones',
-      recomendacion: 'Control en 7 días'
-    },
-    {
-      id_control_puerperio: 'C00002',
-      Programa_Puerperio_id_programapuerperio: 'P000001',
-      fecha_controlpuerperio: '2025-10-09',
-      fecha_modificacion: null,
-      peso: 61.0,
-      talla: 1.63,
-      presion_arterial: '118/76',
-      involucion_uterina: 'Normal',
-      cicatrizacion: 'Leve eritema',
-      estado_mamas_lactancia: 'Lactancia estable',
-      estado_emocional: 'Leve ansiedad',
-      observacion: 'Recomendado seguimiento psicológico',
-      recomendacion: 'Control 14 días'
-    }
-  ];
+  private apiUrl = 'http://localhost:3000/api/controles-puerperio';
+
+  constructor(private http: HttpClient) {}
 
   listarControlesPorPrograma(programaId: string): Observable<ControlPuerperioData[]> {
-    const list = this.data.filter(d => d.Programa_Puerperio_id_programapuerperio === programaId);
-    return of([...list]);
+    // el backend no tiene endpoint por programa, devolvemos todos y filtra el componente
+    return this.http.get<any>(this.apiUrl).pipe(map(r => (r.data || r).filter((c: any) => c.id_programapuerperio === programaId)));
   }
 
   obtenerControl(id: string): Observable<ControlPuerperioData | null> {
-    const item = this.data.find(d => d.id_control_puerperio === id) || null;
-    return of(item);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(map(r => r.data || null));
   }
 
   crearControl(control: ControlPuerperioData): Observable<ControlPuerperioData> {
-    // generar id simple
-    if (!control.id_control_puerperio) {
-      const next = (this.data.length + 1).toString().padStart(5, '0');
-      control.id_control_puerperio = 'C' + next;
-    }
-    this.data.push({ ...control });
-    return of(control);
+    const payload: any = {
+      id_programapuerperio: control.Programa_Puerperio_id_programapuerperio,
+      usuario_id_usuario: control['usuario_id_usuario'] || undefined,
+      peso: control.peso,
+      talla: control.talla,
+      presion_arterial: control.presion_arterial,
+      involucion_uterina: control.involucion_uterina,
+      cicatrizacion: control.cicatrizacion,
+      estado_mamas_lactancia: control.estado_mamas_lactancia,
+      estado_emocional: control.estado_emocional,
+      observacion: control.observacion,
+      recomendacion: control.recomendacion,
+    };
+    return this.http.post<any>(this.apiUrl, payload).pipe(map(r => r.data || r));
   }
 
   actualizarControl(id: string, changes: Partial<ControlPuerperioData>): Observable<ControlPuerperioData | null> {
-    const idx = this.data.findIndex(d => d.id_control_puerperio === id);
-    if (idx === -1) return of(null);
-    this.data[idx] = { ...this.data[idx], ...changes };
-    return of(this.data[idx]);
+    const payload: any = { ...changes } as any;
+    if ((changes as any).Programa_Puerperio_id_programapuerperio) payload.id_programapuerperio = (changes as any).Programa_Puerperio_id_programapuerperio;
+    return this.http.put<any>(`${this.apiUrl}/${id}`, payload).pipe(map(r => r.data || null));
   }
 }

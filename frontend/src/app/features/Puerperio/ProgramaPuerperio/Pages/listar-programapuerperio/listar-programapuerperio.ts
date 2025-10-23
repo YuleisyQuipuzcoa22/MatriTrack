@@ -66,11 +66,15 @@ export class ListarProgramapuerperio implements OnInit {
 
   // Helpers para badges y texto de estado
   getEstadoClase(estado: string): string {
-    return estado === 'A' ? 'badge-estado A' : 'badge-estado I';
+    if (estado === 'A') return 'badge-estado A';
+    if (estado === 'F') return 'badge-estado F';
+    return 'badge-estado I';
   }
 
   getEstadoTexto(estado: string): string {
-    return estado === 'A' ? 'Activo' : 'Inactivo';
+    if (estado === 'A') return 'Activo';
+    if (estado === 'F') return 'Finalizado';
+    return 'Inactivo';
   }
 
   mostrarInfo(id: string) {

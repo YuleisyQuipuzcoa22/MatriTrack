@@ -45,7 +45,7 @@ export class CrearEditarProgramapuerperio implements OnInit {
         id_programapuerperio: '',
         HistorialMedico_id_historialmedico: this.formData.HistorialMedico_id_historialmedico || '',
         fecha_inicio: this.formData.fecha_inicio || new Date().toISOString().slice(0, 10),
-        tipo_parto: this.formData.tipo_parto || '',
+        tipo_parto: (this.formData.tipo_parto as any) || 'NATURAL',
         observacion: this.formData.observacion || '',
         complicacion: this.formData.complicacion || '',
         estado: this.formData.estado || 'A',
@@ -53,7 +53,7 @@ export class CrearEditarProgramapuerperio implements OnInit {
         motivo_finalizacion: this.formData.motivo_finalizacion || null,
       };
       this.service.crearPrograma(nuevo).subscribe((res) => {
-        console.log('Programa creado (mock):', res);
+        console.log('Programa creado:', res);
         this.router.navigate(['puerperio']);
       });
     }

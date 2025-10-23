@@ -83,7 +83,7 @@
 						<div class="info-item">
 							<i class="bi bi-activity"></i>
 							<strong>Tipo Parto:</strong>
-							<span class="ms-2">{{ p.tipo_parto }}</span>
+							<span class="ms-2">{{ p.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</span>
 						</div>
 
 						<div class="info-item">
@@ -136,7 +136,7 @@
 						<div class="info-row"><strong>ID:</strong> {{ programaSeleccionado.id_programapuerperio }}</div>
 						<div class="info-row"><strong>Historial:</strong> {{ programaSeleccionado.HistorialMedico_id_historialmedico }}</div>
 						<div class="info-row"><strong>F. Inicio:</strong> {{ programaSeleccionado.fecha_inicio }}</div>
-						<div class="info-row"><strong>Tipo Parto:</strong> {{ programaSeleccionado.tipo_parto }}</div>
+						<div class="info-row"><strong>Tipo Parto:</strong> {{ programaSeleccionado.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</div>
 						<div class="info-row"><strong>Observación:</strong> {{ programaSeleccionado.observacion }}</div>
 						<div class="info-row"><strong>Complicación:</strong> {{ programaSeleccionado.complicacion }}</div>
 						<div class="info-row"><strong>F. Finalización:</strong> {{ programaSeleccionado.fecha_finalizacion }}</div>

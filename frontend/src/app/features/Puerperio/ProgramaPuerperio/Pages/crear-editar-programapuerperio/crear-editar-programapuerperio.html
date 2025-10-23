@@ -29,7 +29,10 @@
 
 				<div class="col-md-6 mb-3">
 					<label class="label">Tipo de Parto</label>
-					<input type="text" class="form-control" [(ngModel)]="formData.tipo_parto" name="tipo_parto" />
+					<select class="form-control" [(ngModel)]="formData.tipo_parto" name="tipo_parto">
+						<option [ngValue]="'NATURAL'">Natural</option>
+						<option [ngValue]="'CESAREA'">Cesárea</option>
+					</select>
 				</div>
 
 				<div class="col-12 mb-3">
@@ -47,6 +50,7 @@
 					<select class="form-select" [(ngModel)]="formData.estado" name="estado">
 						<option value="A">Activo</option>
 						<option value="I">Inactivo</option>
+						<option value="F">Finalizado</option>
 					</select>
 				</div>
 			</div>
