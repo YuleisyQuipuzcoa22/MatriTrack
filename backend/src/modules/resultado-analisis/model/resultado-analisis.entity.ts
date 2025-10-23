@@ -38,7 +38,7 @@ export class ResultadoAnalisis {
   id_control_puerperio: string | null = null;
 
   // FK para Analisis (obligatorio)
-  @ManyToOne(() => Analisis, (analisis) => analisis.resultados)
+  @ManyToOne(() => Analisis)
   @JoinColumn({ name: 'id_analisis' })
   analisis!: Analisis;
 

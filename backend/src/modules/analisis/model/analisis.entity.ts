@@ -12,8 +12,4 @@ export class Analisis {
 
   @Column({ type: 'varchar', length: 155, nullable: true })
   descripcion_analisis: string | null = null;
-
-  // Relación inversa con ResultadoAnalisis
-  @OneToMany(() => ResultadoAnalisis, (resultado) => resultado.analisis)
-  resultados?: ResultadoAnalisis[];
 }
