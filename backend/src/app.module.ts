@@ -17,7 +17,8 @@ import { ControlDiagnostico } from './modules/control-diagnostico/model/control_
 import { ControlPuerperio } from './modules/control-puerperio/model/control_puerperio.entity';
 import { Analisis } from './modules/analisis/model/analisis.entity';
 import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-analisis.entity';
-
+import { ProgramaDiagnosticoModule } from './modules/programa-diagnostico/programa-diagnostico.module';
+import { ControlDiagnosticoModule } from './modules/control-diagnostico/control-diagnostico.module';
 @Module({
   imports: [
     // 1. PRIMERO: Cargar variables de entorno
@@ -61,6 +62,8 @@ import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-
     UsuarioModule,
     PacienteModule,
     HistorialMedicoModule,
+    ProgramaDiagnosticoModule,
+    ControlDiagnosticoModule
   ],
   controllers: [AppController],
   providers: [AppService],

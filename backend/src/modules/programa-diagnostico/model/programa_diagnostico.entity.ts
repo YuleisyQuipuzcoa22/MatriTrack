@@ -63,6 +63,6 @@ export class ProgramaDiagnostico {
   motivo_otros: string | null = null;
 
   // Relación inversa, un programa de diagnóstico puede tener muchos controles médicos
-  //@OneToMany(() => ControlDiagnostico, (control) => control.//programaDiagnostico)
-  //controlesMedicos?: ControlDiagnostico[];
+@OneToMany(() => ControlDiagnostico, (control) => control.programaDiagnostico)
+  controlesMedicos?: ControlDiagnostico[];
 }

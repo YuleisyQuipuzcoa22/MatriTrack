@@ -1,0 +1,69 @@
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="detalleModalLabel" aria-modal="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content custom-modal-card">
+      
+      <div class="modal-header custom-modal-header">
+        <h5 class="modal-title" id="detalleModalLabel">
+            <i class="fas fa-file-alt me-2"></i> Detalle del Programa Diagnóstico
+        </h5>
+        <button type="button" class="btn-close-custom" (click)="onClose()" aria-label="Cerrar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body p-4">
+        
+        <h6 class="section-title mb-3"><i class="fas fa-user me-2"></i> Información del Paciente</h6>
+        <div class="row info-box p-3 mb-4">
+          <div class="col-md-4 mb-2"><strong>DNI:</strong> {{ programa.historialMedico.paciente.dni }}</div>
+          <div class="col-md-4 mb-2"><strong>Nombre:</strong> {{ programa.historialMedico.paciente.nombre }} {{ programa.historialMedico.paciente.apellido }}</div>
+          <div class="col-md-4 mb-2"><strong>Teléfono:</strong> {{ programa.historialMedico.paciente.telefono }}</div>
+          <div class="col-md-8 mb-2"><strong>Dirección:</strong> {{ programa.historialMedico.paciente.direccion }}</div>
+          <div class="col-md-4 mb-2"><strong>F. Nacimiento:</strong> {{ formatDate(programa.historialMedico.paciente.fecha_nacimiento) }}</div>
+        </div>
+
+        <h6 class="section-title mb-3"><i class="fas fa-heartbeat me-2"></i> Datos del Programa</h6>
+        <div class="row info-box p-3 mb-4">
+          <div class="col-md-4 mb-2"><strong>ID Programa:</strong> {{ programa.id_programadiagnostico }}</div>
+          <div class="col-md-4 mb-2"><strong>N° Gestación:</strong> {{ programa.numero_gestacion }}</div>
+          <div class="col-md-4 mb-2"><strong>F. Inicio:</strong> {{ formatDate(programa.fecha_inicio) }}</div>
+          
+          <div class="col-md-4 mb-2"><strong>FPP:</strong> {{ programa.fecha_probableparto ? formatDate(programa.fecha_probableparto) : 'N/A' }}</div>
+          <div class="col-md-4 mb-2"><strong>Factor Riesgo:</strong> {{ programa.factor_riesgo || 'Ninguno/N/A' }}</div>
+          <div class="col-md-4 mb-2">
+            <strong>Estado:</strong> 
+            <span [ngClass]="['status-badge', programa.estado === Estado.ACTIVO ? 'active' : 'finished']">
+                {{ programa.estado }}
+            </span>
+          </div>
+          
+          <div class="col-12 mt-2">
+            <strong>Observación:</strong> 
+            <p class="observacion-text">{{ programa.observacion || 'Sin observaciones.' }}</p>
+          </div>
+        </div>
+        
+        @if (programa.estado === Estado.FINALIZADO) {
+            <h6 class="section-title mb-3 finalizado-title"><i class="fas fa-flag-checkered me-2"></i> Datos de Finalización</h6>
+            <div class="row info-box p-3 finalizado-box">
+              <div class="col-md-6 mb-2"><strong>F. Finalización:</strong> {{ formatDate(programa.fecha_finalizacion) }}</div>
+              <div class="col-md-6 mb-2"><strong>Motivo:</strong> {{ programa.motivo_finalizacion || 'N/A' }}</div>
+              
+              @if (programa.motivo_otros) {
+                <div class="col-12 mt-2">
+                  <strong>Detalle del Motivo:</strong> 
+                  <p class="observacion-text">{{ programa.motivo_otros }}</p>
+                </div>
+              }
+            </div>
+        }
+        
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-volver-modal" (click)="onClose()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

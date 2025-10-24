@@ -1,0 +1,118 @@
+
+.modal-backdrop.show {
+  opacity: 0.6;
+}
+
+.modal {
+  background-color: transparent; /* El backdrop ya maneja el fondo */
+}
+
+.custom-modal-card {
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(133, 14, 53, 0.2);
+  border: none;
+}
+
+.custom-modal-header {
+  background-color: #f8f0f3; /* Fondo muy suave, casi blanco */
+  border-bottom: 2px solid #e0e0e0;
+  color: #850e35;
+  padding: 15px 25px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.btn-close-custom {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #850e35;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-close-custom:hover {
+  opacity: 1;
+}
+
+.text-primary-custom {
+    color: #850e35;
+    font-weight: 800;
+}
+
+.custom-label {
+  font-weight: 600;
+  color: #850e35;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.custom-input {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+}
+
+.custom-input:focus {
+  border-color: #a22b51;
+  box-shadow: 0 0 0 3px rgba(133, 14, 53, 0.1);
+  outline: none;
+}
+
+.text-danger {
+  font-size: 0.78rem;
+  display: block;
+  margin-top: 4px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+
+.btn-submit-modal {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%); /* Rojo/Vino para Finalizar */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(192, 57, 43, 0.3);
+}
+
+.btn-submit-modal:hover:not([disabled]) {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+}
+
+.btn-submit-modal[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-volver-modal {
+  color: #850e35;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  background: none;
+  border: none;
+}
+
+.btn-volver-modal:hover {
+  background-color: rgba(133, 14, 53, 0.05);
+}
+
+.modal-footer {
+    border-top: none;
+}

@@ -5,26 +5,27 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-//Segun la interfaz, paciente tiene toda la info del historial medico
+// Segun la interfaz, paciente tiene toda la info del historial medico
 interface Historialmedico extends PacienteData {}
+
 @Component({
   selector: 'app-listado-historialmedico',
+  standalone: true, // Asumiendo que es un componente standalone
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './listado-historialmedico.html',
   styleUrl: './listado-historialmedico.css',
+  // Es necesario que PacienteService sea provisto aquí si es standalone
 })
 export class ListadoHistorialmedico implements OnInit {
   historialData: Historialmedico[] = [];
   pacienteSeleccionado: Historialmedico | null = null;
-     public Math = Math;
+  public Math = Math; // Paginación
 
-  // Paginación
   currentPage = 1;
   pageSize = 9;
   totalItems = 0;
-  totalPages = 0;
+  totalPages = 0; // Filtros
 
-  // Filtros
   filtroNombreApellido = '';
   filtroDNI = '';
   filtroEstado: 'todos' | 'A' | 'I' = 'todos';
@@ -35,27 +36,24 @@ export class ListadoHistorialmedico implements OnInit {
 
   constructor(private pacienteService: PacienteService) {}
   ngOnInit(): void {
-    this.cargarPacientes(); // Carga la lista de pacientes desde el backend
+    this.cargarPacientes();
   }
   cargarPacientes(): void {
-    
     this.isLoading = true;
 
     const filters: PacienteFilters = {
       page: this.currentPage,
       limit: this.pageSize,
-    };
-    if (this.filtroNombreApellido.trim()) {
-      filters.nombre = this.filtroNombreApellido.trim();
-    }
-    if (this.filtroDNI.trim()) {
-      filters.dni = this.filtroDNI.trim();
-    }
-    if (this.filtroEstado !== 'todos') {
-      filters.estado = this.filtroEstado;
-    }
 
-    // Ahora envía los parámetros de paginación
+      apellido: '',
+      historialMedico: { id_historialmedico: '' },
+
+      // Propiedades de filtro (condicionales):
+      nombre: this.filtroNombreApellido.trim() || undefined,
+      dni: this.filtroDNI.trim() || undefined,
+      estado: this.filtroEstado !== 'todos' ? this.filtroEstado : undefined,
+    }; // Ahora envía los parámetros de paginación
+
     this.pacienteService.listarPacientes(filters).subscribe({
       next: (response) => {
         this.historialData = response.data;
@@ -76,32 +74,28 @@ export class ListadoHistorialmedico implements OnInit {
   filtrarPacientes(): void {
     this.currentPage = 1; // Reiniciar a página 1 cuando cambian filtros
     this.cargarPacientes();
-  }
-  // Actualizar estado del botón "Limpiar filtros"
+  } // Actualizar estado del botón "Limpiar filtros"
   actualizarBotonLimpiar(): void {
     this.hayFiltroActivo =
       !!this.filtroNombreApellido.trim() ||
       !!this.filtroDNI.trim() ||
       this.filtroEstado !== 'todos';
-  }
-  // Limpiar todos los filtros
+  } // Limpiar todos los filtros
   limpiarFiltros(): void {
     this.filtroNombreApellido = '';
     this.filtroDNI = '';
     this.filtroEstado = 'todos';
     this.currentPage = 1;
     this.cargarPacientes();
-  }
+  } // Navegar entre páginas
 
-  // Navegar entre páginas
   irAPagina(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.cargarPacientes();
     }
-  }
-  // Cambiar tamaño de página
- cambiarTamanoPagina(): void {
+  } // Cambiar tamaño de página
+  cambiarTamanoPagina(): void {
     this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
     this.cargarPacientes();
   }
@@ -115,14 +109,14 @@ export class ListadoHistorialmedico implements OnInit {
   getEstadoTexto(estado: 'A' | 'I'): string {
     return estado === 'A' ? 'Activo' : 'Inactivo';
   }
-  getSexoTexto(sexoCode: 'M' | 'F'): string {
-    switch (sexoCode) {
-      case 'M':
-        return 'Masculino';
-      case 'F':
-        return 'Femenino';
-      default:
-        return 'No especificado';
-    }
+  getSexoTexto(sexoCode: 'M' | 'F'): string {
+    switch (sexoCode) {
+      case 'M':
+        return 'Masculino';
+      case 'F':
+        return 'Femenino';
+      default:
+        return 'No especificado';
+    }
   }
 }

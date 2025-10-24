@@ -1,0 +1,112 @@
+/* REUTILIZAR ESTILOS BASE DEL MODAL DE FINALIZACIÓN */
+/* Nota: Si el modal de finalización está en una carpeta distinta, asegúrate de importar o copiar los estilos base (.modal-backdrop, .custom-modal-card, .custom-modal-header, .btn-close-custom, .btn-volver-modal) */
+
+.custom-modal-card {
+  /* Asegura que el contenedor sea visible */
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(133, 14, 53, 0.2);
+  border: none;
+}
+
+.custom-modal-header {
+  background-color: #f8f0f3;
+  border-bottom: 2px solid #e0e0e0;
+  color: #850e35;
+  padding: 15px 25px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.btn-close-custom {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #850e35;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-volver-modal {
+  color: #850e35;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  background: none;
+  border: none;
+}
+
+.btn-volver-modal:hover {
+  background-color: rgba(133, 14, 53, 0.05);
+}
+
+/* ---------------------------------- */
+/* ESTILOS ESPECÍFICOS DEL DETALLE */
+/* ---------------------------------- */
+.modal-dialog.modal-lg {
+    max-width: 800px; /* Aumentar el tamaño para el detalle */
+}
+
+.section-title {
+    font-weight: 700;
+    color: #850e35;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.section-title i {
+    color: #a22b51;
+}
+
+.info-box {
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+}
+
+.info-box strong {
+    color: #555;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.observacion-text {
+    background-color: #f0f4f7;
+    border-left: 4px solid #3498db;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-badge.active {
+    background-color: #2ecc71; /* Verde para Activo */
+}
+
+.status-badge.finished {
+    background-color: #e74c3c; /* Rojo para Finalizado */
+}
+
+/* Estilos para la sección de Finalización */
+.finalizado-title {
+    color: #c0392b;
+}
+
+.finalizado-box {
+    border: 1px dashed #e74c3c;
+    background-color: #fff8f8;
+}

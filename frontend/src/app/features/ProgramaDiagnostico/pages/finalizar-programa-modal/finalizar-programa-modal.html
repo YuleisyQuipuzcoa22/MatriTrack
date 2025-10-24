@@ -1,0 +1,73 @@
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="finalizarModalLabel" aria-modal="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content custom-modal-card">
+      
+      <div class="modal-header custom-modal-header">
+        <h5 class="modal-title" id="finalizarModalLabel">
+            <i class="fas fa-flag-checkered me-2"></i> Finalizar Programa
+        </h5>
+        <button type="button" class="btn-close-custom" (click)="onClose()" aria-label="Cerrar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-center mb-3">
+            <p>Está a punto de finalizar el programa diagnóstico:</p>
+            <h4 class="text-primary-custom mb-2">{{ programa.id_programadiagnostico }}</h4>
+            <p class="text-muted">
+                Paciente: <strong>{{ programa.historialMedico.paciente.nombre }} {{ programa.historialMedico.paciente.apellido }}</strong>
+            </p>
+        </div>
+        
+        @if (errorMessage) {
+          <div class="alert alert-danger text-center">{{ errorMessage }}</div>
+        }
+
+        <form [formGroup]="finalizarForm" (ngSubmit)="onSubmit()">
+          
+          <div class="mb-3">
+            <label class="form-label custom-label">Motivo de Finalización (*)</label>
+            <select formControlName="motivo_finalizacion" class="form-select custom-input">
+              <option value="" disabled selected>Seleccione el motivo</option>
+              @for (motivo of motivos; track motivo) {
+                <option [value]="motivo">{{ motivo }}</option>
+              }
+            </select>
+            @if (finalizarForm.get('motivo_finalizacion')?.invalid && finalizarForm.get('motivo_finalizacion')?.touched) {
+              <small class="text-danger">El motivo es obligatorio.</small>
+            }
+          </div>
+
+          <div class="mb-3" 
+               [class.d-block]="finalizarForm.get('motivo_finalizacion')?.value === MotivoFin.OTROS"
+               [class.d-none]="finalizarForm.get('motivo_finalizacion')?.value !== MotivoFin.OTROS">
+            
+            <label class="form-label custom-label">Especifique el motivo (*)</label>
+            <textarea formControlName="motivo_otros" class="form-control custom-input" rows="3" placeholder="Detalle el motivo (Máx. 100 caracteres)"></textarea>
+            
+            @if (finalizarForm.get('motivo_otros')?.invalid && finalizarForm.get('motivo_otros')?.touched) {
+              <small class="text-danger">Debe especificar el motivo (1 a 100 caracteres).</small>
+            }
+          </div>
+          
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn-submit-modal" [disabled]="finalizarForm.invalid || isLoading">
+              @if (isLoading) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Finalizando...
+              } @else {
+                Confirmar Finalización
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-volver-modal" (click)="onClose()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

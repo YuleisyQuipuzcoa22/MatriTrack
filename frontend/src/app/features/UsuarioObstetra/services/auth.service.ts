@@ -105,4 +105,35 @@ export class AuthService {
     const randomIndex = Math.floor(Math.random() * charSet.length);
     return charSet.charAt(randomIndex);
   }
+
+  private getDecodedTokenPayload(): any | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      // El payload es la segunda parte del token JWT (índice 1)
+      const payloadBase64 = token.split('.')[1];
+      return JSON.parse(atob(payloadBase64));
+    } catch (e) {
+      console.error('Error al decodificar el token:', e);
+      return null;
+    }
+  }
+
+  // MÉTODO CLAVE: Obtiene el ID del usuario
+  getCurrentUserId(): string | null {
+    const payload = this.getDecodedTokenPayload();
+    
+    if (payload) {
+        // **IMPORTANTE**: Reemplaza 'userId' con el nombre del campo 
+        // que tu backend usa para el ID de usuario en el payload del JWT (ej: 'sub', 'id_usuario', 'userId').
+        const userIdKey = 'id_usuario'; // <-- Asumiendo que tu backend usa 'id_usuario'
+        
+        return payload[userIdKey] || null;
+    }
+    return null;
+  }
+
+
+
 }
