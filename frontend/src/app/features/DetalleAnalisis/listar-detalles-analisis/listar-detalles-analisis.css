@@ -1,0 +1,349 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.header-section {
+  background: linear-gradient(135deg, #f3f2f2 0%, #ffffff 100%);
+  padding: 2rem 0;
+  box-shadow: 0 1px 10px #850e35;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #850e35;
+}
+
+.header-section h2 {
+  color: #850e35 !important;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.btn-agregar {
+  background-color: #850e35 !important;
+  color: white !important;
+  border: 2px solid #850e35 !important;
+  transition: all 0.3s;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(133, 14, 53, 0.2);
+}
+
+.btn-agregar:hover {
+  background-color: #670727 !important;
+  border-color: #670727 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(133, 14, 53, 0.3);
+}
+
+.filters-section {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.filters-title {
+  color: #850e35;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+}
+
+.filter-input .form-control,
+.filter-input .form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.3s;
+}
+
+.filter-input .form-control:focus,
+.filter-input .form-select:focus {
+  border-color: #ee6983;
+  box-shadow: 0 0 0 0.2rem rgba(238, 105, 131, 0.15);
+}
+
+.filter-input .input-group-text {
+  background-color: #ffc4c4;
+  border: 2px solid #ffc4c4;
+  color: #850e35;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.btn-clear-filters {
+  color: white !important;
+  background-color: #ee6983 !important;
+  border: none !important;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s;
+}
+
+.btn-clear-filters:hover {
+  background-color: #850e35 !important;
+  transform: scale(1.05);
+}
+
+.results-info {
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.obstetras-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* cards horizontales con botones al lado */
+.obstetra-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+}
+
+.obstetra-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #850e35, #ee6983);
+}
+
+.obstetra-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(133, 14, 53, 0.12);
+  border-color: #ee6983;
+}
+
+.card-body-custom {
+  padding: 1rem 1.2rem;
+  flex: 1 1 auto;
+}
+
+.obstetra-name {
+  color: #850e35;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.obstetra-id {
+  color: #6c757d;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.info-item i {
+  color: #ee6983;
+  width: 24px;
+  margin-right: 0.75rem;
+  font-size: 1rem;
+}
+
+.info-item strong {
+  color: #212529;
+  min-width: 70px;
+  display: inline-block;
+}
+
+/* Footer con botones al lado derecho */
+.card-footer-custom {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid #e9ecef;
+  min-width: 200px;
+}
+
+/* botones apilados verticalmente */
+.actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.btn-action-full {
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.btn-info-action { 
+  background-color: #17a2b8; 
+  color: white; 
+}
+.btn-info-action:hover { 
+  background-color: #138496; 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3); 
+}
+
+.btn-edit-action { 
+  background-color: #ffc107; 
+  color: #856404; 
+}
+.btn-edit-action:hover { 
+  background-color: #e0a800; 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3); 
+}
+.btn-edit-action.disabled { 
+  background-color: #e0e0e0; 
+  color: #aaa; 
+  cursor: not-allowed; 
+  pointer-events: none; 
+}
+
+
+/* no resultados */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  grid-column: 1 / -1;
+}
+
+.no-results i { 
+  font-size: 4rem; 
+  color: #ffc4c4; 
+  margin-bottom: 1rem; 
+}
+.no-results h4 { 
+  color: #850e35; 
+  margin-bottom: 0.5rem; 
+  font-weight: 700; 
+}
+.no-results p { 
+  color: #6c757d; 
+  margin: 0; 
+}
+
+/* modal */
+.modal-header { 
+  background: linear-gradient(135deg, #850e35 0%, #ee6983 100%); 
+  color: white !important; 
+  border-bottom: none; 
+}
+.modal-title { 
+  color: white !important; 
+  font-weight: 700; 
+}
+.modal-body { 
+  padding: 1.5rem; 
+}
+.modal-body .info-row { 
+  padding: 0.75rem 0; 
+  border-bottom: 1px solid #e9ecef; 
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.modal-body .info-row:last-child { 
+  border-bottom: none; 
+}
+.modal-body .info-row strong { 
+  color: #850e35; 
+  font-weight: 600; 
+  min-width: 150px;
+  flex-shrink: 0;
+}
+.modal-body .info-row span {
+  flex: 1 1 auto;
+  word-break: break-word;
+}
+.modal-footer { 
+  border-top: 1px solid #e9ecef; 
+  padding: 1rem 1.5rem; 
+}
+.btn-secondary { 
+  background-color: #6c757d; 
+  border-color: #6c757d; 
+}
+.btn-secondary:hover { 
+  background-color: #5a6268; 
+  border-color: #545b62; 
+}
+
+/* Evitar desbordes de texto */
+.info-item span,
+.modal-body .info-row {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .obstetra-card {
+    flex-direction: column;
+  }
+  
+  .card-footer-custom {
+    border-left: none;
+    border-top: 1px solid #e9ecef;
+    min-width: auto;
+  }
+}
+
+@media (min-width: 576px) {
+  .obstetras-grid { 
+    grid-template-columns: repeat(1, 1fr); 
+  }
+}
+@media (min-width: 768px) {
+  .obstetras-grid { 
+    grid-template-columns: repeat(1, 1fr); 
+  }
+}
+@media (min-width: 1200px) {
+  .obstetras-grid { 
+    grid-template-columns: repeat(1, 1fr); 
+  }
+}

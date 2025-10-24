@@ -16,6 +16,11 @@ import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerp
 import { ListarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio';
 import { CrearEditarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/crear-editar-controlpuerperio/crear-editar-controlpuerperio';
 import { AnalisisControl } from './features/Puerperio/ControlPuerperio/Pages/analisis-control/analisis-control';
+import { AgregarDetalleAnalisis } from './features/DetalleAnalisis/agregar-detalle-analisis/agregar-detalle-analisis';
+import { EditarDetalleAnalisis } from './features/DetalleAnalisis/editar-detalle-analisis/editar-detalle-analisis';
+import { ListarDetalleAnalisis } from './features/DetalleAnalisis/listar-detalles-analisis/listar-detalles-analisis';
+import { ConsultaVerDetalles } from './features/DetalleAnalisis/consulta-ver-detalles/consulta-ver-detalles';
+import { ProgramasHistorialmedico } from './features/HistorialMedico/pages/programas-historialmedico/programas-historialmedico';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -110,6 +115,33 @@ export const routes: Routes = [
     component: ListadoAnalisis,
     canActivate: [authGuard, roleGuard(['Administrador'])],
   },
+
+
+
+
+
+
+//Detalle Analisis
+    // La ruta estática 'registrar' debe ir antes que la ruta con parámetro ':id'
+    { path: 'detalle-analisis/registrar', component: AgregarDetalleAnalisis },
+    // ruta para ver/editar un detalle por id
+    { path: 'detalle-analisis/:id', component: EditarDetalleAnalisis },
+    //detalles analisis
+    { path: 'detalles-analisis/:id', component: ListarDetalleAnalisis },
+    //consulta detalles de un analisis
+    { path: 'consulta-detalles-analisis/:id', component: ConsultaVerDetalles },
+
+
+
+// --- NUEVAS RUTAS PARA HISTORIAL MÉDICO ---
+  {
+    path: 'historialmedico/:id/programas', // Ruta para ver los programas de UN historial (:id es el ID del historial)
+    component: ProgramasHistorialmedico,
+    canActivate: [authGuard], // Asumiendo que requiere login
+  },
+  // --- FIN NUEVAS RUTAS ---
+
+
 
 
 

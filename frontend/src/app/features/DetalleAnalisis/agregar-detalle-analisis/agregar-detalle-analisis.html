@@ -1,0 +1,69 @@
+
+<div class="agregar-root">
+  <div class="header-section">
+    <div class="container">
+        <div class ="row align- items-center">
+            <div class ="col-md-8">
+                <h2 class="mb-4">
+                    <i class="bi bi-pencil-square"></i> Registrar Nuevo Análisis a Paciente
+                </h2>
+            </div>
+
+        </div>
+    </div>
+  </div>
+  <div class="card p-4 shadow-sm">
+    <form>
+
+      <div class="mb-3">
+        <label class="form-label">Tipo de Análisis</label>
+        <select class="form-select">
+          <option value="">Seleccionar...</option>
+          <option value="Hemograma Completo">Hemograma Completo</option>
+          <option value="Examen de Orina">Examen de Orina</option>
+          <option value="Glucosa en sangre">Glucosa en sangre</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Fecha de Realización</label>
+        <input type="date" class="form-control" [(ngModel)]="fechaRealizacion" name="fechaRealizacion">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Fecha de Registro</label>
+        <!-- tipo datetime-local para permitir fecha+hora local; se convierte a ISO en el TS -->
+        <input type="datetime-local" class="form-control" [(ngModel)]="fechaRegistroLocal" name="fechaRegistroLocal">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Laboratorio</label>
+        <input type="text" class="form-control" placeholder="Nombre del laboratorio">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Subir PDF del Resultado</label>
+        <input type="file" class="form-control" accept="application/pdf" (change)="onFileSelected($event)">
+      </div>
+      
+
+      <div class="mb-3">
+        <label class="form-label">Resultado</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="resultado" name="resultado" maxlength="200"></textarea>
+  <div class="form-text text-end text-muted">{{ resultado.length || 0 }} / 200</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Observaciones</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="observaciones" name="observaciones" maxlength="200"></textarea>
+  <div class="form-text text-end text-muted">{{ observaciones.length || 0 }} / 200</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" [routerLink]="['/detalles-analisis/:id']">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="guardar()">Guardar</button>
+      </div>
+
+    </form>
+  </div>
+</div>

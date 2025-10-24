@@ -1,0 +1,70 @@
+/* root */
+.body {
+
+  background-color: #f8f9fa;
+}
+
+.header-section {
+  background: linear-gradient(135deg, #f3f2f2 0%, #ffffff 100%);
+  padding: 2rem 0;
+  box-shadow: 0 1px 10px #850e35;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #850e35;
+}
+
+.header-section h2 {
+  color: #850e35 !important;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #850e35; /* color morado */
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* BOTONES */
+.btn-primary {
+  background-color: #850e35;
+  border-color: #850e35;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #670727;
+  border-color: #670727;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(133, 14, 53, 0.25);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+/* contenedor botones */
+.d-flex.justify-content-end.gap-2 {
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+
+
