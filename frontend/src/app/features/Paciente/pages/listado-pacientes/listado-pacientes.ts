@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PacienteFilters, PacienteService } from '../../services/paciente.service';
 import { PacienteData } from '../../model/paciente-historial';
+import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 //usar interfaz PacienteData del servicio para consistencia
 
 @Component({
   selector: 'app-listado-pacientes',
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink,Paginacion],
   templateUrl: './listado-pacientes.html',
   styleUrl: '../../../../styles/styleListadoCRUD.css',
 })
@@ -21,7 +22,6 @@ export class ListadoPacientes implements OnInit {
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
-  public Math = Math;
   conteoResultados = 0; // Este debe ser 'totalItems' del backend
 
   // Filtros
@@ -92,19 +92,6 @@ export class ListadoPacientes implements OnInit {
     this.cargarPacientes();
   }
 
-  // Navegar entre páginas
-  irAPagina(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.cargarPacientes();
-    }
-  }
-  // Cambiar tamaño de página o sea mostrar 9,10,20
-  cambiarTamanoPagina(): void {
-    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
-    this.cargarPacientes();
-  }
-
   // Cambiar estado (Activar/Inactivar)
   cambiarEstado(id: string, nuevoEstado: 'A' | 'I'): void {
     const paciente = this.pacientes.find((p) => p.id_paciente === id);
@@ -156,5 +143,16 @@ export class ListadoPacientes implements OnInit {
       default:
         return 'No especificado';
     }
+  }
+  // Navegar entre páginas
+  irAPagina(page: number): void {
+    this.currentPage = page;
+    this.cargarPacientes();
+  }
+  // Cambiar tamaño de página o sea mostrar 9,10,20
+  cambiarTamanoPagina(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+    this.cargarPacientes();
   }
 }

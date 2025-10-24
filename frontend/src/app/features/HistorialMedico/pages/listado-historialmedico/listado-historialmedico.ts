@@ -4,25 +4,26 @@ import { PacienteFilters, PacienteService } from '../../../Paciente/services/pac
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 //Segun la interfaz, paciente tiene toda la info del historial medico
 interface Historialmedico extends PacienteData {}
 @Component({
   selector: 'app-listado-historialmedico',
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-historialmedico.html',
   styleUrl: './listado-historialmedico.css',
 })
 export class ListadoHistorialmedico implements OnInit {
   historialData: Historialmedico[] = [];
   pacienteSeleccionado: Historialmedico | null = null;
-     public Math = Math;
 
   // Paginación
   currentPage = 1;
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
+  conteoResultados = 0;
 
   // Filtros
   filtroNombreApellido = '';
@@ -31,14 +32,12 @@ export class ListadoHistorialmedico implements OnInit {
 
   isLoading = false;
   hayFiltroActivo = false;
-  conteoResultados = 0;
 
   constructor(private pacienteService: PacienteService) {}
   ngOnInit(): void {
     this.cargarPacientes(); // Carga la lista de pacientes desde el backend
   }
   cargarPacientes(): void {
-    
     this.isLoading = true;
 
     const filters: PacienteFilters = {
@@ -93,18 +92,6 @@ export class ListadoHistorialmedico implements OnInit {
     this.cargarPacientes();
   }
 
-  // Navegar entre páginas
-  irAPagina(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.cargarPacientes();
-    }
-  }
-  // Cambiar tamaño de página
- cambiarTamanoPagina(): void {
-    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
-    this.cargarPacientes();
-  }
   mostrarInfoHistorial(id: string): void {
     this.pacienteSeleccionado = this.historialData.find((p) => p.id_paciente === id) || null;
   }
@@ -124,5 +111,16 @@ export class ListadoHistorialmedico implements OnInit {
       default:
         return 'No especificado';
     }
+  }
+  // Navegar entre páginas
+  irAPagina(page: number): void {
+    this.currentPage = page;
+    this.cargarPacientes();
+  }
+  // Cambiar tamaño de página
+  cambiarTamanoPagina(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+    this.cargarPacientes();
   }
 }

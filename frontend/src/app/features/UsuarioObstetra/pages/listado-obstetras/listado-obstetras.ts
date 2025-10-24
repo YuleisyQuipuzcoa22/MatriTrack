@@ -7,13 +7,14 @@ import {
   UserData,
   UsuarioFilters,
 } from '../../services/user-obstetra.service';
+import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 // Usaremos la interfaz UserData del servicio para consistencia
 interface Obstetra extends UserData {}
 
 @Component({
   selector: 'app-listado-obstetras',
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-obstetras.html',
   styleUrl: '../../../../styles/styleListadoCRUD.css',
 })
@@ -24,7 +25,6 @@ export class ListadoObstetras implements OnInit {
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
-  public Math = Math;
   conteoResultados = 0;
 
   // Filtros
@@ -149,14 +149,13 @@ export class ListadoObstetras implements OnInit {
 
   // Navegar entre páginas
   irAPagina(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.cargarObstetras();
-    }
+    this.currentPage = page;
+    this.cargarObstetras();
   }
   // Cambiar tamaño de página o sea mostrar 9,10,20
-  cambiarTamanoPagina(): void {
-    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+  cambiarTamanoPagina(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1;
     this.cargarObstetras();
   }
 }
