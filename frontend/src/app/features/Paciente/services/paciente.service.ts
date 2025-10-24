@@ -13,12 +13,6 @@ export interface PacienteFilters extends BasePaginationParams {
   nombreApellido?: string;
   dni?: string;
   estado?: 'A' | 'I';
-  apellido: string;
-  historialMedico: {
-        id_historialmedico: string; // ¡CRÍTICO! Necesitamos este campo
-        // ... otros campos del historial ...
-    };
-
 }
 
 @Injectable({
@@ -67,32 +61,28 @@ export class PacienteService {
       .pipe(map((response) => response.data));
   }
 
+  /**NUEVO */
   buscarPacientePorDni(dni: string): Observable<PacienteData | null> {
-  
-        let params = new HttpParams().set('dni', dni).set('estado', 'A'); 
-        
-        return this.http
-            .get<PaginatedApiResponse<PacienteData>>(this.apiUrl, { params })
-            .pipe(
-                map(response => {
-                    if (response.data && response.data.length > 0) {
-                        return response.data[0];
-                    }
-                    return null; 
-                })
-            );
-    }
-     getHistorialIdByDni(dni: string): Observable<string | null> {
-        return this.buscarPacientePorDni(dni)
-            .pipe(
-                map(pacienteData => {
-          
-                    const data: any = pacienteData;
-                    if (data && data.historialMedico && data.historialMedico.id_historialmedico) {
-                        return data.historialMedico.id_historialmedico as string;
-                    }
-                    return null;
-                })
-            );
-    }
+    let params = new HttpParams().set('dni', dni).set('estado', 'A');
+
+    return this.http.get<PaginatedApiResponse<PacienteData>>(this.apiUrl, { params }).pipe(
+      map((response) => {
+        if (response.data && response.data.length > 0) {
+          return response.data[0];
+        }
+        return null;
+      })
+    );
+  }
+  getHistorialIdByDni(dni: string): Observable<string | null> {
+    return this.buscarPacientePorDni(dni).pipe(
+      map((pacienteData) => {
+        const data: any = pacienteData;
+        if (data && data.historialMedico && data.historialMedico.id_historialmedico) {
+          return data.historialMedico.id_historialmedico as string;
+        }
+        return null;
+      })
+    );
+  }
 }
