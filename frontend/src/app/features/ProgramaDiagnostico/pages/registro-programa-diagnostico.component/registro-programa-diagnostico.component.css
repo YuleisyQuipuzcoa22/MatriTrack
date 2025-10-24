@@ -1,0 +1,104 @@
+/* ---------------------------------- */
+/* FONDO Y TARJETA PRINCIPAL */
+/* ---------------------------------- */
+.page-background {
+    background-color: #f8f8f8; /* Fondo suave */
+    min-height: 100vh;
+}
+
+.custom-form-card {
+    max-width: 900px; /* Ancho de formulario grande */
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(133, 14, 53, 0.1);
+    border: none;
+}
+
+.title-header {
+    font-weight: 800;
+    color: #850e35;
+    text-align: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.subtitle-text {
+    color: #555;
+    font-size: 0.95rem;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* ---------------------------------- */
+/* ELEMENTOS DEL FORMULARIO */
+/* ---------------------------------- */
+.custom-label {
+    font-weight: 600;
+    color: #850e35;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    display: block;
+}
+
+.custom-input {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: all 0.2s ease-in-out;
+    font-size: 0.9rem;
+}
+
+.custom-input:focus {
+    border-color: #a22b51;
+    box-shadow: 0 0 0 3px rgba(133, 14, 53, 0.1);
+    outline: none;
+}
+
+.text-danger.small {
+    font-size: 0.75rem;
+    color: #e74c3c;
+}
+
+/* ---------------------------------- */
+/* BOTONES DE ACCIÓN */
+/* ---------------------------------- */
+.button-container {
+    padding-top: 20px;
+}
+
+.btn-submit-custom {
+    background: linear-gradient(45deg, #c0392b 0%, #a22b51 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(192, 57, 43, 0.3);
+}
+
+.btn-submit-custom:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+}
+
+.btn-submit-custom[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-back-custom {
+    background-color: #f0f0f0;
+    color: #850e35;
+    border: 1px solid #ddd;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-back-custom:hover {
+    background-color: #e0e0e0;
+}

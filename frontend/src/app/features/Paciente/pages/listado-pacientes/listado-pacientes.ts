@@ -10,7 +10,7 @@ import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 @Component({
   selector: 'app-listado-pacientes',
-  imports: [FormsModule, CommonModule, RouterLink,Paginacion],
+  imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-pacientes.html',
   styleUrl: '../../../../styles/styleListadoCRUD.css',
 })
@@ -22,9 +22,8 @@ export class ListadoPacientes implements OnInit {
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
-  conteoResultados = 0; // Este debe ser 'totalItems' del backend
+  conteoResultados = 0; // Este debe ser 'totalItems' del backend // Filtros
 
-  // Filtros
   filtroNombreApellido = '';
   filtroDNI = '';
   filtroEstado: 'todos' | 'A' | 'I' = 'todos';
@@ -52,9 +51,8 @@ export class ListadoPacientes implements OnInit {
     }
     if (this.filtroEstado !== 'todos') {
       filters.estado = this.filtroEstado;
-    }
+    } // Ahora envía los parámetros de paginación
 
-    // Ahora envía los parámetros de paginación
     this.pacienteService.listarPacientes(filters).subscribe({
       next: (response) => {
         this.pacientes = response.data;
@@ -75,15 +73,13 @@ export class ListadoPacientes implements OnInit {
   filtrarPacientes(): void {
     this.currentPage = 1; // Reiniciar a página 1 cuando cambian filtros
     this.cargarPacientes();
-  }
-  // Actualizar estado del botón "Limpiar filtros"
+  } // Actualizar estado del botón "Limpiar filtros"
   actualizarBotonLimpiar(): void {
     this.hayFiltroActivo =
       !!this.filtroNombreApellido.trim() ||
       !!this.filtroDNI.trim() ||
       this.filtroEstado !== 'todos';
-  }
-  // Limpiar todos los filtros
+  } // Limpiar todos los filtros
   limpiarFiltros(): void {
     this.filtroNombreApellido = '';
     this.filtroDNI = '';
@@ -119,14 +115,12 @@ export class ListadoPacientes implements OnInit {
         });
       }
     }
-  }
+  } // Mostrar información en modal
 
-  // Mostrar información en modal
   mostrarInfoPaciente(id: string): void {
     this.pacienteSeleccionado = this.pacientes.find((p) => p.id_paciente === id) || null;
-  }
+  } // Obtener clase CSS según estado
 
-  // Obtener clase CSS según estado
   getEstadoClase(estado: string): string {
     return estado === 'A' ? 'badge-activo' : 'badge-inactivo';
   }

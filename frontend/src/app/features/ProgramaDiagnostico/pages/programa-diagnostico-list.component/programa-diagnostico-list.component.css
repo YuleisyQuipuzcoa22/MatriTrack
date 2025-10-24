@@ -1,0 +1,135 @@
+/* ---------------------------------- */
+/* ESTILOS GLOBALES Y CONTENEDORES */
+/* ---------------------------------- */
+.custom-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.custom-header-title {
+    color: #850e35;
+    font-weight: 700;
+}
+
+.btn-primary-custom {
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn-primary-custom:hover {
+    background-color: #a22b51;
+    color: white;
+}
+
+.btn-outline-primary-custom {
+    color: #850e35;
+    border: 1px solid #850e35;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-outline-primary-custom:hover {
+    background-color: #850e35;
+    color: white;
+}
+
+/* ---------------------------------- */
+/* FILTROS */
+/* ---------------------------------- */
+.filter-box {
+    border-radius: 10px;
+    background-color: #fcfcfc;
+    border: 1px solid #eee;
+}
+
+.filter-title {
+    color: #a22b51;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.form-control, .custom-select-filter {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+/* ---------------------------------- */
+/* TARJETAS DE PROGRAMA */
+/* ---------------------------------- */
+
+.program-card {
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(133, 14, 53, 0.1);
+}
+
+.text-primary-custom {
+    color: #850e35;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.detail-row {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.detail-icon {
+    color: #a22b51;
+    min-width: 20px;
+}
+
+/* ESTADOS */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    min-width: 70px;
+    text-align: center;
+}
+
+.status-activo { background-color: #2ecc71; } /* Verde */
+.status-inactivo { background-color: #95a5a6; } /* Gris */
+.status-finalizado { background-color: #e74c3c; } /* Rojo */
+
+
+/* ---------------------------------- */
+/* BOTONES DE ACCIÓN DE TARJETA */
+/* ---------------------------------- */
+
+.action-buttons button {
+    margin: 0 2px;
+    border-radius: 50%; /* Botones redondos */
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+/* Colores de botones personalizados */
+.btn-info-custom { background-color: #3498db; color: white; border: none; } /* Detalle (Azul) */
+.btn-warning-custom { background-color: #f39c12; color: white; border: none; } /* Controles (Naranja) */
+.btn-secondary-custom { background-color: #6c757d; color: white; border: none; } /* Editar (Gris Oscuro) */
+.btn-danger-custom { background-color: #c0392b; color: white; border: none; } /* Finalizar (Vino) */
+.btn-success-custom { background-color: #27ae60; color: white; border: none; } /* Activar (Verde Oscuro) */
+
+.action-buttons button:hover {
+    opacity: 0.8;
+}

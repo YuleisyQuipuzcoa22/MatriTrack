@@ -11,6 +11,8 @@ import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/list
 import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado-historialmedico/listado-historialmedico';
 import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
 import { EditarPaciente } from './features/Paciente/pages/editar-paciente/editar-paciente';
+import { ProgramaDiagnosticoListComponent } from './features/ProgramaDiagnostico/pages/programa-diagnostico-list.component/programa-diagnostico-list.component';
+import { RegistroProgramaDiagnosticoComponent } from './features/ProgramaDiagnostico/pages/registro-programa-diagnostico.component/registro-programa-diagnostico.component';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -41,8 +43,23 @@ export const routes: Routes = [
     canActivate: [authGuard], // Requiere estar logueado
   },
 
-
-
+{
+    path: 'diagnostico',
+    component: ProgramaDiagnosticoListComponent, // Listado de programas
+    canActivate: [authGuard], 
+  },
+  {
+    // Ruta para CREAR: Requiere el ID del historial médico para saber a qué paciente se asigna
+    path: 'diagnostico/registrar', 
+    component: RegistroProgramaDiagnosticoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    // Ruta para EDITAR: Requiere el ID del programa diagnóstico
+    path: 'diagnostico/editar/:id', 
+    component: RegistroProgramaDiagnosticoComponent, // Reutiliza el componente
+    canActivate: [authGuard],
+  },
 
   // Rutas protegidas (solo Administrador)
   {

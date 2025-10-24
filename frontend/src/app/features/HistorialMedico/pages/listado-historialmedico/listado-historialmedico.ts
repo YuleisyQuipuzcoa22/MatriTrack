@@ -6,26 +6,26 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Paginacion } from '../../../../components/paginacion/paginacion';
 
-//Segun la interfaz, paciente tiene toda la info del historial medico
+// Segun la interfaz, paciente tiene toda la info del historial medico
 interface Historialmedico extends PacienteData {}
+
 @Component({
   selector: 'app-listado-historialmedico',
   imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-historialmedico.html',
   styleUrl: './listado-historialmedico.css',
+  // Es necesario que PacienteService sea provisto aquí si es standalone
 })
 export class ListadoHistorialmedico implements OnInit {
   historialData: Historialmedico[] = [];
   pacienteSeleccionado: Historialmedico | null = null;
 
-  // Paginación
   currentPage = 1;
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
   conteoResultados = 0;
 
-  // Filtros
   filtroNombreApellido = '';
   filtroDNI = '';
   filtroEstado: 'todos' | 'A' | 'I' = 'todos';
@@ -35,7 +35,7 @@ export class ListadoHistorialmedico implements OnInit {
 
   constructor(private pacienteService: PacienteService) {}
   ngOnInit(): void {
-    this.cargarPacientes(); // Carga la lista de pacientes desde el backend
+    this.cargarPacientes();
   }
   cargarPacientes(): void {
     this.isLoading = true;
@@ -53,8 +53,7 @@ export class ListadoHistorialmedico implements OnInit {
     if (this.filtroEstado !== 'todos') {
       filters.estado = this.filtroEstado;
     }
-
-    // Ahora envía los parámetros de paginación
+     
     this.pacienteService.listarPacientes(filters).subscribe({
       next: (response) => {
         this.historialData = response.data;
@@ -75,22 +74,20 @@ export class ListadoHistorialmedico implements OnInit {
   filtrarPacientes(): void {
     this.currentPage = 1; // Reiniciar a página 1 cuando cambian filtros
     this.cargarPacientes();
-  }
-  // Actualizar estado del botón "Limpiar filtros"
+  } // Actualizar estado del botón "Limpiar filtros"
   actualizarBotonLimpiar(): void {
     this.hayFiltroActivo =
       !!this.filtroNombreApellido.trim() ||
       !!this.filtroDNI.trim() ||
       this.filtroEstado !== 'todos';
-  }
-  // Limpiar todos los filtros
+  } // Limpiar todos los filtros
   limpiarFiltros(): void {
     this.filtroNombreApellido = '';
     this.filtroDNI = '';
     this.filtroEstado = 'todos';
     this.currentPage = 1;
     this.cargarPacientes();
-  }
+  } // Navegar entre páginas
 
   mostrarInfoHistorial(id: string): void {
     this.pacienteSeleccionado = this.historialData.find((p) => p.id_paciente === id) || null;
@@ -102,15 +99,15 @@ export class ListadoHistorialmedico implements OnInit {
   getEstadoTexto(estado: 'A' | 'I'): string {
     return estado === 'A' ? 'Activo' : 'Inactivo';
   }
-  getSexoTexto(sexoCode: 'M' | 'F'): string {
-    switch (sexoCode) {
-      case 'M':
-        return 'Masculino';
-      case 'F':
-        return 'Femenino';
-      default:
-        return 'No especificado';
-    }
+  getSexoTexto(sexoCode: 'M' | 'F'): string {
+    switch (sexoCode) {
+      case 'M':
+        return 'Masculino';
+      case 'F':
+        return 'Femenino';
+      default:
+        return 'No especificado';
+    }
   }
   // Navegar entre páginas
   irAPagina(page: number): void {
