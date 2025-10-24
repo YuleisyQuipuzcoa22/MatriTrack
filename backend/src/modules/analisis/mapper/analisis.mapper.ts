@@ -8,11 +8,14 @@ export class AnalisisMapper {
       id_analisis: analisis.id_analisis,
       nombre_analisis: analisis.nombre_analisis,
       descripcion_analisis: analisis.descripcion_analisis,
+      estado: analisis.estado,
     };
   }
+
   static toResponseDtoList(analisis: Analisis[]): ResponseAnalisisDto[] {
     return analisis.map((analisis) => this.toResponseDto(analisis));
   }
+
   static toEntity(createDto: CreateAnalisisDto, id: string): Analisis {
     const analisis = new Analisis();
     analisis.id_analisis = id;
@@ -25,6 +28,9 @@ export class AnalisisMapper {
       analisis.nombre_analisis = updateDto.nombre_analisis;
     if (updateDto.descripcion_analisis)
       analisis.descripcion_analisis = updateDto.descripcion_analisis;
+    if (updateDto.estado) 
+      analisis.estado = updateDto.estado;
+    
     return analisis;
   }
 }

@@ -9,6 +9,7 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('control_diagnostico')
@@ -18,23 +19,21 @@ export class ControlDiagnostico {
   id_control_diagnostico!: string;
 
   // Relación Many-to-One con ProgramaDiagnostico
-  // Un programa puede tener muchos controles médicos
+  // Muchos controles puede tener 1 programa
+  @Column({ type: 'char', length: 7, nullable: false })
+  id_programadiagnostico!: string;
+  
   @ManyToOne(() => ProgramaDiagnostico)
   @JoinColumn({ name: 'id_programadiagnostico' })
   programaDiagnostico!: ProgramaDiagnostico;
 
-  // FK explícita para ProgramaDiagnostico
-  @Column({ type: 'char', length: 7, nullable: false })
-  id_programadiagnostico!: string;
-
   // Relación Many-to-One con Usuario (el obstetra que realiza el control)
+  @Column({ type: 'char', length: 6, nullable: false })
+  id_usuario!: string;
+
   @ManyToOne(() => Usuario)
   @JoinColumn({ name: 'id_usuario' })
   usuario!: Usuario;
-
-  // FK explícita para Usuario
-  @Column({ type: 'char', length: 6, nullable: false })
-  id_usuario!: string;
 
   // Fecha de control se establece automáticamente al crear
   @CreateDateColumn({ type: 'datetime' })
@@ -69,7 +68,7 @@ export class ControlDiagnostico {
   @Column({ type: 'varchar', length: 255, nullable: true })
   recomendacion: string | null = null;
 
-  @ManyToOne(
+  @OneToMany(
     () => ResultadoAnalisis,
     (resultado) => resultado.controlMedicoDiagnostico,
   )

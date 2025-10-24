@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { Estado } from 'src/enums/Estado';
 
 export class QueryAnalisisDto {
   // Paginación
@@ -19,6 +20,10 @@ export class QueryAnalisisDto {
   @IsOptional()
   @IsString()
   nombreAnalisis?: string;
+
+  @IsOptional()
+  @IsEnum(Estado)
+  estado?: Estado;
 
   // Ordenamiento
   @IsOptional()

@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -12,6 +13,7 @@ import {
 import { AnalisisService } from './analisis.service';
 import { CreateAnalisisDto } from './dto/create_analisis.dto';
 import { QueryAnalisisDto } from './dto/QueryAnalisis.dto';
+import { UpdateAnalisisDto } from './dto/update_analisis.dto';
 
 @Controller('analisis')
 export class AnalisisController {
@@ -50,7 +52,7 @@ export class AnalisisController {
   @HttpCode(HttpStatus.OK)
   async modificarAnalisis(
     @Param('id') id: string,
-    @Body() updateAnalisisDto: CreateAnalisisDto,
+    @Body() updateAnalisisDto: UpdateAnalisisDto,
   ) {
     const analisis = await this.analisisService.modificarAnalisis(
       id,
@@ -60,5 +62,15 @@ export class AnalisisController {
       message: 'Analisis modificado con éxito',
       data: analisis,
     };
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  async inhabilitarAnalisis(@Param('id') id: string){
+    const analisis = await this.analisisService.inhabilitarAnalisis(id);
+    return{
+      message: 'Análisis inhabilitado con éxito',
+      data:analisis,
+    }
   }
 }

@@ -10,6 +10,8 @@ import { CreateAnalisisDto } from './dto/create_analisis.dto';
 import { ResponseAnalisisDto } from './dto/response_analisis.dto';
 import { AnalisisMapper } from './mapper/analisis.mapper';
 import { QueryAnalisisDto } from './dto/QueryAnalisis.dto';
+import { Estado } from 'src/enums/Estado';
+import { UpdateAnalisisDto } from './dto/update_analisis.dto';
 
 @Injectable()
 export class AnalisisService {
@@ -58,18 +60,29 @@ export class AnalisisService {
   }
 
   async listarAnalisis(queryDto: QueryAnalisisDto) {
-    const { page = 1, limit = 10, nombreAnalisis, sortBy, order } = queryDto;
+    const { 
+      page = 1, 
+      limit = 10, 
+      nombreAnalisis, 
+      estado,
+      sortBy, 
+      order 
+    } = queryDto;
 
     // Calcular offset para paginación
     const skip = (page - 1) * limit;
     // Crear query builder
     const queryBuilder = this.analisisRepository.createQueryBuilder('analisis');
+
     if (nombreAnalisis) {
       const search = nombreAnalisis.trim().toUpperCase();
       queryBuilder.andWhere(
         '(UPPER(analisis.nombre_analisis) LIKE :nombreAnalisis)',
         { nombreAnalisis: `%${search}%` },
       );
+    }
+    if(estado){
+      queryBuilder.andWhere('analisis.estado = :estado', {estado});
     }
     queryBuilder.orderBy(`analisis.${sortBy}`, order);
     const [analisis, total] = await queryBuilder
@@ -101,10 +114,10 @@ export class AnalisisService {
     return AnalisisMapper.toResponseDto(analisis);
   }
 
-  //uso el dto de create porque analisis tiene pocos atributos y además todos si o si debe ingresarlo, si tuviera datos que no se editan si sería otro dto update
+  //uso el dto de update y no de create porque el atributo "estado" hace la diferencia
   async modificarAnalisis(
     id: string,
-    updateAnalisisDto: CreateAnalisisDto,
+    updateAnalisisDto: UpdateAnalisisDto,
   ): Promise<ResponseAnalisisDto> {
     const analisis = await this.analisisRepository.findOneBy({
       id_analisis: id,
@@ -129,7 +142,7 @@ export class AnalisisService {
       throw error;
     }
   }
-  /*
+  
   async inhabilitarAnalisis(id: string): Promise<ResponseAnalisisDto> {
     const analisis = await this.analisisRepository.findOneBy({
       id_analisis: id,
@@ -137,7 +150,11 @@ export class AnalisisService {
      if (!analisis) {
       throw new NotFoundException('Analisis no encontrado');
     }
-    analisis
+    if(analisis.estado === Estado.INACTIVO){
+      throw new ConflictException('El análisis ya está inactivo');
+    }
+    analisis.estado = Estado.INACTIVO;
     const analisisInhabilitado = await this.analisisRepository.save(analisis);
-  }*/
+    return AnalisisMapper.toResponseDto(analisisInhabilitado)
+  }
 }
