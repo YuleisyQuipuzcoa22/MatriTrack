@@ -33,7 +33,7 @@ export class UpdateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  @Length(6, 10)
+  @Length(6, 20)
   numero_colegiatura?: string;
 
   @IsOptional()

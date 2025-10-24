@@ -39,11 +39,11 @@ export class ControlPuerperio {
   usuario_id_usuario!: string;
 
   // Fecha de control (automática)
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime', nullable: false })
   fecha_controlpuerperio!: Date;
 
   // Fecha de modificación (automática)
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'datetime', nullable: true })
   fecha_modificacion!: Date;
 
   // Columnas normales

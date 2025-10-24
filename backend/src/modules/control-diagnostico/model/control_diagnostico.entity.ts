@@ -22,7 +22,7 @@ export class ControlDiagnostico {
   // Muchos controles puede tener 1 programa
   @Column({ type: 'char', length: 7, nullable: false })
   id_programadiagnostico!: string;
-  
+
   @ManyToOne(() => ProgramaDiagnostico)
   @JoinColumn({ name: 'id_programadiagnostico' })
   programaDiagnostico!: ProgramaDiagnostico;
@@ -36,11 +36,11 @@ export class ControlDiagnostico {
   usuario!: Usuario;
 
   // Fecha de control se establece automáticamente al crear
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime',nullable: false})
   fecha_controldiagnostico!: Date;
 
   // Fecha de modificación se actualiza automáticamente
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'datetime',nullable: true  })
   fecha_modificacion!: Date;
 
   // Columnas normales
