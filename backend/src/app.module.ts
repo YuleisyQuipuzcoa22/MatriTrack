@@ -20,6 +20,8 @@ import { ResultadoAnalisis } from './modules/resultado-analisis/model/resultado-
 import { ProgramaDiagnosticoModule } from './modules/programa-diagnostico/programa-diagnostico.module';
 import { ControlDiagnosticoModule } from './modules/control-diagnostico/control-diagnostico.module';
 import { AnalisisModule } from './modules/analisis/analisis.module';
+import { ProgramaPuerperioModule } from './modules/programa-puerperio/programa-puerperio.module';
+import { ControlPuerperioModule } from './modules/control-puerperio/control-puerperio.module';
 
 @Module({
   imports: [
@@ -40,20 +42,20 @@ import { AnalisisModule } from './modules/analisis/analisis.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         entities: [
-            Paciente,
-            HistorialMedico,
-            Usuario,
-            ProgramaDiagnostico,
-            ProgramaPuerperio,
-            ControlDiagnostico,
-            ControlPuerperio,
-            Analisis,
-            ResultadoAnalisis
-            // Agrega cualquier otra entidad aquí, por ejemplo: Usuario
+          Paciente,
+          HistorialMedico,
+          Usuario,
+          ProgramaDiagnostico,
+          ProgramaPuerperio,
+          ControlDiagnostico,
+          ControlPuerperio,
+          Analisis,
+          ResultadoAnalisis,
+          // Agrega cualquier otra entidad aquí, por ejemplo: Usuario
         ],
         synchronize: true,
         logging: false,
-        timezone: '-05:00', 
+        timezone: '-05:00',
       }),
       inject: [ConfigService],
     }),
@@ -67,6 +69,8 @@ import { AnalisisModule } from './modules/analisis/analisis.module';
     ProgramaDiagnosticoModule,
     ControlDiagnosticoModule,
     AnalisisModule,
+    ProgramaPuerperioModule,
+    ControlPuerperioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

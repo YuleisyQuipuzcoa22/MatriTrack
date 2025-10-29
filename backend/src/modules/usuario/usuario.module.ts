@@ -7,8 +7,7 @@ import { UsuarioService } from './usuario.service';
 import { Usuario } from './model/usuario.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario
-  ])],
+  imports: [TypeOrmModule.forFeature([Usuario])],
   controllers: [UsuarioController],
   providers: [UsuarioService],
   exports: [UsuarioService], // Para usar en otros módulos (Auth)

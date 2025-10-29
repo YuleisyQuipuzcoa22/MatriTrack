@@ -259,6 +259,7 @@ async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta
     // Desestructuramos la data y la tratamos como el tipo definido
     const { success, 'error-codes': errorCodes } =
       googleResponse.data as RecaptchaResponse;
+    console.log('Resultado de reCAPTCHA (success):', success); // <--- DEBE SER TRUE
 
     if (!success) {
       console.error('Error de verificación reCAPTCHA:', errorCodes);
@@ -274,7 +275,7 @@ async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta
       .addSelect('usuario.contrasena') //seleccionar la contraseña que por defecto no se selecciona
       .where('usuario.dni = :dni', { dni }) //filtrar por dni
       .getOne();
-
+    console.log('Usuario encontrado:', usuario ? usuario.dni : 'null');
     if (!usuario || usuario.estado === Estado.INACTIVO) {
       throw new UnauthorizedException(
         'Credenciales inválidas o usuario inactivo',
