@@ -19,7 +19,6 @@ import { DetalleProgramaModalComponent } from '../detalle-programa-modal/detalle
   imports: [
     CommonModule, 
     ReactiveFormsModule, 
-    RouterLink,
     FinalizarProgramaModalComponent,
     DetalleProgramaModalComponent
   ],
