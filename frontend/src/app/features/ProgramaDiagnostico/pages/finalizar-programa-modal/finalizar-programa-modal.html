@@ -17,7 +17,7 @@
             <p>Está a punto de finalizar el programa diagnóstico:</p>
             <h4 class="text-primary-custom mb-2">{{ programa.id_programadiagnostico }}</h4>
             <p class="text-muted">
-                Paciente: <strong>{{ programa.historialMedico.paciente.nombre }} {{ programa.historialMedico.paciente.apellido }}</strong>
+                Paciente: <strong>{{ programa.paciente?.nombre }} {{ programa.paciente?.nombre }}</strong>
             </p>
         </div>
         

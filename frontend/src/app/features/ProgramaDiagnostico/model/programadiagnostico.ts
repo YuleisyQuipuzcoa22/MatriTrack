@@ -40,11 +40,19 @@ export interface ProgramaDiagnostico {
   fecha_probableparto: string | null;
   factor_riesgo: string | null;
   observacion: string | null;
-  estado: Estado;
+  estado: "ACTIVO"| "FINALIZADO";
   fecha_finalizacion: string | null;
   motivo_finalizacion: MotivoFin | null;
   motivo_otros: string | null;
-  historialMedico: HistorialMedico;
+  //historialMedico: HistorialMedico;
+
+  paciente?: {
+    id_paciente: string;
+    nombre: string;
+    apellido: string;
+    dni: string;
+    edad: number;
+  };
 }
 
 export interface CreateProgramaDiagnosticoDto {
@@ -59,10 +67,4 @@ export interface FinalizarProgramaDiagnosticoDto {
   motivo_otros?: string;
 }
 
-
-export interface FiltrosPrograma {
-  dni?: string;
-  nombre?: string;
-  estado?: Estado | 'TODOS'; // 'TODOS' es una opción extra en el frontend para buscar todos los estados
-}
 

@@ -11,7 +11,7 @@ import { ListadoAnalisis } from './features/Analisis/pages/listado-analisis/list
 import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado-historialmedico/listado-historialmedico';
 import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
 import { EditarPaciente } from './features/Paciente/pages/editar-paciente/editar-paciente';
-import { ProgramaDiagnosticoListComponent } from './features/ProgramaDiagnostico/pages/programa-diagnostico-list.component/programa-diagnostico-list.component';
+import { ProgramaDiagnosticoListComponent } from './features/ProgramaDiagnostico/pages/programa-diagnostico-list.component/list-programadiagnostico';
 import { RegistroProgramaDiagnosticoComponent } from './features/ProgramaDiagnostico/pages/registro-programa-diagnostico.component/registro-programa-diagnostico.component';
 import { ListarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/listar-programapuerperio/listar-programapuerperio';
 import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/crear-editar-programapuerperio/crear-editar-programapuerperio';

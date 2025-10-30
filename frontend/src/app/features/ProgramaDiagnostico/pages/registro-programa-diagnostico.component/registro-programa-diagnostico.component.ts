@@ -155,7 +155,7 @@ export class RegistroProgramaDiagnosticoComponent implements OnInit {
     this.programaService.getProgramaById(id).subscribe({
       next: (programa: ProgramaDiagnostico) => {
         
-        if (programa.estado !== 'A') {
+        if (programa.estado !== 'ACTIVO') {
             alert('Solo se pueden editar programas con estado ACTIVO.');
             this.router.navigate(['/diagnostico']);
             return;
@@ -169,7 +169,7 @@ export class RegistroProgramaDiagnosticoComponent implements OnInit {
         });
         
         // Obtener el nombre del paciente del historial asociado
-        this.pacienteNombreCompleto = `${programa.historialMedico.paciente.nombre} ${programa.historialMedico.paciente.apellido}`;
+        this.pacienteNombreCompleto = `${programa.paciente?.nombre} ${programa.paciente?.apellido}`;
         this.isLoading = false;
       },
       error: (err) => {

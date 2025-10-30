@@ -1,51 +1,51 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ProgramaDiagnostico, 
-  FiltrosPrograma, 
-  CreateProgramaDiagnosticoDto, 
+import { map, Observable } from 'rxjs';
+import {
+  ProgramaDiagnostico,
+  CreateProgramaDiagnosticoDto,
   FinalizarProgramaDiagnosticoDto,
-  Estado } from '../model/programadiagnostico';
+  Estado,
+} from '../model/programadiagnostico';
+import { ApiResponse, BasePaginationParams, PaginatedApiResponse } from '../../../../core/API_Response-interfaces/api-response.model';
 
-// URL base de tu API (Ajusta si es diferente)
-const API_URL = 'http://localhost:3000/api/programas-diagnostico';
+export interface ProgramaDiagnosticoFilters extends BasePaginationParams {
+  nombreApellido?: string;
+  dni?: string;
+  estadoPaciente?: 'ACTIVO' | 'INACTIVO';
+  estadoPrograma?: 'ACTIVO' | 'FINALIZADO';
+}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProgramaDiagnosticoService {
+  private apiUrl = 'http://localhost:3000/api/programas-diagnostico';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  /**
-   * Obtiene la lista de programas de diagnóstico aplicando filtros.
-   * @param filtros Objeto con dni, nombre o estado para filtrar.
-   */
-  getProgramas(filtros: FiltrosPrograma = {}): Observable<ProgramaDiagnostico[]> {
+  
+  listarProgramas(filters?: ProgramaDiagnosticoFilters): Observable<PaginatedApiResponse<ProgramaDiagnostico>> {
     let params = new HttpParams();
 
-    // Construye los parámetros de la consulta (query parameters)
-    if (filtros.dni) {
-      params = params.set('dni', filtros.dni);
-    }
-    if (filtros.nombre) {
-      params = params.set('nombre', filtros.nombre);
-    }
-    // Si el estado es 'TODOS', no se añade el parámetro para traer todos.
-    if (filtros.estado && filtros.estado !== 'TODOS') {
-      params = params.set('estado', filtros.estado);
-    }
-
-    // El endpoint de listado espera los parámetros en la query
-    return this.http.get<ProgramaDiagnostico[]>(API_URL, { params });
+   if (filters) {
+         if (filters.nombreApellido) params = params.set('nombreApellido', filters.nombreApellido);
+         if (filters.dni) params = params.set('dni', filters.dni);
+         if (filters.estadoPaciente) params = params.set('estadoPaciente', filters.estadoPaciente);
+         if (filters.estadoPrograma) params = params.set('estadoPrograma', filters.estadoPrograma);
+         if (filters.page) params = params.set('page', filters.page.toString());
+         if (filters.limit) params = params.set('limit', filters.limit.toString());
+         if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
+         if (filters.order) params = params.set('order', filters.order);
+       }
+       return this.http.get<PaginatedApiResponse<ProgramaDiagnostico>>(this.apiUrl, { params });
   }
 
-  /**
-   * Obtiene un programa de diagnóstico por su ID.
-   * @param id_programa El ID del programa.
-   */
+
   getProgramaById(id_programa: string): Observable<ProgramaDiagnostico> {
-    return this.http.get<ProgramaDiagnostico>(`${API_URL}/${id_programa}`);
+    return this.http
+         .get<ApiResponse<ProgramaDiagnostico>>(`${this.apiUrl}/${id_programa}`)
+         .pipe(map((response) => response.data));
   }
 
   /**
@@ -53,20 +53,26 @@ export class ProgramaDiagnosticoService {
    * @param id_historial El ID del historial médico del paciente.
    * @param dto Los datos de creación del programa.
    */
-  createPrograma(id_historial: string, dto: CreateProgramaDiagnosticoDto): Observable<ProgramaDiagnostico> {
+  createPrograma(
+    id_historial: string,
+    dto: CreateProgramaDiagnosticoDto
+  ): Observable<ProgramaDiagnostico> {
     // Asume que el backend tiene un endpoint de registro que usa el ID del historial
     // Ejemplo: POST /api/programas-diagnostico/historial/{id_historial}
-    return this.http.post<ProgramaDiagnostico>(`${API_URL}/historial/${id_historial}`, dto);
+    return this.http.post<ProgramaDiagnostico>(`${this.apiUrl}/historial/${id_historial}`, dto);
   }
-  
+
   /**
    * Edita la información de un programa existente.
    * @param id_programa El ID del programa a editar.
    * @param dto Los datos a actualizar (se puede reutilizar CreateProgramaDiagnosticoDto si es similar).
    */
-  updatePrograma(id_programa: string, dto: CreateProgramaDiagnosticoDto): Observable<ProgramaDiagnostico> {
+  updatePrograma(
+    id_programa: string,
+    dto: CreateProgramaDiagnosticoDto
+  ): Observable<ProgramaDiagnostico> {
     // Utiliza el método PUT o PATCH
-    return this.http.patch<ProgramaDiagnostico>(`${API_URL}/${id_programa}`, dto);
+    return this.http.patch<ProgramaDiagnostico>(`${this.apiUrl}/${id_programa}`, dto);
   }
 
   /**
@@ -74,9 +80,12 @@ export class ProgramaDiagnosticoService {
    * @param id_programa El ID del programa a finalizar.
    * @param dto Los datos de finalización (motivo).
    */
-  finalizar(id_programa: string, dto: FinalizarProgramaDiagnosticoDto): Observable<ProgramaDiagnostico> {
+  finalizar(
+    id_programa: string,
+    dto: FinalizarProgramaDiagnosticoDto
+  ): Observable<ProgramaDiagnostico> {
     // Asume un endpoint específico para la acción de finalizar
-    return this.http.post<ProgramaDiagnostico>(`${API_URL}/${id_programa}/finalizar`, dto);
+    return this.http.post<ProgramaDiagnostico>(`${this.apiUrl}/${id_programa}/finalizar`, dto);
   }
 
   /**
@@ -85,6 +94,6 @@ export class ProgramaDiagnosticoService {
    */
   activar(id_programa: string): Observable<ProgramaDiagnostico> {
     // Asume un endpoint específico para la acción de activar/habilitar
-    return this.http.post<ProgramaDiagnostico>(`${API_URL}/${id_programa}/activar`, {});
+    return this.http.post<ProgramaDiagnostico>(`${this.apiUrl}/${id_programa}/activar`, {});
   }
 }
