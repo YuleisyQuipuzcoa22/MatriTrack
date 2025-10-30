@@ -7,11 +7,9 @@ export class FinalizarProgramaDiagnosticoDto{
     motivo_finalizacion: MotivoFin;
 
     @ValidateIf((o)=>o.motivo_finalizacion === MotivoFin.OTROS)
-    @IsNotEmpty({message: 'Debe especificar el motivo de finalziacion'})
+    @IsNotEmpty({message: 'Debe especificar el motivo de finalizacon'})
     @IsString()
     @Length(1, 100, {message: 'El motivo otros debe tener entre 1 y 100 caracteres'})
-    motivo_otros?: string;
-
-    
+    motivo_otros?: string;   
 
 }
