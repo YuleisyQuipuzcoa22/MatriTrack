@@ -1,5 +1,5 @@
 /* Lista de programas */
-.pd-list {
+.pr-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -7,7 +7,7 @@
 }
 
 /* Card Horizontal */
-.pd-card-horizontal {
+.pr-card-horizontal {
   background: white;
   border-radius: 1rem;
   border: 2px solid #e9ecef;
@@ -16,7 +16,7 @@
   position: relative;
 }
 
-.pd-card-horizontal::before {
+.pr-card-horizontal::before {
   content: '';
   position: absolute;
   top: 0;
@@ -26,14 +26,14 @@
   background: linear-gradient(180deg, var(--color-vino), var(--color-rosado));
 }
 
-.pd-card-horizontal:hover {
+.pr-card-horizontal:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(133, 14, 53, 0.15);
   border-color: var(--color-rosado);
 }
 
 /* Contenido principal del card */
-.pd-card-main {
+.pr-card-main {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,18 +42,18 @@
 }
 
 /* Sección izquierda - Info del paciente */
-.pd-card-left {
+.pr-card-left {
   flex: 1;
   min-width: 0;
 }
 
-.pd-patient-info {
+.pr-patient-info {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.pd-patient-name {
+.pr-patient-name {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--color-vino);
@@ -62,17 +62,17 @@
   gap: 0.5rem;
 }
 
-.pd-patient-name i {
+.pr-patient-name i {
   font-size: 1.3rem;
 }
 
-.pd-patient-details {
+.pr-patient-details {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.pd-badge {
+.pr-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -82,33 +82,33 @@
   font-weight: 500;
 }
 
-.pd-badge-dni {
+.pr-badge-dni {
   background: #e3f2fd;
   color: #1976d2;
 }
 
-.pd-badge-edad {
+.pr-badge-edad {
   background: #f3e5f5;
   color: #7b1fa2;
 }
 
-.pd-badge-gestacion {
+.pr-badge-gestacion {
   background: #fce4ec;
   color: #c2185b;
 }
 
 /* Sección central - Fechas */
-.pd-card-center {
+.pr-card-center {
   flex: 0 0 auto;
 }
 
-.pd-dates {
+.pr-dates {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.pd-date-item {
+.pr-date-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -116,137 +116,231 @@
   color: #495057;
 }
 
-.pd-date-item i {
+.pr-date-item i {
   color: var(--color-rosado);
   font-size: 1rem;
 }
 
-.pd-date-label {
+.pr-date-label {
   font-weight: 600;
   color: #6c757d;
 }
 
-.pd-date-value {
+.pr-date-value {
   color: var(--color-vino);
   font-weight: 500;
 }
 
 /* Sección derecha - ID y Estado */
-.pd-card-right {
+.pr-card-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
 }
 
-.pd-id {
+.pr-id {
   font-size: 0.85rem;
   color: #6c757d;
   font-weight: 500;
 }
-
+.pr-card-footer {
+  background-color: #f8f9fa;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e9ecef;
+}
 /* Acciones */
-.pd-card-actions {
+.pr-card-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background: #f8f9fa;
-  border-top: 1px solid #e9ecef;
 }
 
-.pd-card-actions .btn-action {
+.btn-action {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: auto;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 0.9rem;
-  width: auto;
-  height: auto;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.pd-card-actions .btn-action span {
-  display: inline;
+.pr-card-actions .btn-action:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.pr-card-actions .btn-action i {
+  font-size: 1.1rem;
+}
+
+/*colores de demás botones están en styleListadoCrud*/
 .btn-primary-action {
-  background-color: #007bff;
+  background-color: #008cff;
   color: white;
 }
 
 .btn-primary-action:hover {
   background-color: #0056b3;
-  transform: scale(1.05);
 }
 
 /* Modal Detalle */
-.pd-modal-section {
+.pr-modal-section {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e9ecef;
 }
 
-.pd-modal-section:last-child {
+.pr-modal-section:last-child {
   border-bottom: none;
+  margin-bottom: 0;
 }
 
-.pd-modal-subtitle {
+.pr-modal-subtitle {
   color: var(--color-vino);
   font-weight: 700;
   margin-bottom: 1rem;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
 }
 
-.pd-text-content {
+.pr-modal-subtitle i {
+  font-size: 1.2rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 0.65rem !important ;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.info-row strong {
+  min-width: 180px;
+}
+
+.pr-text-content {
   background: #f8f9fa;
   padding: 1rem;
   border-radius: 0.5rem;
   border-left: 3px solid var(--color-rosado);
   color: #495057;
   margin: 0;
+  line-height: 1.6;
 }
 
-.pd-finalizado {
+.pr-finalizado {
   background: #fff3cd;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid #ffc107;
 }
 
+/* Modal */
+
+.modal-header .btn-close-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Estilos del modal de finalización */
+.modal-body .form-label {
+  color: var(--color-vino);
+}
+
+.modal-body .alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+}
+
+/* Sin resultados */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  border: 2px dashed #dee2e6;
+}
+
+.no-results i {
+  font-size: 4rem;
+  color: #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.no-results h4 {
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.no-results p {
+  color: #6c757d;
+  margin: 0;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
-  .pd-card-main {
+  .pr-card-main {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .pd-card-center {
+  .pr-card-center {
     width: 100%;
   }
 
-  .pd-card-right {
+  .pr-card-right {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 
-  .pd-card-actions {
+  .pr-card-actions {
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .pd-card-actions .btn-action span {
+  .info-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-row strong {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .pr-card-actions .btn-action span {
     display: none;
   }
 
-  .pd-card-actions .btn-action {
+  .pr-card-actions .btn-action {
     width: 40px;
     height: 40px;
     padding: 0;
     justify-content: center;
+  }
+
+  .pr-patient-name {
+    font-size: 1rem;
+  }
+
+  .pr-patient-details {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

@@ -12,7 +12,7 @@ import { ListadoHistorialmedico } from './features/HistorialMedico/pages/listado
 import { CrearPacienteHistorial } from './features/Paciente/pages/crear-paciente-historial/crear-paciente-historial';
 import { EditarPaciente } from './features/Paciente/pages/editar-paciente/editar-paciente';
 import { ProgramaDiagnosticoListComponent } from './features/ProgramaDiagnostico/pages/programa-diagnostico-list.component/list-programadiagnostico';
-import { RegistroProgramaDiagnosticoComponent } from './features/ProgramaDiagnostico/pages/registro-programa-diagnostico.component/registro-programa-diagnostico.component';
+
 import { ListarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/listar-programapuerperio/listar-programapuerperio';
 import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/crear-editar-programapuerperio/crear-editar-programapuerperio';
 import { ListarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio';
@@ -23,6 +23,7 @@ import { EditarDetalleAnalisis } from './features/DetalleAnalisis/editar-detalle
 import { ListarDetalleAnalisis } from './features/DetalleAnalisis/listar-detalles-analisis/listar-detalles-analisis';
 import { ConsultaVerDetalles } from './features/DetalleAnalisis/consulta-ver-detalles/consulta-ver-detalles';
 import { ProgramasHistorialmedico } from './features/HistorialMedico/pages/programas-historialmedico/programas-historialmedico';
+import { CrearEditarProgDiagnostico } from './features/ProgramaDiagnostico/pages/crear-editar-prog-diagnostico/crear-editar-prog-diagnostico';
 
 export const routes: Routes = [
   // Redirige al login por defecto
@@ -61,13 +62,19 @@ export const routes: Routes = [
   {
     // Ruta para CREAR: Requiere el ID del historial médico para saber a qué paciente se asigna
     path: 'diagnostico/registrar',
-    component: RegistroProgramaDiagnosticoComponent,
+    component: CrearEditarProgDiagnostico,
     canActivate: [authGuard],
   },
   {
     // Ruta para EDITAR: Requiere el ID del programa diagnóstico
     path: 'diagnostico/editar/:id',
-    component: RegistroProgramaDiagnosticoComponent, // Reutiliza el componente
+    component: CrearEditarProgDiagnostico, // Reutiliza el componente
+    canActivate: [authGuard],
+  },
+   {
+    // Ruta para EDITAR: Requiere el ID del programa diagnóstico
+    path: 'diagnostico/:id/finalizar',
+    component: ProgramaDiagnosticoListComponent, // Reutiliza el componente
     canActivate: [authGuard],
   },
   {

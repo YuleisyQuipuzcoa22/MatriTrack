@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router'; // Para la navegación
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
   ProgramaDiagnosticoFilters,
   ProgramaDiagnosticoService,
-} from '../../services/programadiagnostico.service'; // Asegúrate de la ruta correcta
-import { ProgramaDiagnostico, Estado } from '../../model/programadiagnostico';
+} from '../../services/programadiagnostico.service';
+import { ProgramaDiagnostico, MotivoFin } from '../../model/programadiagnostico';
 import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 @Component({
@@ -23,14 +23,15 @@ export class ProgramaDiagnosticoListComponent implements OnInit {
   // Listado principal
   programas: ProgramaDiagnostico[] = [];
   programaSeleccionado: ProgramaDiagnostico | null = null;
+  programaAFinalizar: ProgramaDiagnostico | null = null;
 
   // Paginación
   currentPage = 1;
   pageSize = 9;
   totalItems = 0;
   totalPages = 0;
-  conteoResultados = 0;
 
+  // Filtros
   filtroNombreApellido = '';
   filtroDNI = '';
   filtroEstadoPaciente: 'todos' | 'ACTIVO' | 'INACTIVO' = 'todos';
@@ -39,6 +40,11 @@ export class ProgramaDiagnosticoListComponent implements OnInit {
   // Estado de la UI
   isLoading = false;
   hayFiltroActivo = false;
+
+  // Formulario de finalización
+  motivoFinalizacion: MotivoFin | '' = '';
+  motivoOtros = '';
+  isFinalizando = false;
 
   constructor(private programaService: ProgramaDiagnosticoService) {}
 
@@ -53,6 +59,7 @@ export class ProgramaDiagnosticoListComponent implements OnInit {
       page: this.currentPage,
       limit: this.pageSize,
     };
+
     if (this.filtroNombreApellido.trim()) {
       filters.nombreApellido = this.filtroNombreApellido.trim();
     }
@@ -65,13 +72,13 @@ export class ProgramaDiagnosticoListComponent implements OnInit {
     if (this.filtroEstadoPrograma !== 'todos') {
       filters.estadoPrograma = this.filtroEstadoPrograma;
     }
+
     this.programaService.listarProgramas(filters).subscribe({
       next: (response) => {
         this.programas = response.data;
         this.totalItems = response.meta.total;
         this.totalPages = response.meta.totalPages;
         this.currentPage = response.meta.page;
-        this.conteoResultados = this.totalItems;
         this.actualizarBotonLimpiar();
         this.isLoading = false;
       },
@@ -104,84 +111,126 @@ export class ProgramaDiagnosticoListComponent implements OnInit {
     this.cargarProgramas();
   }
 
-  //mostrar info
+  // Mostrar detalle del programa
   mostrarInfoPrograma(id: string): void {
     this.programaSeleccionado = this.programas.find((p) => p.id_programadiagnostico === id) || null;
   }
 
+  // Obtener clase CSS según el estado
   getEstadoClase(estado: string): string {
     return estado === 'A' ? 'badge-activo' : 'badge-inactivo';
   }
-  // Obtener texto según estado
+
+  // Obtener texto legible del estado
   getEstadoTexto(estado: string): string {
-    return estado === 'A' ? 'Activo' : 'Inactivo';
+    return estado === 'A' ? 'ACTIVO' : 'FINALIZADO';
   }
 
-  /*
+  // Obtener texto legible del motivo de finalización
+  getMotivoFinTexto(motivo: MotivoFin | null): string {
+    if (!motivo) return 'No especificado';
+    
+    const motivos: Record<MotivoFin, string> = {
+      [MotivoFin.PARTO]: 'Parto',
+      [MotivoFin.VOLUNTAD_PACIENTE]: 'Voluntad del Paciente',
+      [MotivoFin.OTROS]: 'Otros',
+    };
+    
+    return motivos[motivo] || motivo;
+  }
 
-  handleCloseDetalleModal(): void {
-    this.showDetalleModal = false;
-    this.programaToDetail = null;
-  }*/
-
-  // 2. Finalizar Programa (Muestra el modal)
+  // Abrir modal de finalización
   abrirModalFinalizar(programa: ProgramaDiagnostico): void {
-    // Solo permitir finalizar si el estado es ACTIVO
-    if (programa.estado === 'ACTIVO') {
+    if (programa.estado === 'A') {
+      this.programaAFinalizar = programa;
+      this.motivoFinalizacion = '';
+      this.motivoOtros = '';
     }
   }
 
-  // 3. Maneja la finalización exitosa (Recarga la lista)
-  handleFinalizacionExitosa(): void {
-    this.cargarProgramas();
-  }
-  /*
-  // 4. Editar Programa (Navegación)
-  editarPrograma(programa: ProgramaDiagnostico): void {
-    // Solo permitir editar si el estado es ACTIVO
-    if (programa.estado === Estado.ACTIVO) {
-      this.router.navigate(['/programas/editar', programa.id_programadiagnostico]);
-    } else {
-      alert('Solo se pueden editar programas con estado ACTIVO.');
+  // Finalizar programa
+  finalizarPrograma(): void {
+    if (!this.programaAFinalizar || !this.motivoFinalizacion) {
+      alert('Debe seleccionar un motivo de finalización');
+      return;
     }
-  }*/
 
-  // 5. Activar/Habilitar Programa (Acción directa)
+    if (this.motivoFinalizacion === MotivoFin.OTROS && !this.motivoOtros.trim()) {
+      alert('Debe especificar el motivo cuando selecciona "Otros"');
+      return;
+    }
+
+    if (confirm(`¿Está seguro de finalizar el programa de ${this.programaAFinalizar.paciente?.nombre}?`)) {
+      this.isFinalizando = true;
+
+      const dto = {
+        motivo_finalizacion: this.motivoFinalizacion,
+        ...(this.motivoFinalizacion === MotivoFin.OTROS && { motivo_otros: this.motivoOtros.trim() }),
+      };
+
+      this.programaService.finalizar(this.programaAFinalizar.id_programadiagnostico, dto).subscribe({
+        next: () => {
+          this.isFinalizando = false;
+          this.cerrarModalFinalizar();
+          this.cargarProgramas();
+          alert('Programa finalizado con éxito');
+        },
+        error: (err) => {
+          console.error('Error al finalizar programa:', err);
+          this.isFinalizando = false;
+          alert(err.error?.message || 'Error al finalizar el programa');
+        },
+      });
+    }
+  }
+
+  // Cerrar modal de finalización
+  cerrarModalFinalizar(): void {
+    this.programaAFinalizar = null;
+    this.motivoFinalizacion = '';
+    this.motivoOtros = '';
+    // Cerrar el modal usando Bootstrap
+    const modal = document.getElementById('modalFinalizar');
+    if (modal) {
+      const bootstrapModal = (window as any).bootstrap.Modal.getInstance(modal);
+      if (bootstrapModal) {
+        bootstrapModal.hide();
+      }
+    }
+  }
+
+  // Reactivar programa
   reactivarPrograma(programa: ProgramaDiagnostico): void {
-    if (programa.estado !== 'ACTIVO') {
-      if (confirm(`¿Está seguro de habilitar el programa de ${programa.paciente?.nombre}?`)) {
+    if (programa.estado !== 'A') {
+      if (confirm(`¿Está seguro de reactivar el programa de ${programa.paciente?.nombre}?`)) {
         this.programaService.activar(programa.id_programadiagnostico).subscribe({
           next: () => {
-            this.cargarProgramas(); // Recargar la lista
-            alert('Programa activado con éxito.');
+            this.cargarProgramas();
+            alert('Programa reactivado con éxito');
           },
           error: (err) => {
-            console.error('Error al activar programa:', err);
-            alert(err.error?.message || 'Error al activar el programa.');
+            console.error('Error al reactivar programa:', err);
+            alert(err.error?.message || 'Error al reactivar el programa');
           },
         });
       }
     }
   }
-  /*
 
-  // 6. Ver Controles (Navegación al módulo de Controles)
-  verControles(programa: ProgramaDiagnostico): void {
-    this.router.navigate(['/controles-diagnostico', programa.id_programadiagnostico]);
-  }
-
-  goToRegistro(): void {
-    this.router.navigate(['/diagnostico/registrar']);
-  }*/
-
+  // Paginación
   irAPagina(page: number): void {
     this.currentPage = page;
     this.cargarProgramas();
   }
-  // Cambiar tamaño de página o sea mostrar 9,10,20
+
   cambiarTamanoPagina(newSize: number): void {
     this.pageSize = newSize;
-    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+    this.currentPage = 1;
     this.cargarProgramas();
+  }
+
+  // Getter para el enum MotivoFin (para usar en el template)
+  get MotivoFin() {
+    return MotivoFin;
   }
 }

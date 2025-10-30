@@ -1,0 +1,40 @@
+.bloque-busqueda {
+      border: 1px solid rgba(133, 14, 53, 0.15);
+      background-color: #fff8f8;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .info-paciente-seleccionado {
+      background-color: #e6f7e9; /* Verde claro */
+      border: 1px solid #73b77e; /* Borde verde */
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .titulo-paciente {
+      color: var(--color-verde);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .btn-cambiar-paciente {
+        background-color: #f0f0f0;
+        color: var(--color-vino);
+        border: 1px solid rgba(133, 14, 53, 0.2);
+        padding: 8px 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    .btn-cambiar-paciente:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-1px);
+    }

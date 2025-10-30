@@ -9,7 +9,7 @@ export class ProgramaDiagnosticoResponseDto {
   fecha_probableparto: Date | null;
   factor_riesgo: string | null;
   observacion: string | null;
-  estado: Estado; // 'ACTIVO', 'FINALIZADO'
+  estado: Estado; // 'A', 'F'
   fecha_finalizacion: Date | null;
   motivo_finalizacion: MotivoFin | null;
   motivo_otros: string | null;

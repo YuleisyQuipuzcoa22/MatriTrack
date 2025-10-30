@@ -1,0 +1,224 @@
+<div class="fondo">
+  <div class="card-container-wide">
+    <div class="header d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="titulo">
+          {{ isEditMode ? 'Editar Programa Diagnóstico' : 'Registrar Programa Diagnóstico' }}
+        </h1>
+        <p class="subtitulo">
+          {{
+            isEditMode
+              ? 'Modifique los detalles del programa seleccionado.'
+              : 'Busque al paciente y complete los datos para iniciar un nuevo programa.'
+          }}
+        </p>
+      </div>
+      <!-- Puedes incluir un logo o icono aquí si lo deseas -->
+      <!-- <img src="ruta/a/tu/logo.png" alt="Logo" class="logo"> -->
+    </div>
+
+    <!-- Mensajes de Alerta -->
+    @if(errorMessage){
+    <div class="alert alert-danger mb-3" role="alert">
+      {{ errorMessage }}
+    </div>
+    } @if(successMessage){
+    <div class="alert alert-success mb-3" role="alert">
+      {{ successMessage }}
+    </div>
+    }
+
+    <form [formGroup]="programaForm" (ngSubmit)="onSubmit()">
+      <!-- SECCIÓN 1: VINCULACIÓN DE PACIENTE (SOLO MODO CREACIÓN) -->
+      <ng-container *ngIf="!isEditMode">
+        <h2 class="section-title">1. Búsqueda y Vinculación de Paciente</h2>
+        <div class="row">
+          <!-- Campo DNI -->
+          <div class="col-md-6 col-lg-4">
+            <div class="mb-3">
+              <label for="dni" class="label"
+                >DNI del Paciente <span class="text-danger">*</span></label
+              >
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="dni"
+                  formControlName="dni"
+                  class="form-control"
+                  placeholder="Ej. 78945612"
+                  maxlength="8"
+                  [ngClass]="{
+                    'is-invalid':
+                      programaForm.get('dni')?.invalid && programaForm.get('dni')?.touched
+                  }"
+                />
+                <button
+                  type="button"
+                  class="btn-generate"
+                  (click)="buscarPacientePorDni()"
+                  [disabled]="programaForm.get('dni')?.invalid || isSearchingPatient"
+                >
+                  <span
+                    *ngIf="isSearchingPatient"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Buscar
+                </button>
+              </div>
+              <small
+                *ngIf="programaForm.get('dni')?.invalid && programaForm.get('dni')?.touched"
+                class="text-danger"
+              >
+                <span *ngIf="programaForm.get('dni')?.errors?.['required']"
+                  >El DNI es obligatorio.</span
+                >
+                <span *ngIf="programaForm.get('dni')?.errors?.['pattern']"
+                  >Debe ser un DNI válido de 8 dígitos.</span
+                >
+              </small>
+            </div>
+          </div>
+
+          <!-- Información del Paciente Vinculado -->
+          <div class="col-md-6 col-lg-8">
+            <div class="mb-3">
+              <label class="label">Paciente Vinculado</label>
+              <div
+                class="form-control"
+                [ngClass]="{
+                  'text-muted': !pacienteVinculado
+                }"
+                style="height: 48px; display: flex; align-items: center"
+              >
+                <ng-container *ngIf="pacienteVinculado; else noPaciente">
+                  {{ pacienteVinculado.nombre }} {{ pacienteVinculado.apellido }} (ID Historial:
+                  {{ pacienteVinculado.historial_medico.id_historialmedico }})
+                </ng-container>
+                <ng-template #noPaciente>
+                  <span class="text-secondary">Paciente no seleccionado o no encontrado.</span>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- SECCIÓN 2: DATOS DEL PROGRAMA DIAGNÓSTICO -->
+      <h2 class="section-title mt-4">2. Detalle del Programa</h2>
+      <div class="row">
+        <!-- Campo: Número de Gestación -->
+        <div class="col-md-6 col-lg-4">
+          <div class="mb-3">
+            <label for="numero_gestacion" class="label"
+              >Número de Gestación <span class="text-danger">*</span></label
+            >
+            <input
+              type="number"
+              id="numero_gestacion"
+              formControlName="numero_gestacion"
+              class="form-control"
+              placeholder="Ej. 1, 2, 3..."
+              [ngClass]="{
+                'is-invalid':
+                  programaForm.get('numero_gestacion')?.invalid &&
+                  programaForm.get('numero_gestacion')?.touched
+              }"
+            />
+            <small
+              *ngIf="
+                programaForm.get('numero_gestacion')?.invalid &&
+                programaForm.get('numero_gestacion')?.touched
+              "
+              class="text-danger"
+            >
+              <span *ngIf="programaForm.get('numero_gestacion')?.errors?.['required']"
+                >Este campo es obligatorio.</span
+              >
+              <span *ngIf="programaForm.get('numero_gestacion')?.errors?.['min']">Mínimo 1.</span>
+              <span *ngIf="programaForm.get('numero_gestacion')?.errors?.['max']">Máximo 20.</span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Campo: Fecha Probable de Parto (Opcional) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="mb-3">
+            <label for="fecha_probableparto" class="label">Fecha Probable de Parto</label>
+            <input
+              type="date"
+              id="fecha_probableparto"
+              formControlName="fecha_probableparto"
+              class="form-control"
+            />
+            <!-- No hay validación compleja para fecha, se deja el espacio -->
+            <small class="text-danger"></small>
+          </div>
+        </div>
+
+        <!-- Campo: Factor de Riesgo (Opcional) -->
+        <div class="col-md-6 col-lg-4">
+          <div class="mb-3">
+            <label for="factor_riesgo" class="label">Factor de Riesgo</label>
+            <input
+              type="text"
+              id="factor_riesgo"
+              formControlName="factor_riesgo"
+              class="form-control"
+              placeholder="Ej. Hipertensión, Diabetes"
+            />
+            <small class="text-danger"></small>
+          </div>
+        </div>
+
+        <!-- Campo: Observación (Grande) -->
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="observacion" class="label">Observaciones</label>
+            <textarea
+              id="observacion"
+              formControlName="observacion"
+              class="form-control"
+              rows="3"
+              placeholder="Detalles adicionales sobre el programa o el estado inicial."
+              [ngClass]="{
+                'is-invalid':
+                  programaForm.get('observacion')?.invalid &&
+                  programaForm.get('observacion')?.touched
+              }"
+            ></textarea>
+            <small
+              *ngIf="programaForm.get('observacion')?.errors?.['maxlength']"
+              class="text-danger"
+            >
+              Máximo 1000 caracteres.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN -->
+      <div class="button-group">
+        <a [routerLink]="['/diagnostico']" class="btn-volver">
+          <i class="fas fa-arrow-left me-2"></i>
+          Volver
+        </a>
+
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="programaForm.invalid || isLoading || (!isEditMode && !pacienteVinculado?.historial_medico?.id_historialmedico)"
+        >
+          <span
+            *ngIf="isLoading"
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ isEditMode ? 'Guardar Cambios' : 'Registrar Programa' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

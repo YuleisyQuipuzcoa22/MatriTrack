@@ -8,7 +8,7 @@
         </h2>
       </div>
       <div class="col-md-4 text-end">
-        <button class="btn btn-agregar" [routerLink]="['crear']">
+        <button class="btn btn-agregar" [routerLink]="['registrar']">
           <i class="bi bi-plus-circle-fill me-2"></i>
           Nuevo Programa
         </button>
@@ -99,29 +99,31 @@
   </div>
   }
 
-  <!-- Lista de Programas (Cards Horizontales) -->
+  <!-- Lista de Programas -->
   @if (!isLoading) {
-  <div class="pd-list">
+  <div class="pr-list">
     @for (programa of programas; track programa.id_programadiagnostico) {
-    <div class="pd-card-horizontal">
+    <div class="pr-card-horizontal">
       <!-- Info Principal -->
-      <div class="pd-card-main">
-        <div class="pd-card-left">
-          <div class="pd-patient-info">
-            <div class="pd-patient-name">
+      <div class="pr-card-main">
+        <div class="pr-card-left">
+          <div class="pr-patient-info">
+            <div class="pr-patient-name">
               <i class="bi bi-person-circle"></i>
               {{ programa.paciente?.nombre }} {{ programa.paciente?.apellido }}
+              <span class="pr-id">ID: {{ programa.id_programadiagnostico }}</span>
             </div>
-            <div class="pd-patient-details">
-              <span class="pd-badge pd-badge-dni">
+
+            <div class="pr-patient-details">
+              <span class="pr-badge pr-badge-dni">
                 <i class="bi bi-credit-card"></i>
                 DNI: {{ programa.paciente?.dni }}
               </span>
-              <span class="pd-badge pd-badge-edad">
+              <span class="pr-badge pr-badge-edad">
                 <i class="bi bi-calendar"></i>
                 {{ programa.paciente?.edad }} años
               </span>
-              <span class="pd-badge pd-badge-gestacion">
+              <span class="pr-badge pr-badge-gestacion">
                 <i class="bi bi-heart-pulse"></i>
                 Gestación N° {{ programa.numero_gestacion }}
               </span>
@@ -129,18 +131,18 @@
           </div>
         </div>
 
-        <div class="pd-card-center">
-          <div class="pd-dates">
-            <div class="pd-date-item">
+        <div class="pr-card-center">
+          <div class="pr-dates">
+            <div class="pr-date-item">
               <i class="bi bi-calendar-check"></i>
-              <span class="pd-date-label">Inicio:</span>
-              <span class="pd-date-value">{{ programa.fecha_inicio | date : 'dd/MM/yyyy' }}</span>
+              <span class="pr-date-label">Inicio:</span>
+              <span class="pr-date-value">{{ programa.fecha_inicio | date : 'dd/MM/yyyy' }}</span>
             </div>
             @if (programa.fecha_probableparto) {
-            <div class="pd-date-item">
+            <div class="pr-date-item">
               <i class="bi bi-calendar-heart"></i>
-              <span class="pd-date-label">F. Probable Parto:</span>
-              <span class="pd-date-value">{{
+              <span class="pr-date-label">F. Probable Parto:</span>
+              <span class="pr-date-value">{{
                 programa.fecha_probableparto | date : 'dd/MM/yyyy'
               }}</span>
             </div>
@@ -148,66 +150,66 @@
           </div>
         </div>
 
-        <div class="pd-card-right">
-          <span class="pd-id">ID: {{ programa.id_programadiagnostico }}</span>
-          <span [ngClass]="getEstadoClase(programa.estado)">
-            {{ programa.estado }}
-          </span>
+        <div class="pr-card-right">
+          <button
+            class="btn-action btn-info-action"
+            title="Ver Controles"
+            [routerLink]="['controles', programa.id_programadiagnostico]"
+          >
+            <i class="bi bi-clipboard-data"></i>
+            <span>Controles</span>
+          </button>
         </div>
       </div>
+      <div class="pr-card-footer">
+        <span [ngClass]="getEstadoClase(programa.estado)">
+          {{ getEstadoTexto(programa.estado) }}
+        </span>
 
-      <!-- Acciones -->
-      <div class="pd-card-actions">
-        <button
-          class="btn-action btn-info-action"
-          title="Ver Controles"
-          [routerLink]="['controles', programa.id_programadiagnostico]"
-        >
-          <i class="bi bi-clipboard-data"></i>
-          <span>Controles</span>
-        </button>
+        <!-- Acciones -->
+        <div class="pr-card-actions">
+          <button
+            class="btn-action btn-primary-action"
+            title="Ver Detalles"
+            (click)="mostrarInfoPrograma(programa.id_programadiagnostico)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalDetalle"
+          >
+            <i class="bi bi-eye"></i>
+            <span>Detalle</span>
+          </button>
 
-        <button
-          class="btn-action btn-primary-action"
-          title="Ver Detalles"
-          (click)="mostrarInfoPrograma(programa.id_programadiagnostico)"
-          data-bs-toggle="modal"
-          data-bs-target="#modalDetalle"
-        >
-          <i class="bi bi-eye"></i>
-          <span>Detalle</span>
-        </button>
+          @if (programa.estado === 'A') {
+          <button
+            class="btn-action btn-edit-action"
+            title="Editar"
+            [routerLink]="['editar', programa.id_programadiagnostico]"
+          >
+            <i class="bi bi-pencil-square"></i>
+            <span>Editar</span>
+          </button>
 
-        @if (programa.estado === "ACTIVO") {
-        <button
-          class="btn-action btn-edit-action"
-          title="Editar"
-          [routerLink]="['editar', programa.id_programadiagnostico]"
-        >
-          <i class="bi bi-pencil-square"></i>
-          <span>Editar</span>
-        </button>
-
-        <button
-          class="btn-action btn-danger-action"
-          title="Finalizar Programa"
-          (click)="abrirModalFinalizar(programa)"
-          data-bs-toggle="modal"
-          data-bs-target="#modalFinalizar"
-        >
-          <i class="bi bi-stop-circle"></i>
-          <span>Finalizar</span>
-        </button>
-        } @else {
-        <button
-          class="btn-action btn-success-action"
-          title="Reactivar Programa"
-          (click)="reactivarPrograma(programa)"
-        >
-          <i class="bi bi-arrow-clockwise"></i>
-          <span>Reactivar</span>
-        </button>
-        }
+          <button
+            class="btn-action btn-danger-action"
+            title="Finalizar Programa"
+            (click)="abrirModalFinalizar(programa)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalFinalizar"
+          >
+            <i class="bi bi-stop-circle"></i>
+            <span>Finalizar</span>
+          </button>
+          } @else {
+          <button
+            class="btn-action btn-success-action"
+            title="Reactivar Programa"
+            (click)="reactivarPrograma(programa)"
+          >
+            <i class="bi bi-arrow-clockwise"></i>
+            <span>Reactivar</span>
+          </button>
+          }
+        </div>
       </div>
     </div>
     } @empty {
@@ -235,8 +237,8 @@
       </div>
       <div class="modal-body">
         <!-- Información del Paciente -->
-        <div class="pd-modal-section">
-          <h6 class="pd-modal-subtitle">
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle">
             <i class="bi bi-person-circle me-2"></i>
             Información del Paciente
           </h6>
@@ -266,33 +268,33 @@
         </div>
 
         <!-- Información del Programa -->
-        <div class="pd-modal-section">
-          <h6 class="pd-modal-subtitle">
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle">
             <i class="bi bi-clipboard-check me-2"></i>
             Datos del Programa
           </h6>
           <div class="row">
             <div class="col-md-6">
               <div class="info-row">
-                <strong>ID Programa:</strong>
+                <strong>ID programa diagnóstico:</strong>
                 <span>{{ programaSeleccionado.id_programadiagnostico }}</span>
               </div>
             </div>
             <div class="col-md-6">
               <div class="info-row">
-                <strong>Número de Gestación:</strong>
+                <strong>Número de gestación:</strong>
                 <span>{{ programaSeleccionado.numero_gestacion }}</span>
               </div>
             </div>
             <div class="col-md-6">
               <div class="info-row">
-                <strong>Fecha Inicio:</strong>
+                <strong>Fecha de inicio:</strong>
                 <span>{{ programaSeleccionado.fecha_inicio | date : 'dd/MM/yyyy' }}</span>
               </div>
             </div>
             <div class="col-md-6">
               <div class="info-row">
-                <strong>Fecha Probable Parto:</strong>
+                <strong>Fecha probable de parto:</strong>
                 <span>{{
                   programaSeleccionado.fecha_probableparto
                     ? (programaSeleccionado.fecha_probableparto | date : 'dd/MM/yyyy')
@@ -304,7 +306,7 @@
               <div class="info-row">
                 <strong>Estado:</strong>
                 <span [ngClass]="getEstadoClase(programaSeleccionado.estado)">
-                  {{ programaSeleccionado.estado }}
+                  {{ getEstadoTexto(programaSeleccionado.estado) }}
                 </span>
               </div>
             </div>
@@ -313,30 +315,30 @@
 
         <!-- Factor de Riesgo -->
         @if (programaSeleccionado.factor_riesgo) {
-        <div class="pd-modal-section">
-          <h6 class="pd-modal-subtitle">
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle">
             <i class="bi bi-exclamation-triangle me-2"></i>
             Factor de Riesgo
           </h6>
-          <p class="pd-text-content">{{ programaSeleccionado.factor_riesgo }}</p>
+          <p class="pr-text-content">{{ programaSeleccionado.factor_riesgo }}</p>
         </div>
         }
 
         <!-- Observaciones -->
         @if (programaSeleccionado.observacion) {
-        <div class="pd-modal-section">
-          <h6 class="pd-modal-subtitle">
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle">
             <i class="bi bi-chat-text me-2"></i>
             Observaciones
           </h6>
-          <p class="pd-text-content">{{ programaSeleccionado.observacion }}</p>
+          <p class="pr-text-content">{{ programaSeleccionado.observacion }}</p>
         </div>
         }
 
         <!-- Info de Finalización -->
-        @if (programaSeleccionado.estado === 'FINALIZADO') {
-        <div class="pd-modal-section pd-finalizado">
-          <h6 class="pd-modal-subtitle">
+        @if (programaSeleccionado.estado === 'F') {
+        <div class="pr-modal-section pr-finalizado">
+          <h6 class="pr-modal-subtitle">
             <i class="bi bi-x-circle me-2"></i>
             Información de Finalización
           </h6>
@@ -347,14 +349,14 @@
                 <span>{{ programaSeleccionado.fecha_finalizacion | date : 'dd/MM/yyyy' }}</span>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 p-0">
               <div class="info-row">
                 <strong>Motivo:</strong>
-                <span>{{ programaSeleccionado.motivo_finalizacion }}</span>
+                <span>{{ getMotivoFinTexto(programaSeleccionado.motivo_finalizacion) }}</span>
               </div>
             </div>
             @if (programaSeleccionado.motivo_otros) {
-            <div class="col-12">
+            <div class="col-12 p-0">
               <div class="info-row">
                 <strong>Detalle:</strong>
                 <span>{{ programaSeleccionado.motivo_otros }}</span>
@@ -370,17 +372,90 @@
   </div>
 </div>
 
-<!-- Modal Finalizar (lo haremos después) -->
+<!-- Modal Finalizar -->
 <div class="modal fade" id="modalFinalizar" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+      @if (programaAFinalizar) {
       <div class="modal-header">
-        <h5 class="modal-title">Finalizar Programa</h5>
+        <h5 class="modal-title">
+          <i class="bi bi-stop-circle me-2"></i>
+          Finalizar Programa
+        </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <p>Formulario para finalizar el programa (lo creamos después)</p>
+        <div class="mb-3">
+          <p class="mb-3">
+            <strong>Paciente:</strong>
+            {{ programaAFinalizar.paciente?.nombre }} {{ programaAFinalizar.paciente?.apellido }}
+          </p>
+          <p class="mb-3">
+            <strong>Gestación:</strong> N° {{ programaAFinalizar.numero_gestacion }}
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">
+            <i class="bi bi-clipboard-check me-2"></i>
+            Motivo de Finalización *
+          </label>
+          <select class="form-select" [(ngModel)]="motivoFinalizacion" [disabled]="isFinalizando">
+            <option value="">Seleccione un motivo</option>
+            <option [value]="MotivoFin.PARTO">Parto</option>
+            <option [value]="MotivoFin.VOLUNTAD_PACIENTE">Voluntad del Paciente</option>
+            <option [value]="MotivoFin.OTROS">Otros</option>
+          </select>
+        </div>
+
+        @if (motivoFinalizacion === MotivoFin.OTROS) {
+        <div class="mb-3">
+          <label class="form-label fw-bold">
+            <i class="bi bi-chat-text me-2"></i>
+            Especificar Motivo *
+          </label>
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Describa el motivo de finalización..."
+            [(ngModel)]="motivoOtros"
+            [disabled]="isFinalizando"
+          ></textarea>
+        </div>
+        }
+
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>
+            Esta acción finalizará el programa de diagnóstico. El programa podrá ser reactivado
+            posteriormente si es necesario.
+          </div>
+        </div>
       </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          [disabled]="isFinalizando"
+        >
+          <i class="bi bi-x-circle me-2"></i>
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="finalizarPrograma()"
+          [disabled]="isFinalizando || !motivoFinalizacion"
+        >
+          @if (isFinalizando) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          } @else {
+          <i class="bi bi-stop-circle me-2"></i>
+          } Finalizar Programa
+        </button>
+      </div>
+      }
     </div>
   </div>
 </div>
