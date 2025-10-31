@@ -60,7 +60,7 @@ export class ProgramaDiagnosticoService {
   updatePrograma(id_programa: string, dto: any): Observable<ProgramaDiagnostico> {
     // Utiliza el método PUT o PATCH
     return this.http
-      .patch<ApiResponse<ProgramaDiagnostico>>(`${this.apiUrl}/${id_programa}`, dto)
+      .put<ApiResponse<ProgramaDiagnostico>>(`${this.apiUrl}/${id_programa}`, dto)
       .pipe(map((response) => response.data));
   }
 

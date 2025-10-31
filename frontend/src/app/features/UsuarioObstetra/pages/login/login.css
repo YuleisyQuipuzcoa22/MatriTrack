@@ -1,11 +1,4 @@
-/* VARIABLES */
-:root {
-  --color-vino: #850e35;
-  --color-vino-oscuro: #670727;
-  --color-vino-claro: #a22b51;
-  --color-rosado-bebe: #ffc4c4;
-  --color-rosado: #ee6983;
-}
+
 
 * {
   margin: 0;
@@ -238,7 +231,6 @@ html {
   color: #666;
   cursor: pointer;
   user-select: none;
-  display: flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -256,12 +248,7 @@ html {
 }
 
 /* ===== MENSAJES DE ERROR ===== */
-.text-danger {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-  display: block;
-}
+
 
 .alert {
   border-radius: 12px;

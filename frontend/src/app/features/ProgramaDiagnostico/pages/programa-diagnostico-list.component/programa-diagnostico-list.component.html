@@ -385,14 +385,12 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <p class="mb-3">
+        <div>
+          <p>
             <strong>Paciente:</strong>
             {{ programaAFinalizar.paciente?.nombre }} {{ programaAFinalizar.paciente?.apellido }}
           </p>
-          <p class="mb-3">
-            <strong>Gestación:</strong> N° {{ programaAFinalizar.numero_gestacion }}
-          </p>
+          <p><strong>Gestación: </strong> {{ programaAFinalizar.numero_gestacion }}</p>
         </div>
 
         <div class="mb-3">

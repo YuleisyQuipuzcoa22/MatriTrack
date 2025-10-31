@@ -63,7 +63,7 @@ export class PacienteService {
 
   /**NUEVO */
   buscarPacientePorDni(dni: string): Observable<PacienteData | null> {
-    let params = new HttpParams().set('dni', dni).set('estado', 'A');
+    let params = new HttpParams().set('dni', dni);
 
     return this.http.get<PaginatedApiResponse<PacienteData>>(this.apiUrl, { params }).pipe(
       map((response) => {
