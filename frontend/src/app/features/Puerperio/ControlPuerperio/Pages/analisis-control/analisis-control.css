@@ -1,7 +1,0 @@
-.fondo { background-color: #f7f7f7; min-height: 100vh; }
-.card-container { background: #fff; border-radius: 12px; padding: 20px; max-width: 900px; margin: 0 auto; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-.header .titulo { color: #850e35; margin: 0 0 6px 0; }
-.subtitulo { color: #666; margin: 0 0 12px 0; }
-.analisis-row { display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee; }
-.btn-submit { background-color: #850e35; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight:700; }
-.btn-volver { background: transparent; border: none; color: #850e35; font-weight:700; }

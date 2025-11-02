@@ -17,7 +17,7 @@ import { ListarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/
 import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerperio/Pages/crear-editar-programapuerperio/crear-editar-programapuerperio';
 import { ListarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio';
 import { CrearEditarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/crear-editar-controlpuerperio/crear-editar-controlpuerperio';
-import { AnalisisControl } from './features/Puerperio/ControlPuerperio/Pages/analisis-control/analisis-control';
+
 import { AgregarDetalleAnalisis } from './features/DetalleAnalisis/agregar-detalle-analisis/agregar-detalle-analisis';
 import { EditarDetalleAnalisis } from './features/DetalleAnalisis/editar-detalle-analisis/editar-detalle-analisis';
 import { ListarDetalleAnalisis } from './features/DetalleAnalisis/listar-detalles-analisis/listar-detalles-analisis';
@@ -113,11 +113,6 @@ export const routes: Routes = [
     canActivate: [authGuard], // Requiere estar logueado
   },
 
-  {
-    path: 'puerperio/:id/controles/:cid/analisis',
-    component: AnalisisControl,
-    canActivate: [authGuard], // Requiere estar logueado
-  },
 
   // Rutas protegidas (solo Administrador)
   {
