@@ -1,0 +1,5 @@
+export enum MotivoFinPuerperio {
+  ALTA_MEDICA = 'ALTA_MEDICA',
+  VOLUNTAD_PACIENTE = 'VOLUNTAD_PACIENTE',
+  OTROS = 'OTROS',
+}

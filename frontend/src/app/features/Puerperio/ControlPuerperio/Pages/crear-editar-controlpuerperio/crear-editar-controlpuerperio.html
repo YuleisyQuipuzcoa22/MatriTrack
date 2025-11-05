@@ -1,66 +1,121 @@
 <div class="fondo d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card-container">
+  <div class="card-container-wide"> 
+    
     <div class="header text-center">
-      <h2 class="titulo">{{ controlId ? 'EDITAR CONTROL' : 'NUEVO CONTROL' }}</h2>
+      <h2 class="titulo">{{ isEditMode ? 'EDITAR CONTROL' : 'NUEVO CONTROL DE PUERPERIO' }}</h2>
       <p class="subtitulo">Programa: {{ programaId }}</p>
+      @if(isEditMode && fechaCreacion){
+        <p class="subtitulo">Fecha de Control: <strong>{{ fechaCreacion }}</strong></p>
+      }
     </div>
 
-    <form (ngSubmit)="guardar()">
+    @if (isLoading) {
+      <div class="text-center p-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando datos del control...</p>
+      </div>
+    }
+
+    <form [formGroup]="controlForm" (ngSubmit)="guardar()" class="formulario" *ngIf="!isLoading">
+      
+      <h3 class="section-title mt-4 mb-3">1. Signos Vitales y Medidas</h3>
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="label">Fecha</label>
-          <input type="date" class="form-control" [(ngModel)]="formData.fecha_controlpuerperio" name="fecha_controlpuerperio" />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="label">Peso (kg)</label>
-          <input type="number" step="0.1" class="form-control" [(ngModel)]="formData.peso" name="peso" />
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="label">Talla (m)</label>
-          <input type="number" step="0.01" class="form-control" [(ngModel)]="formData.talla" name="talla" />
+          <label class="label"><i class="bi bi-person-arms-up me-2"></i>Peso (kg) <span class="text-danger">*</span></label>
+          <input type="number" step="0.1" class="form-control" formControlName="peso" placeholder="Ej. 65.5" />
+          @if (isInvalid('peso')) {
+            <small class="text-danger">{{ getErrorMessage('peso') }}</small>
+          }
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="label">Presión arterial</label>
-          <input class="form-control" [(ngModel)]="formData.presion_arterial" name="presion_arterial" />
+          <label class="label"><i class="bi bi-arrows-vertical me-2"></i>Talla (m) <span class="text-danger">*</span></label>
+          <input type="number" step="0.01" class="form-control" formControlName="talla" placeholder="Ej. 1.60" />
+           @if (isInvalid('talla')) {
+            <small class="text-danger">{{ getErrorMessage('talla') }}</small>
+          }
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="label">Involución uterina</label>
-          <input class="form-control" [(ngModel)]="formData.involucion_uterina" name="involucion_uterina" />
+          <label class="label"><i class="bi bi-heart-pulse me-2"></i>Presión arterial <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="presion_arterial" placeholder="Ej. 120/80" />
+           @if (isInvalid('presion_arterial')) {
+            <small class="text-danger">{{ getErrorMessage('presion_arterial') }}</small>
+          }
         </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="label">Cicatrización</label>
-          <input class="form-control" [(ngModel)]="formData.cicatrizacion" name="cicatrizacion" />
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="label">Estado mamas / lactancia</label>
-          <input class="form-control" [(ngModel)]="formData.estado_mamas_lactancia" name="estado_mamas_lactancia" />
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="label">Estado emocional</label>
-          <input class="form-control" [(ngModel)]="formData.estado_emocional" name="estado_emocional" />
-        </div>
-
-        <div class="col-12 mb-3">
-          <label class="label">Observación</label>
-          <textarea class="form-control" [(ngModel)]="formData.observacion" name="observacion"></textarea>
-        </div>
-
-        <div class="col-12 mb-3">
-          <label class="label">Recomendación</label>
-          <textarea class="form-control" [(ngModel)]="formData.recomendacion" name="recomendacion"></textarea>
-        </div>
-
       </div>
 
-      <div class="text-center mt-3">
-        <button type="submit" class="btn-submit">{{ controlId ? 'Guardar Cambios' : 'Crear Control' }}</button>
-        <button type="button" class="btn-volver ms-3" (click)="cancelar()">← Volver</button>
+      <h3 class="section-title mt-4 mb-3">2. Evaluación Física y Emocional</h3>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="label"><i class="bi bi-body-text me-2"></i>Involución uterina</label>
+          <input class="form-control" formControlName="involucion_uterina" placeholder="Ej. Útero contraído a la altura del ombligo" />
+           @if (isInvalid('involucion_uterina')) {
+            <small class="text-danger">{{ getErrorMessage('involucion_uterina') }}</small>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label"><i class="bi bi-bandaid me-2"></i>Cicatrización</label>
+          <input class="form-control" formControlName="cicatrizacion" placeholder="Ej. Herida (episiotomía/cesárea) limpia" />
+           @if (isInvalid('cicatrizacion')) {
+            <small class="text-danger">{{ getErrorMessage('cicatrizacion') }}</small>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label"><i class="bi bi-person-check me-2"></i>Estado mamas / lactancia</label>
+          <input class="form-control" formControlName="estado_mamas_lactancia" placeholder="Ej. Mamas blandas, lactancia exitosa" />
+           @if (isInvalid('estado_mamas_lactancia')) {
+            <small class="text-danger">{{ getErrorMessage('estado_mamas_lactancia') }}</small>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label"><i class="bi bi-emoji-smile me-2"></i>Estado emocional</label>
+          <input class="form-control" formControlName="estado_emocional" placeholder="Ej. Paciente tranquila, refiere buen ánimo" />
+           @if (isInvalid('estado_emocional')) {
+            <small class="text-danger">{{ getErrorMessage('estado_emocional') }}</small>
+          }
+        </div>
+      </div>
+
+      <h3 class="section-title mt-4 mb-3">3. Observaciones y Recomendaciones</h3>
+      <div class="row">
+        <div class="col-12 mb-3">
+          <label class="label"><i class="bi bi-journal-text me-2"></i>Observación</label>
+          <textarea class="form-control" formControlName="observacion" rows="3" placeholder="Ej. Se refuerzan signos de alarma (fiebre, sangrado excesivo)."></textarea>
+           @if (isInvalid('observacion')) {
+            <small class="text-danger">{{ getErrorMessage('observacion') }}</small>
+          }
+        </div>
+
+        <div class="col-12 mb-3">
+          <label class="label"><i class="bi bi-card-checklist me-2"></i>Recomendación</label>
+          <textarea class="form-control" formControlName="recomendacion" rows="3" placeholder="Ej. Continuar con sulfato ferroso. Próximo control en 7 días."></textarea>
+           @if (isInvalid('recomendacion')) {
+            <small class="text-danger">{{ getErrorMessage('recomendacion') }}</small>
+          }
+        </div>
+      </div>
+
+      @if (errorMessage) {
+        <div class="alert alert-danger text-center mt-3">{{ errorMessage }}</div>
+      }
+
+      <div class="button-group">
+        <button type="button" class="btn-volver" (click)="cancelar()" [disabled]="isLoading">← Volver al Listado</button>
+        
+        <button type="submit" class="btn-submit" [disabled]="controlForm.invalid || isLoading">
+          @if(isLoading) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Guardando...
+          } @else {
+            <i class="bi bi-check-circle me-2"></i>
+            {{ isEditMode ? 'Guardar Cambios' : 'Crear Control' }}
+          }
+        </button>
       </div>
     </form>
   </div>

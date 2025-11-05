@@ -1,153 +1,318 @@
-<div class="puerperio-root">
-	<div class="header-section">
-	<div class="container">
-		<div class="row align-items-center">
-			<div class="col-md-8">
-				<h2>
-					<i class="bi bi-folder2-open"></i>
-					Lista de Programas Puerperio
-				</h2>
-			</div>
-			<div class="col-md-4 text-end">
-				<button class="btn btn-agregar" (click)="agregar()">
-					<i class="bi bi-plus-circle-fill me-2"></i>
-					Agregar Nuevo
-				</button>
-			</div>
-		</div>
-	</div>
-	</div>
+<div class="header-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2>
+          <i class="bi bi-folder2-open"></i>
+          Programas de Puerperio
+        </h2>
+      </div>
+      <div class="col-md-4 text-end">
+        <button class="btn btn-agregar" [routerLink]="['crear']">
+          <i class="bi bi-plus-circle-fill me-2"></i>
+          Nuevo Programa
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="container">
-	<!-- Filtros -->
-	<div class="filters-section">
-		<div class="filters-title">
-			<span>
-				<i class="bi bi-funnel-fill me-2"></i>
-				Filtros de Búsqueda
-			</span>
-			<button *ngIf="filtroId || filtroHistorial || filtroEstado !== 'todos'" class="btn btn-clear-filters" (click)="limpiarFiltros()">
-				<i class="bi bi-x-circle me-1"></i>
-				Limpiar
-			</button>
-		</div>
+  <div class="filters-section">
+    <div class="filters-title">
+      <span>
+        <i class="bi bi-funnel-fill me-2"></i>
+        Filtros de Búsqueda
+      </span>
+      @if (hayFiltroActivo) {
+      <button class="btn btn-clear-filters" (click)="limpiarFiltros()">
+        <i class="bi bi-x-circle me-1"></i>
+        Limpiar
+      </button>
+      }
+    </div>
 
-		<div class="row g-3">
-			<div class="col-md-4">
-				<div class="input-group filter-input">
-					<span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
-					<input type="text" class="form-control" placeholder="ID Programa" [(ngModel)]="filtroId" (ngModelChange)="aplicarFiltros()">
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="input-group filter-input">
-					<span class="input-group-text"><i class="bi bi-journal-text"></i></span>
-					<input type="text" class="form-control" placeholder="Historial Médico" [(ngModel)]="filtroHistorial" (ngModelChange)="aplicarFiltros()">
-				</div>
-			</div>
-			<div class="col-md-4">
-				<select class="form-select filter-input" [(ngModel)]="filtroEstado" (ngModelChange)="aplicarFiltros()">
-					<option value="todos">Estado (Todos)</option>
-					<option value="A">Activo</option>
-					<option value="I">Inactivo</option>
-				</select>
-			</div>
-		</div>
-	</div>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="input-group filter-input">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre y Apellido"
+            [(ngModel)]="filtroNombreApellido"
+            (ngModelChange)="filtrarProgramas()"
+          />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group filter-input">
+          <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="DNI"
+            [(ngModel)]="filtroDNI"
+            (ngModelChange)="filtrarProgramas()"
+          />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select
+          class="form-select filter-input"
+          [(ngModel)]="filtroEstadoPaciente"
+          (ngModelChange)="filtrarProgramas()"
+        >
+          <option value="todos">Estado Paciente (Todos)</option>
+          <option value="ACTIVO">Activo</option>
+          <option value="INACTIVO">Inactivo</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select
+          class="form-select filter-input"
+          [(ngModel)]="filtroEstadoPrograma"
+          (ngModelChange)="filtrarProgramas()"
+        >
+          <option value="todos">Estado Programa (Todos)</option>
+          <option value="ACTIVO">Activo</option>
+          <option value="FINALIZADO">Finalizado</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-	<!-- Resultados -->
-	<p class="results-info">
-		<i class="bi bi-list-ul me-2"></i>
-		{{ filtrados.length }} programas encontrados
-	</p>
+  <p class="results-info">
+    <i class="bi bi-list-ul me-2"></i>
+    {{ totalItems }} programas encontrados
+  </p>
 
-	<!-- Grid de Cards horizontales -->
-	<div class="obstetras-grid">
-		<div *ngFor="let p of filtrados" class="obstetra-card horizontal-card">
-			<div class="row g-0">
-				<div class="col-md-8">
-					<div class="card-body-custom">
-						<h6 class="obstetra-name">
-							<i class="bi bi-folder2-open"></i>
-							Programa #{{ p.id_programapuerperio }}
-						</h6>
-						<small class="obstetra-id">Historial: {{ p.HistorialMedico_id_historialmedico }}</small>
+  @if (isLoading) {
+  <div class="text-center p-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando programas...</p>
+  </div>
+  }
 
-						<div class="info-item">
-							<i class="bi bi-calendar-event"></i>
-							<strong>F. Inicio:</strong>
-							<span class="ms-2">{{ p.fecha_inicio }}</span>
-						</div>
+  @if (!isLoading) {
+  <div class="pr-list">
+    @for (programa of programas; track programa.id_programapuerperio) {
+    <div class="pr-card-horizontal">
+      <div class="pr-card-main">
+        <div class="pr-card-left">
+          <div class="pr-patient-info">
+            <div class="pr-patient-name">
+              <i class="bi bi-person-circle"></i>
+              {{ programa.paciente?.nombre }} {{ programa.paciente?.apellido }}
+              <span class="pr-id">ID: {{ programa.id_programapuerperio }}</span>
+            </div>
 
-						<div class="info-item">
-							<i class="bi bi-activity"></i>
-							<strong>Tipo Parto:</strong>
-							<span class="ms-2">{{ p.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</span>
-						</div>
+            <div class="pr-patient-details">
+              <span class="pr-badge pr-badge-dni">
+                <i class="bi bi-credit-card"></i>
+                DNI: {{ programa.paciente?.dni }}
+              </span>
+              <span class="pr-badge pr-badge-edad">
+                <i class="bi bi-calendar"></i>
+                {{ programa.paciente?.edad }} años
+              </span>
+              <span class="pr-badge pr-badge-gestacion" [class.pr-badge-cesarea]="programa.tipo_parto === 'CESAREA'">
+                <i class="bi bi-award"></i>
+                Parto: {{ programa.tipo_parto }}
+              </span>
+            </div>
+          </div>
+        </div>
 
-						<div class="info-item">
-							<i class="bi bi-journal"></i>
-							<strong>Observación:</strong>
-							<span class="ms-2">{{ p.observacion }}</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="card-footer-custom h-100 d-flex flex-column justify-content-between">
-						<div>
-							<span [ngClass]="getEstadoClase(p.estado)">{{ getEstadoTexto(p.estado) }}</span>
-						</div>
-						<div class="text-end">
-							<div class="actions-group justify-content-end">
-								<button class="btn-action btn-info-action" title="Ver Info" (click)="mostrarInfo(p.id_programapuerperio)" data-bs-toggle="modal" data-bs-target="#modalInfo">
-									<i class="bi bi-info-circle-fill"></i>
-								</button>
-								<button class="btn-action btn-edit-action" title="Editar" (click)="editar(p.id_programapuerperio)">
-									<i class="bi bi-pencil-square"></i>
-								</button>
-								<button class="btn-action btn-success-action" title="Controles" (click)="abrirControles(p.id_programapuerperio)">
-									<i class="bi bi-list-check"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="pr-card-center">
+          <div class="pr-dates">
+            <div class="pr-date-item">
+              <i class="bi bi-calendar-check"></i>
+              <span class="pr-date-label">Inicio:</span>
+              <span class="pr-date-value">{{ programa.fecha_inicio | date : 'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </div>
 
-		<div *ngIf="filtrados.length === 0" class="no-results">
-			<i class="bi bi-people-fill"></i>
-			<h4>0 Programas encontrados</h4>
-			<p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
-		</div>
-	</div>
+        <div class="pr-card-right">
+          <button
+            class="btn-action btn-info-action"
+            title="Ver Controles"
+            (click)="abrirControles(programa.id_programapuerperio)"
+          >
+            <i class="bi bi-clipboard-data"></i>
+            <span>Controles</span>
+          </button>
+        </div>
+      </div>
+      <div class="pr-card-footer">
+        <span [ngClass]="getEstadoClase(programa.estado)">
+          {{ getEstadoTexto(programa.estado) }}
+        </span>
 
-	<!-- Modal -->
-	<div class="modal fade" id="modalInfo" tabindex="-1">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div *ngIf="programaSeleccionado">
-					<div class="modal-header">
-						<h5 class="modal-title">Programa #{{ programaSeleccionado.id_programapuerperio }}</h5>
-						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-					</div>
-					<div class="modal-body">
-						<div class="info-row"><strong>ID:</strong> {{ programaSeleccionado.id_programapuerperio }}</div>
-						<div class="info-row"><strong>Historial:</strong> {{ programaSeleccionado.HistorialMedico_id_historialmedico }}</div>
-						<div class="info-row"><strong>F. Inicio:</strong> {{ programaSeleccionado.fecha_inicio }}</div>
-						<div class="info-row"><strong>Tipo Parto:</strong> {{ programaSeleccionado.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</div>
-						<div class="info-row"><strong>Observación:</strong> {{ programaSeleccionado.observacion }}</div>
-						<div class="info-row"><strong>Complicación:</strong> {{ programaSeleccionado.complicacion }}</div>
-						<div class="info-row"><strong>F. Finalización:</strong> {{ programaSeleccionado.fecha_finalizacion }}</div>
-						<div class="info-row"><strong>Motivo Finalización:</strong> {{ programaSeleccionado.motivo_finalizacion }}</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="pr-card-actions">
+          <button
+            class="btn-action btn-primary-action"
+            title="Ver Detalles"
+            (click)="mostrarInfo(programa.id_programapuerperio)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalInfoPuerperio"
+          >
+            <i class="bi bi-eye"></i>
+            <span>Detalle</span>
+          </button>
 
+          @if (programa.estado === 'A') {
+          <button
+            class="btn-action btn-edit-action"
+            title="Editar"
+            [routerLink]="['editar', programa.id_programapuerperio]"
+          >
+            <i class="bi bi-pencil-square"></i>
+            <span>Editar</span>
+          </button>
+
+          <button
+            class="btn-action btn-danger-action"
+            title="Finalizar Programa"
+            (click)="abrirModalFinalizar(programa)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalFinalizarPuerperio"
+          >
+            <i class="bi bi-stop-circle"></i>
+            <span>Finalizar</span>
+          </button>
+          } @else {
+          <button
+            class="btn-action btn-success-action"
+            title="Reactivar Programa"
+            (click)="reactivarPrograma(programa)"
+          >
+            <i class="bi bi-arrow-clockwise"></i>
+            <span>Reactivar</span>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+    } @empty {
+    <div class="no-results">
+      <i class="bi bi-clipboard-x"></i>
+      <h4>No hay programas disponibles</h4>
+      <p>No se encontraron programas que coincidan con los filtros aplicados.</p>
+    </div>
+    }
+  </div>
+  }
 </div>
+
+<div class="modal fade" id="modalInfoPuerperio" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      @if (programaSeleccionado) {
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-folder2-open me-2"></i>
+          Detalle del Programa Puerperio
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle"><i class="bi bi-person-circle me-2"></i> Información del Paciente</h6>
+          <div class="row">
+            <div class="col-md-6"><div class="info-row"><strong>Nombre:</strong> <span>{{ programaSeleccionado.paciente?.nombre }} {{ programaSeleccionado.paciente?.apellido }}</span></div></div>
+            <div class="col-md-6"><div class="info-row"><strong>DNI:</strong> <span>{{ programaSeleccionado.paciente?.dni }}</span></div></div>
+          </div>
+        </div>
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle"><i class="bi bi-clipboard-check me-2"></i> Datos del Programa</h6>
+          <div class="row">
+            <div class="col-md-6"><div class="info-row"><strong>ID Programa:</strong> <span>{{ programaSeleccionado.id_programapuerperio }}</span></div></div>
+            <div class="col-md-6"><div class="info-row"><strong>ID Historial:</strong> <span>{{ programaSeleccionado.id_historialmedico }}</span></div></div>
+            <div class="col-md-6"><div class="info-row"><strong>Tipo de Parto:</strong> <span>{{ programaSeleccionado.tipo_parto }}</span></div></div>
+            <div class="col-md-6"><div class="info-row"><strong>Fecha de inicio:</strong> <span>{{ programaSeleccionado.fecha_inicio | date : 'dd/MM/yyyy' }}</span></div></div>
+            <div class="col-12"><div class="info-row"><strong>Estado:</strong> <span [ngClass]="getEstadoClase(programaSeleccionado.estado)">{{ getEstadoTexto(programaSeleccionado.estado) }}</span></div></div>
+          </div>
+        </div>
+        @if (programaSeleccionado.complicacion) {
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle"><i class="bi bi-exclamation-triangle me-2"></i> Complicación</h6>
+          <p class="pr-text-content">{{ programaSeleccionado.complicacion }}</p>
+        </div>
+        }
+        @if (programaSeleccionado.observacion) {
+        <div class="pr-modal-section">
+          <h6 class="pr-modal-subtitle"><i class="bi bi-chat-text me-2"></i> Observaciones</h6>
+          <p class="pr-text-content">{{ programaSeleccionado.observacion }}</p>
+        </div>
+        }
+        @if (programaSeleccionado.estado === 'F') {
+        <div class="pr-modal-section pr-finalizado">
+          <h6 class="pr-modal-subtitle"><i class="bi bi-x-circle me-2"></i> Información de Finalización</h6>
+          <div class="row">
+            <div class="col-md-6"><div class="info-row"><strong>Fecha:</strong> <span>{{ programaSeleccionado.fecha_finalizacion | date : 'dd/MM/yyyy' }}</span></div></div>
+            <div class="col-md-6 p-0"><div class="info-row"><strong>Motivo:</strong> <span>{{ getMotivoFinTexto(programaSeleccionado.motivo_finalizacion) }}</span></div></div>
+            @if (programaSeleccionado.motivo_otros) {
+            <div class="col-12 p-0"><div class="info-row"><strong>Detalle:</strong> <span>{{ programaSeleccionado.motivo_otros }}</span></div></div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalFinalizarPuerperio" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      @if (programaAFinalizar) {
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-stop-circle me-2"></i> Finalizar Programa Puerperio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Paciente:</strong> {{ programaAFinalizar.paciente?.nombre }} {{ programaAFinalizar.paciente?.apellido }}</p>
+        <div class="mb-3">
+          <label class="form-label fw-bold"><i class="bi bi-clipboard-check me-2"></i> Motivo de Finalización *</label>
+          <select class="form-select" [(ngModel)]="motivoFinalizacion" [disabled]="isFinalizando">
+            <option value="">Seleccione un motivo</option>
+            <option [value]="MotivoFinPuerperio.ALTA_MEDICA">Alta Médica</option>
+            <option [value]="MotivoFinPuerperio.VOLUNTAD_PACIENTE">Voluntad del Paciente</option>
+            <option [value]="MotivoFinPuerperio.OTROS">Otros</option>
+          </select>
+        </div>
+        @if (motivoFinalizacion === MotivoFinPuerperio.OTROS) {
+        <div class="mb-3">
+          <label class="form-label fw-bold"><i class="bi bi-chat-text me-2"></i> Especificar Motivo *</label>
+          <textarea class="form-control" rows="3" placeholder="Describa el motivo..." [(ngModel)]="motivoOtros" [disabled]="isFinalizando"></textarea>
+        </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" [disabled]="isFinalizando"><i class="bi bi-x-circle me-2"></i> Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="finalizarPrograma()" [disabled]="isFinalizando || !motivoFinalizacion">
+          @if (isFinalizando) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          } @else {
+          <i class="bi bi-stop-circle me-2"></i>
+          } Finalizar
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<app-paginacion
+  [currentPage]="currentPage"
+  [totalPages]="totalPages"
+  [totalItems]="totalItems"
+  [pageSize]="pageSize"
+  (pageChange)="irAPagina($event)"
+  (sizeChange)="cambiarTamanoPagina($event)"
+></app-paginacion>

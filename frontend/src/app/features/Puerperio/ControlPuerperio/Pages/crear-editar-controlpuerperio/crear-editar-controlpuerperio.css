@@ -1,8 +1,16 @@
-.fondo { background-color: #f7f7f7; min-height: 100vh; }
-.card-container { background: #fff; border-radius: 12px; padding: 20px; max-width: 900px; margin: 0 auto; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-.header .titulo { color: #850e35; margin: 0 0 6px 0; }
-.subtitulo { color: #666; margin: 0 0 12px 0; }
-.label { font-weight: 600; color: #7b2434; margin-bottom: 5px; display:block; }
-.form-control, .form-select, textarea.form-control { border: 1.5px solid #d2a1ad; border-radius: 10px; padding: 10px 12px; }
-.btn-submit { background-color: #850e35; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight:700; }
-.btn-volver { background: transparent; border: none; color: #850e35; font-weight:700; }
+/* La mayoría de los estilos ahora vienen de form-base.css 
+  (fondo, card-container, label, form-control, btn-submit, btn-volver)
+*/
+
+/* Ajuste específico: Hacemos el card-container de este módulo un poco más ancho 
+  para que el formulario de 2 columnas se vea bien.
+*/
+.card-container-wide {
+  width: 900px; /* Ajustado para 2 columnas */
+  max-width: 95%;
+}
+
+/* Ajustes menores si 'form-base.css' no los cubre */
+.subtitulo strong {
+  color: var(--color-vino);
+}

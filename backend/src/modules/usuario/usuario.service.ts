@@ -267,7 +267,6 @@ async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta
         'Verificación reCAPTCHA fallida. Por favor, inténtelo de nuevo',
       );
     }
-
     // Buscar usuario
     const usuario = await this.usuarioRepository
       //es como hacer un SELECT * FROM usuario WHERE dni = 'dni'

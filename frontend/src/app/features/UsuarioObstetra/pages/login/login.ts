@@ -208,15 +208,22 @@ Es la única forma de obtener el token de reCAPTCHA */
     this.privacy = false;
   }
 
+  // --- INICIO DE LA CORRECCIÓN ---
+  // Apunta a las rutas correctas de 'app.routes.ts'
   private redirectToRole(rol: string): void {
-    if (rol === 'Administrador') {
-      this.router.navigate(['/admin/dashboard']);
-    } else if (rol === 'Obstetra') {
-      this.router.navigate(['/obstetra/pacientes']);
+    // Convertimos a minúsculas para una comparación segura
+    const rolLower = rol.toLowerCase().trim();
+
+    if (rolLower === 'administrador') {
+      this.router.navigate(['/obstetras']); 
+    } else if (rolLower === 'obstetra') {
+      this.router.navigate(['/pacientes']);
     } else {
-      this.router.navigate(['/home']);
+      // Ruta por defecto si el rol no es ninguno
+      this.router.navigate(['/login']);
     }
   }
+  // --- FIN DE LA CORRECCIÓN ---
 
   ngOnDestroy(): void {
     if (this.intervalId) {

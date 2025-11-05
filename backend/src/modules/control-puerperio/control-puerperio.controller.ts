@@ -1,43 +1,82 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, Delete } from '@nestjs/common';
+// src/modules/control-puerperio/control-puerperio.controller.ts
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ControlPuerperioService } from './control-puerperio.service';
 import { CreateControlPuerperioDto } from './dto/create-control-puerperio.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { RolUsuario } from 'src/enums/RolUsuario';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UpdateControlPuerperioDto } from './dto/update-control-puerperio.dto';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator'; // Importar CurrentUser
 
-@Controller('controles-puerperio')
+// La ruta base ahora es 'programas-puerperio' para anidar los controles
+@Controller('programas-puerperio')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) // Roles base
 export class ControlPuerperioController {
   constructor(private readonly service: ControlPuerperioService) {}
 
-  @Post()
+  // POST /programas-puerperio/:id_programa/controles
+  @Post(':id_programa/controles')
+  // --- CORREGIDO: Ahora ambos roles pueden crear ---
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) 
   @HttpCode(HttpStatus.CREATED)
-  async crear(@Body() dto: CreateControlPuerperioDto) {
-    const creado = await this.service.crearControl(dto);
+  async crear(
+    @Param('id_programa') id_programa: string,
+    @Body() dto: CreateControlPuerperioDto,
+    @CurrentUser() user: { id_usuario: string; rol: string }, // Usar el decorador @CurrentUser
+  ) {
+    // Obtenemos el ID del usuario logueado (Obstetra) desde el token
+    const id_usuario = user.id_usuario;
+
+    const creado = await this.service.create(id_programa, id_usuario, dto);
     return { message: 'Control puerperio creado', data: creado };
   }
 
-  @Get()
+  // GET /programas-puerperio/:id_programa/controles
+  @Get(':id_programa/controles')
   @HttpCode(HttpStatus.OK)
-  async listar() {
-    const data = await this.service.listarControles();
-    return { message: 'Controles obtenidos', data };
+  async listarPorPrograma(@Param('id_programa') id_programa: string) {
+    const data = await this.service.findAllByPrograma(id_programa);
+    return {
+      message: `Controles obtenidos para el programa ${id_programa}`,
+      data,
+    };
   }
 
-  @Get(':id')
+  // GET /programas-puerperio/:id_programa/controles/:id_control
+  @Get(':id_programa/controles/:id_control')
   @HttpCode(HttpStatus.OK)
-  async obtener(@Param('id') id: string) {
-    const c = await this.service.obtenerPorId(id);
+  async obtener(
+    @Param('id_programa') _id_programa: string, // No se usa, pero es parte de la ruta
+    @Param('id_control') id_control: string,
+  ) {
+    const c = await this.service.findOne(id_control);
     return { message: 'Control obtenido', data: c };
   }
 
-  @Put(':id')
+  // PUT /programas-puerperio/:id_programa/controles/:id_control
+  @Put(':id_programa/controles/:id_control')
+  // --- CORREGIDO: Ahora ambos roles pueden actualizar ---
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) 
   @HttpCode(HttpStatus.OK)
-  async actualizar(@Param('id') id: string, @Body() changes: any) {
-    const updated = await this.service.actualizarControl(id, changes);
+  async actualizar(
+    @Param('id_programa') _id_programa: string, // No se usa, pero es parte de la ruta
+    @Param('id_control') id_control: string,
+    @Body() dto: UpdateControlPuerperioDto,
+  ) {
+    const updated = await this.service.update(id_control, dto);
     return { message: 'Control actualizado', data: updated };
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async eliminar(@Param('id') id: string) {
-    await this.service.eliminarControl(id);
-    return { message: 'Control eliminado' };
   }
 }
