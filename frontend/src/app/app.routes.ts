@@ -25,6 +25,8 @@ import { ConsultaVerDetalles } from './features/DetalleAnalisis/consulta-ver-det
 import { ProgramasHistorialmedico } from './features/HistorialMedico/pages/programas-historialmedico/programas-historialmedico';
 import { CrearEditarProgDiagnostico } from './features/ProgramaDiagnostico/pages/crear-editar-prog-diagnostico/crear-editar-prog-diagnostico';
 
+import { ListarControles } from './features/ControlDiagnostico/pages/listar-controles/listar-controles';
+import { CrearEditarControlDiagnostico } from './features/ControlDiagnostico/pages/crear-editar-control/crear-editar-control';
 export const routes: Routes = [
   // Redirige al login por defecto
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -36,26 +38,26 @@ export const routes: Routes = [
   {
     path: 'pacientes',
     component: ListadoPacientes,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'pacientes/registrar',
     component: CrearPacienteHistorial,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'pacientes/editar/:id',
     component: EditarPaciente,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'historialmedico',
     component: ListadoHistorialmedico,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'diagnostico',
-    component: ProgramaDiagnosticoListComponent, 
+    component: ProgramaDiagnosticoListComponent,
     canActivate: [authGuard],
   },
   {
@@ -65,28 +67,28 @@ export const routes: Routes = [
   },
   {
     path: 'diagnostico/editar/:id',
-    component: CrearEditarProgDiagnostico, 
+    component: CrearEditarProgDiagnostico,
     canActivate: [authGuard],
   },
-   {
+  {
     path: 'diagnostico/:id/finalizar',
-    component: ProgramaDiagnosticoListComponent, 
+    component: ProgramaDiagnosticoListComponent,
     canActivate: [authGuard],
   },
   {
     path: 'puerperio',
     component: ListarProgramapuerperio,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'puerperio/crear',
     component: CrearEditarProgramapuerperio,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
   {
     path: 'puerperio/editar/:id',
     component: CrearEditarProgramapuerperio,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
   },
 
   // --- INICIO DE LA CORRECCIÓN ---
@@ -94,47 +96,46 @@ export const routes: Routes = [
   {
     path: 'puerperio/:id/controles',
     component: ListarControlpuerperio,
-    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   {
     path: 'puerperio/:id/controles/crear',
     component: CrearEditarControlpuerperio,
-    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   {
     path: 'puerperio/:id/controles/editar/:cid',
     component: CrearEditarControlpuerperio,
-    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   // (Asumiendo que Admin también debe ver detalles de análisis)
-  { 
-    path: 'detalle-analisis/registrar', 
+  {
+    path: 'detalle-analisis/registrar',
     component: AgregarDetalleAnalisis,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
-  { 
-    path: 'detalle-analisis/:id', 
+  {
+    path: 'detalle-analisis/:id',
     component: EditarDetalleAnalisis,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
-  { 
-    path: 'detalles-analisis/:id', 
+  {
+    path: 'detalles-analisis/:id',
     component: ListarDetalleAnalisis,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
-  { 
-    path: 'consulta-detalles-analisis/:id', 
+  {
+    path: 'consulta-detalles-analisis/:id',
     component: ConsultaVerDetalles,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   // --- FIN DE LA CORRECCIÓN ---
 
-
   // --- RUTAS SOLO DE ADMINISTRADOR ---
   {
     path: 'obstetras',
     component: ListadoObstetras,
-    canActivate: [authGuard, roleGuard(['Administrador'])], 
+    canActivate: [authGuard, roleGuard(['Administrador'])],
   },
   {
     path: 'obstetras/registrar',
@@ -154,12 +155,30 @@ export const routes: Routes = [
 
   // --- RUTAS DE HISTORIAL MÉDICO (Común) ---
   {
-    path: 'historialmedico/:id/programas', 
+    path: 'historialmedico/:id/programas',
     component: ProgramasHistorialmedico,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'diagnostico/:id/controles',
+    component: ListarControles,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  {
+    path: 'diagnostico/:id/controles/crear',
+    component: CrearEditarControlDiagnostico,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  {
+    path: 'diagnostico/:id/controles/editar/:cid',
+    component: CrearEditarControlDiagnostico,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
 
   // --- RUTAS GENÉRICAS ---
   { path: 'no-autorizado', component: NoAutorizado },
   { path: '**', component: Notfound },
+
+  
 ];

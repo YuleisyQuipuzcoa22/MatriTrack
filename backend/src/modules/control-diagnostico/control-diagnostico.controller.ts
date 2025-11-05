@@ -34,11 +34,11 @@ export class ControlDiagnosticoController {
   ) {
     // *** Lógica para obtener el ID del usuario logueado (Obstetra) ***
     // Ejemplo: Si usas JWT y NestJS Passport, el ID estaría en req.user.id
-    // const id_usuario = req.user.id_usuario; 
+    // const id_usuario = req.user.id_usuario;
     // Usamos un placeholder por ahora:
-    const id_usuario = 'OB0001'; 
+    const id_usuario = 'OB0001';
     // *******************************************************************
-    
+
     const nuevoControl = await this.controlDiagnosticoService.create(
       id_programa,
       id_usuario,
@@ -51,15 +51,27 @@ export class ControlDiagnosticoController {
   }
 
   // GET /programas-diagnostico/:id_programa/controles
-  @Get(':id_programa/controles')
-  async findAllByPrograma(@Param('id_programa') id_programa: string) {
-    return this.controlDiagnosticoService.findAllByPrograma(id_programa);
-  }
+@Get(':id_programa/controles')
+async findAllByPrograma(@Param('id_programa') id_programa: string) {
+  const controles = await this.controlDiagnosticoService.findAllByPrograma(id_programa);
+  return {
+    message: `Controles del programa ${id_programa} obtenidos correctamente`,
+    data: controles,
+  };
+}
 
   // GET /programas-diagnostico/:id_programa/controles/:id_control
   @Get(':id_programa/controles/:id_control')
-  async findOne(@Param('id_control') id_control: string) {
-    return this.controlDiagnosticoService.findOne(id_control);
+  async findOne(
+    @Param('id_programa') id_programa: string,
+    @Param('id_control') id_control: string,
+  ) {
+    const control = await this.controlDiagnosticoService.findOne(id_control);
+
+    return {
+      message: `Control ${id_control} del programa ${id_programa} obtenido correctamente`,
+      data: control, // 🔹 asegúrate de devolver { data: {...} }
+    };
   }
 
   // PUT /programas-diagnostico/:id_programa/controles/:id_control

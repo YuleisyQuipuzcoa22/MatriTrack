@@ -68,6 +68,8 @@ export class ListarControlpuerperio implements OnInit {
     }
   }
 
+  
+
   verAnalisis(cid: string): void {
     if (this.programaId) {
       this.router.navigate([

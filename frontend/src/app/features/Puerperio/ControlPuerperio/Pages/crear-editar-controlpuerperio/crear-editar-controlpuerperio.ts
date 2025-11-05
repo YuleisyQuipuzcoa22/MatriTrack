@@ -203,16 +203,20 @@ export class CrearEditarControlpuerperio implements OnInit {
   // Helper para validación en HTML
   isInvalid(controlName: string): boolean {
     const control = this.controlForm.get(controlName);
-    return !!control && control.invalid && (control.touched || control.dirty);
+    return !!control && control.invalid && (control.dirty || control.touched);
   }
 
   getErrorMessage(controlName: string): string {
     const control = this.controlForm.get(controlName);
-    if (control?.errors?.['required']) return 'Este campo es obligatorio.';
-    if (control?.errors?.['min']) return `El valor debe ser al menos ${control.errors['min'].min}.`;
-    if (control?.errors?.['max']) return `El valor debe ser máximo ${control.errors['max'].max}.`;
-    if (control?.errors?.['pattern']) return 'Formato incorrecto (Ej. 120/80 o 1.70).';
-    if (control?.errors?.['maxlength']) return `Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
-    return '';
+
+    if (!control || !control.errors) return '';
+
+    if (control.errors['required']) return 'Este campo es obligatorio.';
+    if (control.errors['min']) return `El valor debe ser al menos ${control.errors['min'].min}.`;
+    if (control.errors['max']) return `El valor no puede ser mayor que ${control.errors['max'].max}.`;
+    if (control.errors['pattern']) return 'Formato incorrecto (Ej. 120/80).';
+    if (control.errors['maxlength']) return `Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+
+    return 'Valor inválido.';
   }
 }

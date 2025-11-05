@@ -1,0 +1,31 @@
+/* Usa el mismo diseño base que Puerperio */
+.card-container-wide {
+  width: 900px;
+  max-width: 95%;
+}
+
+.subtitulo strong {
+  color: var(--color-vino);
+}
+
+/* Espaciado uniforme para las secciones */
+.section-title {
+  font-weight: 600;
+  color: var(--color-vino);
+  border-bottom: 2px solid var(--color-vino);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+/* Ajuste a los input */
+input.form-control,
+textarea.form-control {
+  font-size: 0.95rem;
+}
+
+/* Alineación en botones */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}

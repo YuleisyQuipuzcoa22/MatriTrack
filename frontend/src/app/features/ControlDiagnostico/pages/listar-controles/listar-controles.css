@@ -1,0 +1,160 @@
+.fondo {
+  background-color: #f7f7f7;
+  padding: 20px 0;
+}
+
+.card-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 950px;
+  margin: 0 auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.header .titulo {
+  color: var(--color-vino);
+  margin-bottom: 6px;
+}
+
+.subtitulo {
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* Botones */
+.btn-agregar {
+  background-color: var(--color-vino);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+  background-color: var(--color-vino-oscuro);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(133, 14, 53, 0.3);
+}
+
+.btn-volver {
+  background: transparent;
+  border: 1px solid var(--color-vino);
+  color: var(--color-vino);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+  background: #fdf0f3;
+  color: var(--color-vino-oscuro);
+}
+
+/* Acordeón */
+.ctrl-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.ctrl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(to right, #fafafa, #fff);
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.ctrl-accordion-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-vino-claro);
+}
+
+.ctrl-date-badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--color-rosado);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+}
+
+.ctrl-chevron {
+  color: var(--color-rosado);
+  transition: transform 0.3s ease;
+}
+
+.ctrl-accordion-btn[aria-expanded='true'] .ctrl-chevron {
+  transform: rotate(180deg);
+}
+
+/* Acciones */
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-edit-action {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.btn-edit-action:hover {
+  background-color: #e0a800;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.btn-success-action {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success-action:hover {
+  background-color: #1e7e34;
+  transform: scale(1.1);
+}
+
+/* Cuerpo */
+.ctrl-card-body {
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.info-item strong {
+  color: var(--color-vino);
+  font-weight: 600;
+}
+
+.info-item p {
+  color: #333;
+  margin: 0;
+}
