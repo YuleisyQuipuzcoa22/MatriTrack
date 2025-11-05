@@ -4,14 +4,14 @@ import { PacienteFilters, PacienteService } from '../../../Paciente/services/pac
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Paginacion } from '../../../../components/paginacion/paginacion';
 
 // Segun la interfaz, paciente tiene toda la info del historial medico
 interface Historialmedico extends PacienteData {}
 
 @Component({
   selector: 'app-listado-historialmedico',
-  standalone: true, // Asumiendo que es un componente standalone
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-historialmedico.html',
   styleUrl: './listado-historialmedico.css',
   // Es necesario que PacienteService sea provisto aquí si es standalone
@@ -19,12 +19,12 @@ interface Historialmedico extends PacienteData {}
 export class ListadoHistorialmedico implements OnInit {
   historialData: Historialmedico[] = [];
   pacienteSeleccionado: Historialmedico | null = null;
-  public Math = Math; // Paginación
 
   currentPage = 1;
   pageSize = 9;
   totalItems = 0;
-  totalPages = 0; // Filtros
+  totalPages = 0;
+  conteoResultados = 0;
 
   filtroNombreApellido = '';
   filtroDNI = '';
@@ -32,7 +32,6 @@ export class ListadoHistorialmedico implements OnInit {
 
   isLoading = false;
   hayFiltroActivo = false;
-  conteoResultados = 0;
 
   constructor(private pacienteService: PacienteService) {}
   ngOnInit(): void {
@@ -44,23 +43,24 @@ export class ListadoHistorialmedico implements OnInit {
     const filters: PacienteFilters = {
       page: this.currentPage,
       limit: this.pageSize,
-
-      apellido: '',
-      historialMedico: { id_historialmedico: '' },
-
-      // Propiedades de filtro (condicionales):
-      nombre: this.filtroNombreApellido.trim() || undefined,
-      dni: this.filtroDNI.trim() || undefined,
-      estado: this.filtroEstado !== 'todos' ? this.filtroEstado : undefined,
-    }; // Ahora envía los parámetros de paginación
-
+    };
+    if (this.filtroNombreApellido.trim()) {
+      filters.nombreApellido = this.filtroNombreApellido.trim();
+    }
+    if (this.filtroDNI.trim()) {
+      filters.dni = this.filtroDNI.trim();
+    }
+    if (this.filtroEstado !== 'todos') {
+      filters.estado = this.filtroEstado;
+    }
+     
     this.pacienteService.listarPacientes(filters).subscribe({
       next: (response) => {
         this.historialData = response.data;
         this.totalItems = response.meta.total;
         this.totalPages = response.meta.totalPages;
         this.currentPage = response.meta.page;
-        this.conteoResultados = response.data.length;
+        this.conteoResultados = this.totalItems;
         this.actualizarBotonLimpiar();
         this.isLoading = false;
       },
@@ -89,16 +89,6 @@ export class ListadoHistorialmedico implements OnInit {
     this.cargarPacientes();
   } // Navegar entre páginas
 
-  irAPagina(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.cargarPacientes();
-    }
-  } // Cambiar tamaño de página
-  cambiarTamanoPagina(): void {
-    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
-    this.cargarPacientes();
-  }
   mostrarInfoHistorial(id: string): void {
     this.pacienteSeleccionado = this.historialData.find((p) => p.id_paciente === id) || null;
   }
@@ -118,5 +108,16 @@ export class ListadoHistorialmedico implements OnInit {
       default:
         return 'No especificado';
     }
+  }
+  // Navegar entre páginas
+  irAPagina(page: number): void {
+    this.currentPage = page;
+    this.cargarPacientes();
+  }
+  // Cambiar tamaño de página
+  cambiarTamanoPagina(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1; // Siempre ir a la página 1 al cambiar el límite
+    this.cargarPacientes();
   }
 }

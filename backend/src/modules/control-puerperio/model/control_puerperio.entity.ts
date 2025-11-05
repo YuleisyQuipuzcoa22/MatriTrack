@@ -13,7 +13,6 @@ import {
 import { ProgramaPuerperio } from 'src/modules/programa-puerperio/model/programa_puerperio.entity';
 import { Usuario } from 'src/modules/usuario/model/usuario.entity';
 import { ResultadoAnalisis } from 'src/modules/resultado-analisis/model/resultado-analisis.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity('control_puerperio')
 export class ControlPuerperio {
@@ -24,7 +23,6 @@ export class ControlPuerperio {
   // Relación Many-to-One con ProgramaPuerperio
   @ManyToOne(() => ProgramaPuerperio, (programa) => programa.controlesMedicos)
   @JoinColumn({ name: 'id_programapuerperio' })
-  @Exclude() // Evitar ciclos
   programaPuerperio?: ProgramaPuerperio;
 
   // FK explícita para ProgramaPuerperio
@@ -41,11 +39,11 @@ export class ControlPuerperio {
   usuario_id_usuario!: string;
 
   // Fecha de control (automática)
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime', nullable: false })
   fecha_controlpuerperio!: Date;
 
   // Fecha de modificación (automática)
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'datetime', nullable: true })
   fecha_modificacion!: Date;
 
   // Columnas normales

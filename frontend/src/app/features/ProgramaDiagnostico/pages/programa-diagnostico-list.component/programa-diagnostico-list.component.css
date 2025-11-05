@@ -1,135 +1,346 @@
-/* ---------------------------------- */
-/* ESTILOS GLOBALES Y CONTENEDORES */
-/* ---------------------------------- */
-.custom-card {
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+/* Lista de programas */
+.pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.custom-header-title {
-    color: #850e35;
-    font-weight: 700;
+/* Card Horizontal */
+.pr-card-horizontal {
+  background: white;
+  border-radius: 1rem;
+  border: 2px solid #e9ecef;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: relative;
 }
 
-.btn-primary-custom {
-    background-color: #c0392b;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: 600;
-    transition: background-color 0.3s;
+.pr-card-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--color-vino), var(--color-rosado));
 }
 
-.btn-primary-custom:hover {
-    background-color: #a22b51;
-    color: white;
+.pr-card-horizontal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(133, 14, 53, 0.15);
+  border-color: var(--color-rosado);
 }
 
-.btn-outline-primary-custom {
-    color: #850e35;
-    border: 1px solid #850e35;
-    border-radius: 8px;
-    font-weight: 600;
+/* Contenido principal del card */
+.pr-card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  gap: 1.5rem;
 }
 
-.btn-outline-primary-custom:hover {
-    background-color: #850e35;
-    color: white;
+/* Sección izquierda - Info del paciente */
+.pr-card-left {
+  flex: 1;
+  min-width: 0;
 }
 
-/* ---------------------------------- */
-/* FILTROS */
-/* ---------------------------------- */
-.filter-box {
-    border-radius: 10px;
-    background-color: #fcfcfc;
-    border: 1px solid #eee;
+.pr-patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.filter-title {
-    color: #a22b51;
-    font-weight: 700;
-    margin-bottom: 15px;
-    font-size: 1rem;
+.pr-patient-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-vino);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.form-control, .custom-select-filter {
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 8px 12px;
+.pr-patient-name i {
+  font-size: 1.3rem;
 }
 
-/* ---------------------------------- */
-/* TARJETAS DE PROGRAMA */
-/* ---------------------------------- */
-
-.program-card {
-    border-radius: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f0f0f0;
+.pr-patient-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.program-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(133, 14, 53, 0.1);
+.pr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
-.text-primary-custom {
-    color: #850e35;
-    font-weight: 700;
-    font-size: 1.1rem;
+.pr-badge-dni {
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
-.detail-row {
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    color: #555;
+.pr-badge-edad {
+  background: #f3e5f5;
+  color: #7b1fa2;
 }
 
-.detail-icon {
-    color: #a22b51;
-    min-width: 20px;
+.pr-badge-gestacion {
+  background: #fce4ec;
+  color: #c2185b;
 }
 
-/* ESTADOS */
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: white;
-    min-width: 70px;
-    text-align: center;
+/* Sección central - Fechas */
+.pr-card-center {
+  flex: 0 0 auto;
 }
 
-.status-activo { background-color: #2ecc71; } /* Verde */
-.status-inactivo { background-color: #95a5a6; } /* Gris */
-.status-finalizado { background-color: #e74c3c; } /* Rojo */
+.pr-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
+.pr-date-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #495057;
+}
 
-/* ---------------------------------- */
-/* BOTONES DE ACCIÓN DE TARJETA */
-/* ---------------------------------- */
+.pr-date-item i {
+  color: var(--color-rosado);
+  font-size: 1rem;
+}
 
-.action-buttons button {
-    margin: 0 2px;
-    border-radius: 50%; /* Botones redondos */
-    width: 38px;
-    height: 38px;
-    display: flex;
+.pr-date-label {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.pr-date-value {
+  color: var(--color-vino);
+  font-weight: 500;
+}
+
+/* Sección derecha - ID y Estado */
+.pr-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.pr-id {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+.pr-card-footer {
+  background-color: #f8f9fa;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e9ecef;
+}
+/* Acciones */
+.pr-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.pr-card-actions .btn-action:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pr-card-actions .btn-action i {
+  font-size: 1.1rem;
+}
+
+/*colores de demás botones están en styleListadoCrud*/
+.btn-primary-action {
+  background-color: #008cff;
+  color: white;
+}
+
+.btn-primary-action:hover {
+  background-color: #0056b3;
+}
+
+/* Modal Detalle */
+.pr-modal-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.pr-modal-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.pr-modal-subtitle {
+  color: var(--color-vino);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.pr-modal-subtitle i {
+  font-size: 1.2rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 0.65rem !important ;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.info-row strong {
+  min-width: 180px;
+}
+
+.pr-text-content {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--color-rosado);
+  color: #495057;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.pr-finalizado {
+  background: #fff3cd;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ffc107;
+}
+
+/* Modal */
+
+.modal-header .btn-close-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Estilos del modal de finalización */
+.modal-body .form-label {
+  color: var(--color-vino);
+}
+
+.modal-body .alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+}
+
+/* Sin resultados */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  border: 2px dashed #dee2e6;
+}
+
+.no-results i {
+  font-size: 4rem;
+  color: #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.no-results h4 {
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.no-results p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .pr-card-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .pr-card-center {
+    width: 100%;
+  }
+
+  .pr-card-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+  }
+
+  .pr-card-actions {
+    flex-wrap: wrap;
     justify-content: center;
-    font-size: 0.9rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-row strong {
+    min-width: auto;
+  }
 }
 
-/* Colores de botones personalizados */
-.btn-info-custom { background-color: #3498db; color: white; border: none; } /* Detalle (Azul) */
-.btn-warning-custom { background-color: #f39c12; color: white; border: none; } /* Controles (Naranja) */
-.btn-secondary-custom { background-color: #6c757d; color: white; border: none; } /* Editar (Gris Oscuro) */
-.btn-danger-custom { background-color: #c0392b; color: white; border: none; } /* Finalizar (Vino) */
-.btn-success-custom { background-color: #27ae60; color: white; border: none; } /* Activar (Verde Oscuro) */
+@media (max-width: 768px) {
+  .pr-card-actions .btn-action span {
+    display: none;
+  }
 
-.action-buttons button:hover {
-    opacity: 0.8;
+  .pr-card-actions .btn-action {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .pr-patient-name {
+    font-size: 1rem;
+  }
+
+  .pr-patient-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

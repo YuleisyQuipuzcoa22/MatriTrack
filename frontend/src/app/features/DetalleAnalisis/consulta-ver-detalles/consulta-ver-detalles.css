@@ -1,0 +1,242 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.consulta-root {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.header-section {
+  background: linear-gradient(135deg, #f3f2f2 0%, #ffffff 100%);
+  padding: 2rem 0;
+  box-shadow: 0 1px 10px #850e35;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #850e35;
+}
+
+.header-section h2 {
+  color: #850e35 !important;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.btn-volver {
+  background-color: #6c757d !important;
+  color: white !important;
+  border: 2px solid #6c757d !important;
+  transition: all 0.3s;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+.btn-volver:hover {
+  background-color: #5a6268 !important;
+  border-color: #545b62 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+}
+
+/* Card principal */
+.card {
+  border-radius: 1rem;
+  border: none;
+  overflow: hidden;
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #850e35 0%, #ee6983 100%);
+  color: white;
+  padding: 1.5rem;
+  border-bottom: none;
+}
+
+.card-header-custom h4 {
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+
+.badge-id {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Títulos de sección */
+.section-title {
+  color: #850e35;
+  font-weight: 700;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #ee6983;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-title i {
+  color: #ee6983;
+}
+
+/* Info boxes */
+.info-box {
+  background-color: #f8f9fa;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s;
+}
+
+.info-box:hover {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.08);
+  transform: translateY(-2px);
+}
+
+.info-label {
+  color: #850e35;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-label i {
+  color: #ee6983;
+  font-size: 1rem;
+}
+
+.info-value {
+  color: #495057;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Boxes especiales para resultado y observaciones */
+.resultado-box {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
+  border: 2px solid #a5d6a7;
+}
+
+.resultado-text {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.observacion-box {
+  background: linear-gradient(135deg, #fff3e0 0%, #fef7ed 100%);
+  border: 2px solid #ffcc80;
+}
+
+.observacion-text {
+  color: #e65100;
+  font-weight: 600;
+}
+
+/* Footer del card */
+.card-footer-custom {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #850e35;
+  border-color: #850e35;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #670727;
+  border-color: #670727;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(133, 14, 53, 0.25);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-header-custom {
+    padding: 1rem;
+  }
+  
+  .card-header-custom h4 {
+    font-size: 1.2rem;
+  }
+  
+  .badge-id {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .card-footer-custom {
+    padding: 1rem;
+  }
+  
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  
+  .d-flex.gap-2 {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}

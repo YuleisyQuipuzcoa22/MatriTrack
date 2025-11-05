@@ -26,10 +26,10 @@
         Filtros de Búsqueda
       </span>
       @if (hayFiltroActivo) {
-        <button class="btn btn-clear-filters" (click)="limpiarFiltros()">
-          <i class="bi bi-x-circle me-1"></i>
-          Limpiar
-        </button>
+      <button class="btn btn-clear-filters" (click)="limpiarFiltros()">
+        <i class="bi bi-x-circle me-1"></i>
+        Limpiar
+      </button>
       }
     </div>
 
@@ -37,19 +37,33 @@
       <div class="col-md-4">
         <div class="input-group filter-input">
           <span class="input-group-text"><i class="bi bi-person"></i></span>
-          <input type="text" class="form-control" placeholder="Nombre y Apellido" 
-                 [(ngModel)]="filtroNombreApellido" (ngModelChange)="filtrarObstetras()">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre y Apellido"
+            [(ngModel)]="filtroNombreApellido"
+            (ngModelChange)="filtrarObstetras()"
+          />
         </div>
       </div>
       <div class="col-md-4">
         <div class="input-group filter-input">
           <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
-          <input type="text" class="form-control" placeholder="DNI" 
-                 [(ngModel)]="filtroDNI" (ngModelChange)="filtrarObstetras()">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="DNI"
+            [(ngModel)]="filtroDNI"
+            (ngModelChange)="filtrarObstetras()"
+          />
         </div>
       </div>
       <div class="col-md-4">
-        <select class="form-select filter-input" [(ngModel)]="filtroEstado" (ngModelChange)="filtrarObstetras()">
+        <select
+          class="form-select filter-input"
+          [(ngModel)]="filtroEstado"
+          (ngModelChange)="filtrarObstetras()"
+        >
           <option value="todos">Estado (Todos)</option>
           <option value="A">Activo</option>
           <option value="I">Inactivo</option>
@@ -63,67 +77,90 @@
     <i class="bi bi-list-ul me-2"></i>
     {{ conteoResultados }} obstetras encontrados
   </p>
-
+  @if (isLoading) {
+  <div class="text-center p-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando obstetras...</p>
+  </div>
+  }
   <!-- Grid de Cards -->
-  <div class="obstetras-grid">
-    @for (obstetra of obstetrasFiltrados; track obstetra.id_usuario) {
-      <div class="obstetra-card">
-        <div class="card-header-custom">
-          <h6 class="obstetra-name">
-            <i class="bi bi-person-circle"></i>
-            {{ obstetra.nombre }} {{ obstetra.apellido }}
-          </h6>
-          <small class="obstetra-id">ID: {{ obstetra.id_usuario }}</small>
+  @if(!isLoading){
+  <div class="list-grid">
+    @for (obstetra of obstetrasData; track obstetra.id_usuario) {
+    <div class="list-card">
+      <div class="card-header-custom">
+        <h6 class="item-name">
+          <i class="bi bi-person-circle"></i>
+          {{ obstetra.nombre }} {{ obstetra.apellido }}
+        </h6>
+        <small class="item-id">ID: {{ obstetra.id_usuario }}</small>
+      </div>
+      <div class="card-body-custom">
+        <div class="info-item">
+          <i class="bi bi-credit-card-2-front"></i>
+          <strong>DNI:</strong> {{ obstetra.dni }}
         </div>
-        <div class="card-body-custom">
-          <div class="info-item">
-            <i class="bi bi-credit-card-2-front"></i>
-            <strong>DNI:</strong> {{ obstetra.dni }}
-          </div>
-          <div class="info-item">
-            <i class="bi bi-envelope"></i>
-            <strong>Correo:</strong> {{ obstetra.correo_electronico }}
-          </div>
-          <div class="info-item">
-            <i class="bi bi-telephone"></i>
-            <strong>Teléfono:</strong> {{ obstetra.telefono }}
-          </div>
+        <div class="info-item">
+          <i class="bi bi-envelope"></i>
+          <strong>Correo:</strong> {{ obstetra.correo_electronico }}
         </div>
-        <div class="card-footer-custom">
-          <span [ngClass]="getEstadoClase(obstetra.estado)">
-            {{ getEstadoTexto(obstetra.estado) }}
-          </span>
-          <div class="actions-group">
-            <button class="btn-action btn-info-action" title="Ver Info" 
-                    (click)="mostrarInfo(obstetra.id_usuario)" data-bs-toggle="modal" data-bs-target="#modalInfo">
-              <i class="bi bi-info-circle-fill"></i>
-            </button>
-            <button class="btn-action btn-edit-action" title="Editar" 
-                   [routerLink]="['editar', obstetra.id_usuario]">
-              <i class="bi bi-pencil-square"></i>
-            </button>
-            @if (obstetra.estado === 'A') {
-              <button class="btn-action btn-danger-action" title="Inactivar" 
-                      (click)="cambiarEstado(obstetra.id_usuario, 'I')">
-                <i class="bi bi-toggle-off"></i>
-              </button>
-            } @else {
-              <button class="btn-action btn-success-action" title="Activar" 
-                      (click)="cambiarEstado(obstetra.id_usuario, 'A')">
-                <i class="bi bi-toggle-on"></i>
-              </button>
-            }
-          </div>
+        <div class="info-item">
+          <i class="bi bi-telephone"></i>
+          <strong>Teléfono:</strong> {{ obstetra.telefono }}
         </div>
       </div>
+      <div class="card-footer-custom">
+        <span [ngClass]="getEstadoClase(obstetra.estado)">
+          {{ getEstadoTexto(obstetra.estado) }}
+        </span>
+        <div class="actions-group">
+          <button
+            class="btn-action btn-info-action"
+            title="Ver Info"
+            (click)="mostrarInfo(obstetra.id_usuario)"
+            data-bs-toggle="modal"
+            data-bs-target="#modalInfo"
+          >
+            <i class="bi bi-info-circle-fill"></i>
+          </button>
+          <button
+            class="btn-action btn-edit-action"
+            title="Editar"
+            [routerLink]="['editar', obstetra.id_usuario]"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          @if (obstetra.estado === 'A') {
+          <button
+            class="btn-action btn-danger-action"
+            title="Inactivar"
+            (click)="cambiarEstado(obstetra.id_usuario, 'I')"
+          >
+            <i class="bi bi-toggle-off"></i>
+          </button>
+          } @else {
+          <button
+            class="btn-action btn-success-action"
+            title="Activar"
+            (click)="cambiarEstado(obstetra.id_usuario, 'A')"
+          >
+            <i class="bi bi-toggle-on"></i>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
     } @empty {
-      <div class="no-results">
-        <i class="bi bi-people-fill"></i>
-        <h4>0 Obstetras encontrados</h4>
-        <p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
-      </div>
+    <div class="no-results" [class.hidden]="isLoading">
+      <i class="bi bi-people-fill"></i>
+      <h4>0 obstetras encontrados</h4>
+      <p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
+    </div>
     }
   </div>
+  }
 </div>
 
 <!-- Modal -->
@@ -131,31 +168,47 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       @if (obstetraSeleccionado) {
-        <div class="modal-header">
-          <h5 class="modal-title">{{ obstetraSeleccionado.nombre }} {{ obstetraSeleccionado.apellido }}</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ obstetraSeleccionado.nombre }} {{ obstetraSeleccionado.apellido }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="info-row">
+          <strong>Estado:</strong>
+          <span [ngClass]="getEstadoClase(obstetraSeleccionado.estado)" class="ms-2">
+            {{ getEstadoTexto(obstetraSeleccionado.estado) }}
+          </span>
         </div>
-        <div class="modal-body">
-          <div class="info-row">
-            <strong>Estado:</strong>
-            <span [ngClass]="getEstadoClase(obstetraSeleccionado.estado)" class="ms-2">
-              {{ getEstadoTexto(obstetraSeleccionado.estado) }}
-            </span>
-          </div>
-          <div class="info-row"><strong>ID:</strong> {{ obstetraSeleccionado.id_usuario }}</div>
-          <div class="info-row"><strong>DNI:</strong> {{ obstetraSeleccionado.dni }}</div>
-          <div class="info-row"><strong>Rol:</strong> {{ obstetraSeleccionado.rol}}</div>
-          <div class="info-row"><strong>Colegiatura:</strong> {{ obstetraSeleccionado.numero_colegiatura }}</div>
-          <div class="info-row"><strong>Teléfono:</strong> {{ obstetraSeleccionado.telefono }}</div>
-          <div class="info-row"><strong>Correo:</strong> {{ obstetraSeleccionado.correo_electronico }}</div>
-           <div class="info-row"><strong>Dirección:</strong> {{ obstetraSeleccionado.direccion }}</div>
-          <div class="info-row"><strong>F. Nacimiento:</strong> {{ obstetraSeleccionado.fecha_nacimiento }}</div>
+        <div class="info-row"><strong>ID:</strong> {{ obstetraSeleccionado.id_usuario }}</div>
+        <div class="info-row"><strong>DNI:</strong> {{ obstetraSeleccionado.dni }}</div>
+        <div class="info-row"><strong>Rol:</strong> {{ obstetraSeleccionado.rol }}</div>
+        <div class="info-row">
+          <strong>Colegiatura:</strong> {{ obstetraSeleccionado.numero_colegiatura }}
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <div class="info-row"><strong>Teléfono:</strong> {{ obstetraSeleccionado.telefono }}</div>
+        <div class="info-row">
+          <strong>Correo:</strong> {{ obstetraSeleccionado.correo_electronico }}
         </div>
+        <div class="info-row"><strong>Dirección:</strong> {{ obstetraSeleccionado.direccion }}</div>
+        <div class="info-row">
+          <strong>F. Nacimiento:</strong> {{ obstetraSeleccionado.fecha_nacimiento }}
+        </div>
+      </div>
+
       }
     </div>
   </div>
-  
 </div>
+<!--PAGINACIÓN-->
+<app-paginacion
+  [currentPage]="currentPage"
+  [totalPages]="totalPages"
+  [totalItems]="totalItems"
+  [pageSize]="pageSize"
+  (pageChange)="irAPagina($event)"
+  (sizeChange)="cambiarTamanoPagina($event)"
+></app-paginacion>
+
+

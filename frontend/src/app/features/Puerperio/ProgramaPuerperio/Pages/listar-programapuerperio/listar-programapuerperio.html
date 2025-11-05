@@ -1,0 +1,153 @@
+<div class="puerperio-root">
+	<div class="header-section">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-md-8">
+				<h2>
+					<i class="bi bi-folder2-open"></i>
+					Lista de Programas Puerperio
+				</h2>
+			</div>
+			<div class="col-md-4 text-end">
+				<button class="btn btn-agregar" (click)="agregar()">
+					<i class="bi bi-plus-circle-fill me-2"></i>
+					Agregar Nuevo
+				</button>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+<div class="container">
+	<!-- Filtros -->
+	<div class="filters-section">
+		<div class="filters-title">
+			<span>
+				<i class="bi bi-funnel-fill me-2"></i>
+				Filtros de Búsqueda
+			</span>
+			<button *ngIf="filtroId || filtroHistorial || filtroEstado !== 'todos'" class="btn btn-clear-filters" (click)="limpiarFiltros()">
+				<i class="bi bi-x-circle me-1"></i>
+				Limpiar
+			</button>
+		</div>
+
+		<div class="row g-3">
+			<div class="col-md-4">
+				<div class="input-group filter-input">
+					<span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+					<input type="text" class="form-control" placeholder="ID Programa" [(ngModel)]="filtroId" (ngModelChange)="aplicarFiltros()">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="input-group filter-input">
+					<span class="input-group-text"><i class="bi bi-journal-text"></i></span>
+					<input type="text" class="form-control" placeholder="Historial Médico" [(ngModel)]="filtroHistorial" (ngModelChange)="aplicarFiltros()">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<select class="form-select filter-input" [(ngModel)]="filtroEstado" (ngModelChange)="aplicarFiltros()">
+					<option value="todos">Estado (Todos)</option>
+					<option value="A">Activo</option>
+					<option value="I">Inactivo</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<!-- Resultados -->
+	<p class="results-info">
+		<i class="bi bi-list-ul me-2"></i>
+		{{ filtrados.length }} programas encontrados
+	</p>
+
+	<!-- Grid de Cards horizontales -->
+	<div class="obstetras-grid">
+		<div *ngFor="let p of filtrados" class="obstetra-card horizontal-card">
+			<div class="row g-0">
+				<div class="col-md-8">
+					<div class="card-body-custom">
+						<h6 class="obstetra-name">
+							<i class="bi bi-folder2-open"></i>
+							Programa #{{ p.id_programapuerperio }}
+						</h6>
+						<small class="obstetra-id">Historial: {{ p.HistorialMedico_id_historialmedico }}</small>
+
+						<div class="info-item">
+							<i class="bi bi-calendar-event"></i>
+							<strong>F. Inicio:</strong>
+							<span class="ms-2">{{ p.fecha_inicio }}</span>
+						</div>
+
+						<div class="info-item">
+							<i class="bi bi-activity"></i>
+							<strong>Tipo Parto:</strong>
+							<span class="ms-2">{{ p.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</span>
+						</div>
+
+						<div class="info-item">
+							<i class="bi bi-journal"></i>
+							<strong>Observación:</strong>
+							<span class="ms-2">{{ p.observacion }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card-footer-custom h-100 d-flex flex-column justify-content-between">
+						<div>
+							<span [ngClass]="getEstadoClase(p.estado)">{{ getEstadoTexto(p.estado) }}</span>
+						</div>
+						<div class="text-end">
+							<div class="actions-group justify-content-end">
+								<button class="btn-action btn-info-action" title="Ver Info" (click)="mostrarInfo(p.id_programapuerperio)" data-bs-toggle="modal" data-bs-target="#modalInfo">
+									<i class="bi bi-info-circle-fill"></i>
+								</button>
+								<button class="btn-action btn-edit-action" title="Editar" (click)="editar(p.id_programapuerperio)">
+									<i class="bi bi-pencil-square"></i>
+								</button>
+								<button class="btn-action btn-success-action" title="Controles" (click)="abrirControles(p.id_programapuerperio)">
+									<i class="bi bi-list-check"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="filtrados.length === 0" class="no-results">
+			<i class="bi bi-people-fill"></i>
+			<h4>0 Programas encontrados</h4>
+			<p>No se encontraron resultados que coincidan con los filtros aplicados.</p>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalInfo" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div *ngIf="programaSeleccionado">
+					<div class="modal-header">
+						<h5 class="modal-title">Programa #{{ programaSeleccionado.id_programapuerperio }}</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<div class="info-row"><strong>ID:</strong> {{ programaSeleccionado.id_programapuerperio }}</div>
+						<div class="info-row"><strong>Historial:</strong> {{ programaSeleccionado.HistorialMedico_id_historialmedico }}</div>
+						<div class="info-row"><strong>F. Inicio:</strong> {{ programaSeleccionado.fecha_inicio }}</div>
+						<div class="info-row"><strong>Tipo Parto:</strong> {{ programaSeleccionado.tipo_parto === 'CESAREA' ? 'Cesárea' : 'Natural' }}</div>
+						<div class="info-row"><strong>Observación:</strong> {{ programaSeleccionado.observacion }}</div>
+						<div class="info-row"><strong>Complicación:</strong> {{ programaSeleccionado.complicacion }}</div>
+						<div class="info-row"><strong>F. Finalización:</strong> {{ programaSeleccionado.fecha_finalizacion }}</div>
+						<div class="info-row"><strong>Motivo Finalización:</strong> {{ programaSeleccionado.motivo_finalizacion }}</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

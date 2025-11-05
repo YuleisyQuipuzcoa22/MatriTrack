@@ -51,11 +51,11 @@ export class Usuario {
   @Column({ type: 'varchar', length: 15, nullable: false })
   telefono!: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   direccion?: string;
 
   // Puede ser null para el Administrador
-  @Column({ type: 'varchar', length: 20, unique: true, nullable: true })
+  @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
   numero_colegiatura: string | null = null;
 
   /*

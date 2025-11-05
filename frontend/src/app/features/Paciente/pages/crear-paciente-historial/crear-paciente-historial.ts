@@ -14,7 +14,6 @@ import { PacienteService } from '../../services/paciente.service';
   selector: 'app-crear-paciente-historial',
   imports: [FormsModule, ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './crear-paciente-historial.html',
-  styleUrl: './crear-paciente-historial.css',
 })
 export class CrearPacienteHistorial implements OnInit {
   registerForm!: FormGroup;

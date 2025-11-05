@@ -46,13 +46,13 @@ export class CreateUsuarioDto {
   @Length(9, 15, { message: 'El teléfono debe tener máximo 15 caracteres' })
   telefono: string;
 
-  @IsOptional()
+  @IsNotEmpty({message: 'La dirección es obligatoria'})
   @IsString()
-  @Length(6, 100)
+  @Length(6, 100, {message: 'La dirección no debe exceder los 100 caracteres'})
   direccion?: string;
 
-  @IsOptional()
+  @IsNotEmpty({message: 'El número de colegiatura es obligatorio'})
   @IsString()
-  @Length(6, 10, { message: 'El número de colegiatura debe tener máximo 10 caracteres' })
+  @Length(6, 20, { message: 'El número de colegiatura debe tener máximo 20 caracteres' })
   numero_colegiatura?: string;
 }

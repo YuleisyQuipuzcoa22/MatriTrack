@@ -1,0 +1,67 @@
+<div class="fondo d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card-container">
+    <div class="header text-center">
+      <h2 class="titulo">{{ controlId ? 'EDITAR CONTROL' : 'NUEVO CONTROL' }}</h2>
+      <p class="subtitulo">Programa: {{ programaId }}</p>
+    </div>
+
+    <form (ngSubmit)="guardar()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="label">Fecha</label>
+          <input type="date" class="form-control" [(ngModel)]="formData.fecha_controlpuerperio" name="fecha_controlpuerperio" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="label">Peso (kg)</label>
+          <input type="number" step="0.1" class="form-control" [(ngModel)]="formData.peso" name="peso" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Talla (m)</label>
+          <input type="number" step="0.01" class="form-control" [(ngModel)]="formData.talla" name="talla" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Presión arterial</label>
+          <input class="form-control" [(ngModel)]="formData.presion_arterial" name="presion_arterial" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Involución uterina</label>
+          <input class="form-control" [(ngModel)]="formData.involucion_uterina" name="involucion_uterina" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Cicatrización</label>
+          <input class="form-control" [(ngModel)]="formData.cicatrizacion" name="cicatrizacion" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Estado mamas / lactancia</label>
+          <input class="form-control" [(ngModel)]="formData.estado_mamas_lactancia" name="estado_mamas_lactancia" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="label">Estado emocional</label>
+          <input class="form-control" [(ngModel)]="formData.estado_emocional" name="estado_emocional" />
+        </div>
+
+        <div class="col-12 mb-3">
+          <label class="label">Observación</label>
+          <textarea class="form-control" [(ngModel)]="formData.observacion" name="observacion"></textarea>
+        </div>
+
+        <div class="col-12 mb-3">
+          <label class="label">Recomendación</label>
+          <textarea class="form-control" [(ngModel)]="formData.recomendacion" name="recomendacion"></textarea>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-3">
+        <button type="submit" class="btn-submit">{{ controlId ? 'Guardar Cambios' : 'Crear Control' }}</button>
+        <button type="button" class="btn-volver ms-3" (click)="cancelar()">← Volver</button>
+      </div>
+    </form>
+  </div>
+</div>

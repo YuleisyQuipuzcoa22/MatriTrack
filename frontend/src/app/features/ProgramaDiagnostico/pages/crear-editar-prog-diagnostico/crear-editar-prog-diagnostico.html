@@ -1,0 +1,303 @@
+<div class="fondo">
+  <div class="card-container-wide">
+    <!-- Header -->
+    <div class="header d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="titulo">
+          <i class="bi bi-clipboard-heart-fill me-2"></i>
+          {{ isEditMode ? 'Editar Programa Diagnóstico' : 'Registrar Programa Diagnóstico' }}
+        </h1>
+        <p class="subtitulo">
+          {{
+            isEditMode
+              ? 'Modifique los detalles del programa seleccionado.'
+              : 'Busque al paciente por DNI y complete los datos del programa.'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <form [formGroup]="programaForm" (ngSubmit)="onSubmit()">
+      <!-- SECCIÓN 1: BÚSQUEDA DE PACIENTE (Solo modo creación) -->
+      @if(!isEditMode){
+      <ng-container>
+        <div class="bloque-busqueda">
+          <h2 class="section-title">
+            <i class="bi bi-search me-2"></i>
+            Búsqueda de Paciente
+          </h2>
+
+          <!-- Si NO hay paciente vinculado: Mostrar búsqueda -->
+          @if(!pacienteVinculado){
+          <ng-container>
+            <div class="row align-items-end">
+              <div class="col-md-6">
+                <label for="dni" class="label">
+                  DNI del Paciente <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-credit-card"></i>
+                  </span>
+                  <input
+                    type="text"
+                    id="dni"
+                    formControlName="dni"
+                    class="form-control"
+                    placeholder="Ingrese 8 dígitos"
+                    maxlength="8"
+                    [ngClass]="{
+                      'is-invalid':
+                        programaForm.get('dni')?.invalid && programaForm.get('dni')?.touched
+                    }"
+                  />
+                  <button
+                    type="button"
+                    class="btn-generate"
+                    (click)="buscarPacientePorDni()"
+                    [disabled]="programaForm.get('dni')?.invalid || isSearchingPatient"
+                  >
+                    @if(isSearchingPatient){
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+
+                    } @if(!isSearchingPatient){
+                    <i class="bi bi-search me-2"></i>
+
+                    } Buscar
+                  </button>
+                </div>
+                @if(programaForm.get('dni')?.invalid && programaForm.get('dni')?.touched){
+                <small class="text-danger d-block mt-1">
+                  <i class="bi bi-exclamation-circle me-1"></i>
+                  @if(programaForm.get('dni')?.errors?.['required']){
+                  <span> El DNI es obligatorio. </span>
+
+                  } @if(programaForm.get('dni')?.errors?.['pattern']){
+                  <span> Debe ser un DNI válido de 8 dígitos. </span>
+                  }
+                </small>
+
+                }
+              </div>
+
+              <div class="col-md-6">
+                <div class="mensaje-instruccion">
+                  <i class="bi bi-info-circle"></i>
+                  <span>Ingrese el DNI del paciente para vincularlo al programa.</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          }
+
+          <!-- Si SÍ hay paciente vinculado: Mostrar info -->
+          @if(pacienteVinculado){
+          <ng-container>
+            <div class="info-paciente-seleccionado">
+              <div class="paciente-datos">
+                <div class="paciente-icono">
+                  <i class="bi bi-person-check-fill"></i>
+                </div>
+                <div class="paciente-info">
+                  <h3 class="titulo-paciente">
+                    {{ pacienteVinculado.nombre }} {{ pacienteVinculado.apellido }}
+                  </h3>
+                  <div class="detalles-paciente">
+                    <span class="detalle-item">
+                      <i class="bi bi-credit-card"></i>
+                      DNI: {{ pacienteVinculado.dni }}
+                    </span>
+                    <span class="detalle-item">
+                      <i class="bi bi-calendar"></i>
+                      {{ pacienteVinculado.edad }} años
+                    </span>
+                    <span class="detalle-item">
+                      <i class="bi bi-clipboard2-pulse"></i>
+                      ID Historial: {{ pacienteVinculado.historial_medico.id_historialmedico }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn-cambiar-paciente"
+                (click)="cambiarPaciente()"
+                title="Cambiar paciente"
+              >
+                <i class="bi bi-arrow-left-right me-2"></i>
+                Cambiar
+              </button>
+            </div>
+          </ng-container>
+
+          }
+        </div>
+      </ng-container>
+
+      }
+
+      <!-- Mensajes de Alerta (Después de la búsqueda) -->
+      <div class="mensajes-container">
+        @if(errorMessage){
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = null"></button>
+        </div>
+
+        } @if(successMessage){
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="successMessage = null"></button>
+        </div>
+
+        }
+      </div>
+
+      <!-- SECCIÓN 2: DATOS DEL PROGRAMA -->
+      <h2 class="section-title mt-4">
+        <i class="bi bi-clipboard-data me-2"></i>
+        {{ isEditMode ? 'Datos del Programa' : 'Detalles del Programa' }}
+      </h2>
+
+      <div class="row">
+        <!-- Número de Gestación -->
+        <div class="col-md-6 col-lg-4">
+          <div class="mb-3">
+            <label for="numero_gestacion" class="label">
+              Número de Gestación <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-hash"></i>
+              </span>
+              <input
+                type="number"
+                id="numero_gestacion"
+                formControlName="numero_gestacion"
+                class="form-control"
+                placeholder="Ej. 1, 2, 3..."
+                min="1"
+                max="20"
+                [ngClass]="{
+                  'is-invalid':
+                    programaForm.get('numero_gestacion')?.invalid &&
+                    programaForm.get('numero_gestacion')?.touched
+                }"
+              />
+            </div>
+            @if(programaForm.get('numero_gestacion')?.invalid &&
+            programaForm.get('numero_gestacion')?.touched){
+            <small class="text-danger d-block mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>
+              @if(programaForm.get('numero_gestacion')?.errors?.['required']){
+              <span> Campo obligatorio. </span>
+              } @if(programaForm.get('numero_gestacion')?.errors?.['min']){<span> Mínimo 1. </span>
+
+              } @if(programaForm.get('numero_gestacion')?.errors?.['max']){
+              <span> Máximo 20. </span>
+              }
+            </small>
+
+            }
+          </div>
+        </div>
+
+        <!-- Fecha Probable de Parto -->
+        <div class="col-md-6 col-lg-4">
+          <div class="mb-3">
+            <label for="fecha_probableparto" class="label"> Fecha Probable de Parto </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-calendar-heart"></i>
+              </span>
+              <input
+                type="date"
+                id="fecha_probableparto"
+                formControlName="fecha_probableparto"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Factor de Riesgo -->
+        <div class="col-md-12 col-lg-4">
+          <div class="mb-3">
+            <label for="factor_riesgo" class="label"> Factor de Riesgo </label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-exclamation-triangle"></i>
+              </span>
+              <input
+                type="text"
+                id="factor_riesgo"
+                formControlName="factor_riesgo"
+                class="form-control"
+                placeholder="Ej. Hipertensión, Diabetes"
+                maxlength="255"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="col-12">
+          <div class="mb-3">
+            <label for="observacion" class="label">
+              <i class="bi bi-chat-text me-2"></i>
+              Observaciones
+            </label>
+            <textarea
+              id="observacion"
+              formControlName="observacion"
+              class="form-control"
+              rows="4"
+              placeholder="Detalles adicionales sobre el programa o estado inicial..."
+              maxlength="1000"
+              [ngClass]="{
+                'is-invalid':
+                  programaForm.get('observacion')?.errors?.['maxlength']
+              }"
+            ></textarea>
+            <small class="text-muted d-block mt-1">
+              {{ programaForm.get('observacion')?.value?.length || 0 }}/1000 caracteres
+            </small>
+            @if(programaForm.get('observacion')?.errors?.['maxlength']){
+            <small class="text-danger d-block mt-1">
+              <i class="bi bi-exclamation-circle me-1"></i>
+              Máximo 1000 caracteres.
+            </small>
+
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN -->
+      <div class="button-group">
+        <button
+          type="button"
+          class="btn-volver"
+          [routerLink]="['/diagnostico']"
+          [disabled]="isLoading"
+        >
+          <i class="bi bi-arrow-left me-2"></i>
+          Volver
+        </button>
+
+        <button type="submit" class="btn-submit" [disabled]="!canSubmit || isLoading">
+          @if(isLoading){
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          } @if(!isLoading){
+          <i class="bi bi-check-circle me-2"></i>
+          }
+
+          {{ isEditMode ? 'Guardar Cambios' : 'Registrar Programa' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
