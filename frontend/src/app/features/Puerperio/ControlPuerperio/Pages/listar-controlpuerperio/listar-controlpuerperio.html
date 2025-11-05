@@ -1,9 +1,9 @@
 <div class="fondo d-flex justify-content-center align-items-start min-vh-100 py-4">
   <div class="card-container w-100">
-    <div class="header d-flex justify-content-between align-items-center">
+    <div class="header d-flex justify-content-between align-items-center flex-wrap gap-2">
       <div>
         <h3 class="titulo">Controles Médicos - Programa {{ programaId }}</h3>
-        <p class="subtitulo">Listado de controles para el programa seleccionado</p>
+        <p class="subtitulo">Listado de controles para el programa seleccionado.</p>
       </div>
       <div>
         <button class="btn btn-agregar me-2" (click)="crearControl()">
@@ -24,41 +24,93 @@
     }
 
     @if (!isLoading && controles.length === 0) {
-      <div class="text-center p-4">
-        <p>No hay controles registrados para este programa.</p>
+      <div class="text-center p-4 alert alert-info mt-3">
+        <i class="bi bi-info-circle-fill fs-3 d-block mb-2"></i>
+        <p class="m-0">No hay controles registrados para este programa.</p>
       </div>
     }
 
     @if (!isLoading && controles.length > 0) {
-      <div class="controls-list">
-        @for (c of controles; track c.id_control_puerperio) {
-          <div class="control-card mb-3">
-            <div class="card-row">
-              <div class="col-left">
-                <h4>
-                  {{ c.id_control_puerperio }} 
-                  <span class="badge">{{ c.fecha_controlpuerperio | date:'dd/MM/yyyy HH:mm' }}</span>
-                </h4>
-                <p><strong>Peso:</strong> {{ c.peso || '-' }} kg — <strong>Talla:</strong> {{ c.talla || '-' }} m</p>
-                <p><strong>Presión:</strong> {{ c.presion_arterial || '-' }}</p>
-                <p><strong>Involución uterina:</strong> {{ c.involucion_uterina || '-' }}</p>
-                <p><strong>Cicatrización:</strong> {{ c.cicatrizacion || '-' }}</p>
-                <p><strong>Estado mamas / lactancia:</strong> {{ c.estado_mamas_lactancia || '-' }}</p>
+      <div class="ctrl-accordion" id="accordionControles">
+        @for (c of controles; track c.id_control_puerperio; let i = $index) {
+          <div class="ctrl-card">
+            
+            <div class="ctrl-card-header"
+                 data-bs-toggle="collapse" 
+                 [attr.data-bs-target]="'#collapse-' + i">
+
+              <button class="ctrl-accordion-btn" 
+                      type="button" 
+                      [attr.aria-expanded]="i === 0 ? 'true' : 'false'" 
+                      [attr.aria-controls]="'collapse-' + i">
+                <i class="bi bi-clipboard2-pulse-fill fs-5"></i>
+                {{ c.id_control_puerperio }}
+                <span class="ctrl-date-badge">
+                  {{ c.fecha_controlpuerperio | date:'dd/MM/yyyy HH:mm' }}
+                </span>
+                <i class="bi bi-chevron-down ctrl-chevron"></i>
+              </button>
+
+              <div class="ctrl-actions">
+                <button class="btn-action btn-edit-action" 
+                        title="Editar" 
+                        (click)="editarControl(c.id_control_puerperio); $event.stopPropagation()">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn-action btn-success-action" 
+                        title="Análisis" 
+                        (click)="verAnalisis(c.id_control_puerperio); $event.stopPropagation()">
+                  <i class="bi bi-file-earmark-medical"></i>
+                </button>
               </div>
-              <div class="col-right">
-                <p><strong>Estado emocional:</strong> {{ c.estado_emocional || '-' }}</p>
-                <p><strong>Observación:</strong> {{ c.observacion || '-' }}</p>
-                <p><strong>Recomendación:</strong> {{ c.recomendacion || '-' }}</p>
-                <div class="text-end mt-2">
-                  <button class="btn-action btn-edit-action me-2" title="Editar" (click)="editarControl(c.id_control_puerperio)">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button class="btn-action btn-success-action" title="Análisis" (click)="verAnalisis(c.id_control_puerperio)">
-                    <i class="bi bi-file-earmark-medical"></i>
-                  </button>
+            </div>
+
+            <div [id]="'collapse-' + i" 
+                 class="accordion-collapse collapse" 
+                 [class.show]="i === 0" 
+                 data-bs-parent="#accordionControles">
+              <div class="ctrl-card-body">
+                <div class="row ctrl-info-grid">
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <strong>Peso y Talla</strong>
+                      <p>{{ c.peso || '-' }} kg / {{ c.talla || '-' }} m</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Presión Arterial</strong>
+                      <p>{{ c.presion_arterial || '-' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Involución Uterina</strong>
+                      <p>{{ c.involucion_uterina || 'Sin registro' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Cicatrización</strong>
+                      <p>{{ c.cicatrizacion || 'Sin registro' }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <strong>Estado Mamas / Lactancia</strong>
+                      <p>{{ c.estado_mamas_lactancia || 'Sin registro' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Estado Emocional</strong>
+                      <p>{{ c.estado_emocional || 'Sin registro' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Observación</strong>
+                      <p>{{ c.observacion || 'Sin registro' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <strong>Recomendación</strong>
+                      <p>{{ c.recomendacion || 'Sin registro' }}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         }
       </div>

@@ -32,93 +32,109 @@ export const routes: Routes = [
   // Ruta pública (login)
   { path: 'login', component: Login },
 
-  // Rutas protegidas (requieren autenticación)
+  // --- RUTAS COMUNES (Obstetra y Admin) ---
   {
     path: 'pacientes',
     component: ListadoPacientes,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
   {
     path: 'pacientes/registrar',
     component: CrearPacienteHistorial,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
   {
     path: 'pacientes/editar/:id',
     component: EditarPaciente,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
   {
     path: 'historialmedico',
     component: ListadoHistorialmedico,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
-
   {
     path: 'diagnostico',
-    component: ProgramaDiagnosticoListComponent, // Listado de programas
+    component: ProgramaDiagnosticoListComponent, 
     canActivate: [authGuard],
   },
   {
-    // Ruta para CREAR: Requiere el ID del historial médico para saber a qué paciente se asigna
     path: 'diagnostico/registrar',
     component: CrearEditarProgDiagnostico,
     canActivate: [authGuard],
   },
   {
-    // Ruta para EDITAR: Requiere el ID del programa diagnóstico
     path: 'diagnostico/editar/:id',
-    component: CrearEditarProgDiagnostico, // Reutiliza el componente
+    component: CrearEditarProgDiagnostico, 
     canActivate: [authGuard],
   },
    {
-    // Ruta para EDITAR: Requiere el ID del programa diagnóstico
     path: 'diagnostico/:id/finalizar',
-    component: ProgramaDiagnosticoListComponent, // Reutiliza el componente
+    component: ProgramaDiagnosticoListComponent, 
     canActivate: [authGuard],
   },
   {
     path: 'puerperio',
     component: ListarProgramapuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
-
   {
     path: 'puerperio/crear',
     component: CrearEditarProgramapuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
-
   {
     path: 'puerperio/editar/:id',
     component: CrearEditarProgramapuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard], 
   },
 
+  // --- INICIO DE LA CORRECCIÓN ---
+  // Rutas que ahora aceptan AMBOS roles (Admin y Obstetra)
   {
     path: 'puerperio/:id/controles',
     component: ListarControlpuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
   },
-
   {
     path: 'puerperio/:id/controles/crear',
     component: CrearEditarControlpuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
   },
-
   {
     path: 'puerperio/:id/controles/editar/:cid',
     component: CrearEditarControlpuerperio,
-    canActivate: [authGuard], // Requiere estar logueado
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])], 
   },
+  // (Asumiendo que Admin también debe ver detalles de análisis)
+  { 
+    path: 'detalle-analisis/registrar', 
+    component: AgregarDetalleAnalisis,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  { 
+    path: 'detalle-analisis/:id', 
+    component: EditarDetalleAnalisis,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  { 
+    path: 'detalles-analisis/:id', 
+    component: ListarDetalleAnalisis,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  { 
+    path: 'consulta-detalles-analisis/:id', 
+    component: ConsultaVerDetalles,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  // --- FIN DE LA CORRECCIÓN ---
 
 
-  // Rutas protegidas (solo Administrador)
+  // --- RUTAS SOLO DE ADMINISTRADOR ---
   {
     path: 'obstetras',
     component: ListadoObstetras,
-    canActivate: [authGuard, roleGuard(['Administrador'])], // Requiere login + rol Admin
+    canActivate: [authGuard, roleGuard(['Administrador'])], 
   },
   {
     path: 'obstetras/registrar',
@@ -136,27 +152,14 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['Administrador'])],
   },
 
-  //Detalle Analisis
-  // La ruta estática 'registrar' debe ir antes que la ruta con parámetro ':id'
-  { path: 'detalle-analisis/registrar', component: AgregarDetalleAnalisis },
-  // ruta para ver/editar un detalle por id
-  { path: 'detalle-analisis/:id', component: EditarDetalleAnalisis },
-  //detalles analisis
-  { path: 'detalles-analisis/:id', component: ListarDetalleAnalisis },
-  //consulta detalles de un analisis
-  { path: 'consulta-detalles-analisis/:id', component: ConsultaVerDetalles },
-
-  // --- NUEVAS RUTAS PARA HISTORIAL MÉDICO ---
+  // --- RUTAS DE HISTORIAL MÉDICO (Común) ---
   {
-    path: 'historialmedico/:id/programas', // Ruta para ver los programas de UN historial (:id es el ID del historial)
+    path: 'historialmedico/:id/programas', 
     component: ProgramasHistorialmedico,
-    canActivate: [authGuard], // Asumiendo que requiere login
+    canActivate: [authGuard], 
   },
-  // --- FIN NUEVAS RUTAS ---
 
-  //no autorizado
+  // --- RUTAS GENÉRICAS ---
   { path: 'no-autorizado', component: NoAutorizado },
-
-  // Página 404 (debe ir al final)
   { path: '**', component: Notfound },
 ];

@@ -29,7 +29,8 @@ export class ControlPuerperioController {
 
   // POST /programas-puerperio/:id_programa/controles
   @Post(':id_programa/controles')
-  @Roles(RolUsuario.OBSTETRA) // Solo obstetra puede crear
+  // --- CORREGIDO: Ahora ambos roles pueden crear ---
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) 
   @HttpCode(HttpStatus.CREATED)
   async crear(
     @Param('id_programa') id_programa: string,
@@ -67,7 +68,8 @@ export class ControlPuerperioController {
 
   // PUT /programas-puerperio/:id_programa/controles/:id_control
   @Put(':id_programa/controles/:id_control')
-  @Roles(RolUsuario.OBSTETRA) // Solo obstetra puede actualizar
+  // --- CORREGIDO: Ahora ambos roles pueden actualizar ---
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) 
   @HttpCode(HttpStatus.OK)
   async actualizar(
     @Param('id_programa') _id_programa: string, // No se usa, pero es parte de la ruta
@@ -77,6 +79,4 @@ export class ControlPuerperioController {
     const updated = await this.service.update(id_control, dto);
     return { message: 'Control actualizado', data: updated };
   }
-
-  // Se eliminan las rutas DELETE y GET /controles-puerperio (obsoletas)
 }

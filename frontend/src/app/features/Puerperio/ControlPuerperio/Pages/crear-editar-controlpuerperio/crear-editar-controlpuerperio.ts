@@ -1,13 +1,13 @@
-// src/app/features/Puerperio/ControlPuerperio/Pages/crear-editar-controlpuerperio/crear-editar-control-puerperio.ts
+// src/app/features/Puerperio/ControlPuerperio/Pages/crear-editar-control-puerperio.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common'; // Importar DatePipe
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router'; // <-- Quitado RouterLink
+import { ActivatedRoute, Router } from '@angular/router'; 
 import { ControlpuerperioService } from '../../service/controlpuerperio.service';
 import {
   ControlPuerperio,
@@ -19,9 +19,15 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-crear-editar-controlpuerperio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], // <-- Quitado RouterLink
+  // --- CORRECCIÓN: Añadido DatePipe y ReactiveFormsModule ---
+  imports: [CommonModule, ReactiveFormsModule], 
+  providers: [DatePipe], // Añadir DatePipe a providers
   templateUrl: './crear-editar-controlpuerperio.html',
-  styleUrls: ['./crear-editar-controlpuerperio.css'],
+  // --- CORRECCIÓN: Añadidos los estilos base ---
+  styleUrls: [
+    '../../../../../../styles/form-base.css', 
+    './crear-editar-controlpuerperio.css'
+  ],
 })
 export class CrearEditarControlpuerperio implements OnInit {
   programaId: string | null = null;
@@ -38,7 +44,8 @@ export class CrearEditarControlpuerperio implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private service: ControlpuerperioService
+    private service: ControlpuerperioService,
+    private datePipe: DatePipe // Inyectar DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +123,9 @@ export class CrearEditarControlpuerperio implements OnInit {
           observacion: control.observacion || '',
           recomendacion: control.recomendacion || '',
         });
-        this.fechaCreacion = control.fecha_controlpuerperio;
+        
+        // Formatear la fecha para mostrarla
+        this.fechaCreacion = this.datePipe.transform(control.fecha_controlpuerperio, 'dd/MM/yyyy HH:mm');
         this.isLoading = false;
       },
       error: (err) => {
