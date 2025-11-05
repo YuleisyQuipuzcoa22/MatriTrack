@@ -56,10 +56,10 @@ export class ControlDiagnostico {
   @Column({ type: 'varchar', length: 10, nullable: false })
   presion_arterial!: string;
 
-  @Column({ type: 'decimal', precision: 4, scale: 1, nullable: false })
+  @Column({ type: 'decimal', precision: 4, scale: 1, nullable: true })
   altura_uterina!: number;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: true })
   fcf!: number;
 
   @Column({ type: 'varchar', length: 255, nullable: true })

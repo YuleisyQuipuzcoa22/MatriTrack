@@ -46,7 +46,7 @@ export class CreateControlDiagnosticoDto {
   presion_arterial: string;
 
   // Altura Uterina (cm)
-  @IsNotEmpty({ message: 'La altura uterina es obligatoria' })
+  @IsOptional()
   @IsNumber({}, { message: 'La altura uterina debe ser numérica' })
   @Type(() => Number)
   @Min(5, { message: 'La altura uterina debe ser al menos 5 cm' })
@@ -54,7 +54,7 @@ export class CreateControlDiagnosticoDto {
   altura_uterina: number;
 
   // Frecuencia Cardiaca Fetal (lpm)
-  @IsNotEmpty({ message: 'La FCF es obligatoria' })
+  @IsOptional()
   @IsInt({ message: 'La FCF debe ser un número entero' })
   @Min(100, { message: 'La FCF mínima debe ser 100 lpm' })
   @Max(180, { message: 'La FCF máxima debe ser 180 lpm' })
