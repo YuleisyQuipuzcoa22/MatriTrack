@@ -82,6 +82,7 @@ export class ProgramaDiagnosticoService {
       id,
       id_historialmedico, // Ahora el mapper recibe el ID
     );
+    nuevoPrograma.fecha_inicio = new Date();
 
     const programaGuardado =
       await this.programaDiagnosticoRepository.save(nuevoPrograma);

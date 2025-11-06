@@ -60,4 +60,6 @@ export class UpdateControlPuerperioDto {
   @IsString()
   @Length(0, 500)
   recomendacion?: string;
+
+  
 }

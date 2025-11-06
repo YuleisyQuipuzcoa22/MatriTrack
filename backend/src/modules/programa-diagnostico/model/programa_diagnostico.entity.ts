@@ -29,7 +29,7 @@ export class ProgramaDiagnostico {
   id_historialmedico!: string;
 
   // Columnas normales
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'timestamp' })
   fecha_inicio!: Date;
 
   @Column({ type: 'integer', nullable: false })
