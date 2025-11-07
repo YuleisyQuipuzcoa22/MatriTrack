@@ -17,8 +17,8 @@ export class ControldiagnosticoService {
 
   listarControlesPorPrograma(programaId: string): Observable<ControlDiagnostico[]> {
   return this.http
-    .get<ControlDiagnostico[]>(this.getApiUrl(programaId))
-    .pipe(map((r) => r));
+    .get<{ message: string; data: ControlDiagnostico[] }>(this.getApiUrl(programaId))
+    .pipe(map((r) => r.data));
 }
 
   obtenerControl(programaId: string, controlId: string): Observable<ControlDiagnostico> {
