@@ -27,7 +27,11 @@ export class CrearEditarControlpuerperio implements OnInit {
   controlId: string | null = null;
   controlForm!: FormGroup;
   isEditMode = false;
-  isLoading = false;
+  
+  // 1. Variables de estado separadas
+  isLoadingData = false; // Para cargar datos
+  isSaving = false;      // Para guardar/actualizar
+
   errorMessage: string | null = null;
   nombrePaciente: string = '';
 
@@ -104,7 +108,7 @@ export class CrearEditarControlpuerperio implements OnInit {
   }
 
   private loadControlData(programaId: string, controlId: string): void {
-    this.isLoading = true;
+    this.isLoadingData = true; // 2. Usar isLoadingData
     this.service.obtenerControl(programaId, controlId).subscribe({
       next: (control) => {
         this.controlForm.patchValue({
@@ -124,12 +128,12 @@ export class CrearEditarControlpuerperio implements OnInit {
           control.fecha_controlpuerperio,
           'dd/MM/yyyy HH:mm'
         );
-        this.isLoading = false;
+        this.isLoadingData = false; // 2. Usar isLoadingData
       },
       error: (err) => {
         console.error('Error al cargar control:', err);
         this.errorMessage = 'No se pudo cargar el control para edición.';
-        this.isLoading = false;
+        this.isLoadingData = false; // 2. Usar isLoadingData
       },
     });
   }
@@ -147,7 +151,7 @@ export class CrearEditarControlpuerperio implements OnInit {
       return;
     }
 
-    this.isLoading = true;
+    this.isSaving = true; // 3. Usar isSaving
     const formValues = this.controlForm.value;
 
     const dto: CreateControlPuerperioDto | UpdateControlPuerperioDto = {
@@ -174,14 +178,14 @@ export class CrearEditarControlpuerperio implements OnInit {
 
     request$.subscribe({
       next: () => {
-        this.isLoading = false;
+        this.isSaving = false; // 3. Usar isSaving
         alert(this.isEditMode ? 'Control actualizado' : 'Control creado');
         this.router.navigate(['/puerperio', this.programaId, 'controles']);
       },
       error: (err) => {
         console.error('Error al guardar:', err);
         this.errorMessage = err.error?.message || 'Error al guardar el control.';
-        this.isLoading = false;
+        this.isSaving = false; // 3. Usar isSaving
       },
     });
   }

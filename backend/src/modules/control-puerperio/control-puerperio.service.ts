@@ -12,6 +12,7 @@ import { ControlPuerperioMapper } from './mapper/controlPuerperio.mapper';
 import { ProgramaPuerperio } from '../programa-puerperio/model/programa_puerperio.entity';
 import { Estado } from 'src/enums/Estado';
 import { UpdateControlPuerperioDto } from './dto/update-control-puerperio.dto';
+import { QueryControlPuerperioDto } from './dto/query-control-puerperio.dto'; // Importar DTO
 
 @Injectable()
 export class ControlPuerperioService {
@@ -72,12 +73,79 @@ export class ControlPuerperioService {
     return await this.repo.save(entity);
   }
 
-  async findAllByPrograma(id_programa: string): Promise<ControlPuerperio[]> {
-    return await this.repo.find({
+  // MODIFICADO: findAllByPrograma
+  async findAllByPrograma(
+    id_programa: string,
+    queryDto: QueryControlPuerperioDto, // Aceptar DTO
+  ) {
+    const {
+      page = 1,
+      limit = 10,
+      fechaInicio,
+      fechaFin,
+      order = 'DESC',
+    } = queryDto;
+    const skip = (page - 1) * limit;
+
+    // 1. Validar que el programa exista
+    const programa = await this.programaPuerperioRepository.findOne({
       where: { id_programapuerperio: id_programa },
-      relations: ['usuario'], // Para saber qué obstetra lo realizó
-      order: { fecha_controlpuerperio: 'DESC' },
     });
+    if (!programa) {
+      throw new NotFoundException(
+        `Programa de puerperio con ID ${id_programa} no encontrado`,
+      );
+    }
+
+    // 2. Crear QueryBuilder
+    const queryBuilder = this.repo.createQueryBuilder('control')
+      .leftJoinAndSelect('control.usuario', 'usuario')
+      .where('control.id_programapuerperio = :id_programa', { id_programa });
+
+    // 3. Aplicar Filtro de Fecha
+    if (fechaInicio && fechaFin) {
+      // Asegurarse de incluir todo el día final
+      const fechaFinAjustada = new Date(fechaFin);
+      fechaFinAjustada.setHours(23, 59, 59, 999);
+      
+      queryBuilder.andWhere(
+        'control.fecha_controlpuerperio BETWEEN :fechaInicio AND :fechaFin',
+        { fechaInicio, fechaFin: fechaFinAjustada },
+      );
+    } else if (fechaInicio) {
+      queryBuilder.andWhere(
+        'control.fecha_controlpuerperio >= :fechaInicio',
+        { fechaInicio },
+      );
+    } else if (fechaFin) {
+      const fechaFinAjustada = new Date(fechaFin);
+      fechaFinAjustada.setHours(23, 59, 59, 999);
+      queryBuilder.andWhere(
+        'control.fecha_controlpuerperio <= :fechaFin',
+        { fechaFin: fechaFinAjustada },
+      );
+    }
+
+    // 4. Ordenamiento y Paginación
+    queryBuilder
+      .orderBy('control.fecha_controlpuerperio', order)
+      .skip(skip)
+      .take(limit);
+
+    // 5. Obtener resultados
+    const [controles, total] = await queryBuilder.getManyAndCount();
+
+    return {
+      data: controles, // Los datos ya están filtrados y paginados
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1,
+      },
+    };
   }
 
   async findOne(id_control: string): Promise<ControlPuerperio> {
@@ -112,7 +180,4 @@ export class ControlPuerperioService {
 
     return await this.repo.save(actualizado);
   }
-
-  // Se eliminan 'listarControles', 'actualizarControl' y 'eliminarControl'
-  // para seguir el patrón de 'control-diagnostico.service'.
 }

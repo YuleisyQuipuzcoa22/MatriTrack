@@ -11,14 +11,16 @@
       }
     </div>
 
-    @if (isLoading) {
+    @if (isLoadingData) {
     <div class="text-center p-5">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-2">Cargando datos del control...</p>
     </div>
-    } @if(!isLoading){
+    } 
+    
+    @if(!isLoadingData){
     <form [formGroup]="controlForm" (ngSubmit)="guardar()" class="formulario">
       <h3 class="section-title mt-4">Signos vitales y medidas</h3>
       <div class="row">
@@ -155,12 +157,12 @@
       }
 
       <div class="button-group">
-        <button type="button" class="btn-volver" (click)="cancelar()" [disabled]="isLoading">
+        <button type="button" class="btn-volver" (click)="cancelar()" [disabled]="isSaving">
           ← Volver al Listado
         </button>
 
-        <button type="submit" class="btn-submit" [disabled]="controlForm.invalid || isLoading">
-          @if(isLoading) {
+        <button type="submit" class="btn-submit" [disabled]="controlForm.invalid || isSaving">
+          @if(isSaving) {
           <span class="spinner-border spinner-border-sm me-2"></span> Guardando... } @else {
           <i class="bi bi-check-circle me-2"></i>
           {{ isEditMode ? 'Guardar Cambios' : 'Crear Control' }}

@@ -1,6 +1,5 @@
 <div class="fondo d-flex justify-content-center align-items-start min-vh-100 py-4">
   <div class="card-container w-100">
-    <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -15,7 +14,6 @@
       </ol>
     </nav>
 
-    <!-- Header mejorado -->
     <div class="header-section">
       <div class="header-content">
         <div class="header-icon">
@@ -38,12 +36,49 @@
       </div>
     </div>
 
-    <!-- Subtítulo -->
     <div class="section-description">
       <i class="bi bi-info-circle-fill"></i>
       <p>Historial de controles médicos registrados para este programa</p>
     </div>
 
+    <div class="filters-section mt-4">
+      <div class="filters-title">
+        <span>
+          <i class="bi bi-funnel-fill me-2"></i>
+          Filtros de Búsqueda
+        </span>
+        @if (hayFiltroActivo) {
+        <button class="btn btn-clear-filters" (click)="limpiarFiltros()">
+          <i class="bi bi-x-circle me-1"></i>
+          Limpiar
+        </button>
+        }
+      </div>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Desde</label>
+          <input
+            type="date"
+            class="form-control filter-input"
+            [(ngModel)]="filtroFechaInicio"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Hasta</label>
+          <input
+            type="date"
+            class="form-control filter-input"
+            [(ngModel)]="filtroFechaFin"
+          />
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-agregar w-100" (click)="filtrarPorFecha()">
+                <i class="bi bi-search me-1"></i>
+                Buscar por Fecha
+            </button>
+        </div>
+      </div>
+    </div>
     @if (isLoading) {
     <div class="text-center p-5">
       <div class="spinner-border" role="status" style="color: #850e35">
@@ -152,5 +187,14 @@
       }
     </div>
     }
-  </div>
-</div>
+
+    <app-paginacion
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [totalItems]="totalItems"
+      [pageSize]="pageSize"
+      (pageChange)="irAPagina($event)"
+      (sizeChange)="cambiarTamanoPagina($event)"
+    ></app-paginacion>
+    
+  </div> </div> ```
