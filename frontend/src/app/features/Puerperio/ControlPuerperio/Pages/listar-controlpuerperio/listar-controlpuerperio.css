@@ -53,7 +53,7 @@
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
-  content: "›";
+  content: '›';
   color: #999;
   padding: 0 0.5rem;
 }
@@ -347,7 +347,7 @@
 
 .btn-success-action:hover {
   background-color: #a60bb1;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Cuerpo del Acordeón */
