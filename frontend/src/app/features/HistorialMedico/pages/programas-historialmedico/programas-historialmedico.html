@@ -1,1 +1,101 @@
-<p>programas-historialmedico works!</p>
+<section class="historial-container">
+    <h2>Historial Médico Detallado</h2>
+    
+    <div class="header-info">
+        <p>Paciente ID: <strong>{{ idPaciente || 'Cargando...' }}</strong></p>
+        @if (historialCompleto) {
+            <p>Historial ID: <strong>{{ historialCompleto.id_historialmedico }}</strong></p>
+        }
+    </div>
+
+    <!-- Mensajes de Estado -->
+    @if (isLoading) {
+        <div class="message-box loading">
+            <i class="fas fa-spinner fa-spin"></i> Cargando historial y programas...
+        </div>
+    } @else if (error) {
+        <div class="message-box error">
+            <i class="fas fa-times-circle"></i> {{ error }}
+        </div>
+    } @else if (historialCompleto) {
+        
+        <!-- Tarjeta de Detalles del Historial -->
+        <div class="card-section historial-details">
+            <h3 class="card-title"><i class="fas fa-notes-medical"></i> Datos Base del Historial</h3>
+            
+            <div class="detail-grid">
+                <p><strong>Tipo de Sangre:</strong> {{ historialCompleto.tipo_sangre }}</p>
+                <p><strong>Inicio Historial:</strong> {{ historialCompleto.fecha_iniciohistorial | date:'mediumDate' }}</p>
+                <p class="span-full"><strong>Antecedentes Médicos:</strong> {{ historialCompleto.antecedente_medico || 'No registrado' }}</p>
+                <p class="span-full"><strong>Alergias:</strong> {{ historialCompleto.alergia || 'No registrado' }}</p>
+            </div>
+        </div>
+
+        <!-- Sección de Programas de Diagnóstico -->
+        <div class="card-section program-list-section">
+            <h3 class="card-title diagnostic"><i class="fas fa-stethoscope"></i> Programas de Diagnóstico</h3>
+            
+            @if (historialCompleto.programasDiagnostico && historialCompleto.programasDiagnostico.length > 0) {
+                <div class="program-list">
+                    @for (prog of historialCompleto.programasDiagnostico; track prog.id_programadiagnostico) {
+                        <div class="program-item diagnostic-item">
+                            <div class="program-header">
+                                <span class="program-id">PD ID: {{ prog.id_programadiagnostico }}</span>
+                                <span [class]="prog.estado === 'A' ? 'status-badge active' : 'status-badge finalized'">
+                                    {{ getDiagnosticoStatus(prog.estado) }}
+                                </span>
+                            </div>
+                            <div class="program-body">
+                                <p><strong>Gestación N°:</strong> {{ prog.numero_gestacion }}</p>
+                                <p><strong>FPP:</strong> {{ prog.fecha_probableparto | date : 'dd/MM/yyyy' }}</p>
+                                <p><strong>Inicio:</strong> {{ prog.fecha_inicio | date:'shortDate' }}</p>
+                                <p class="span-full"><strong>Factor de Riesgo:</strong> {{ prog.factor_riesgo || 'Ninguno' }}</p>
+                                @if (prog.estado === 'F') {
+                                    <p class="span-full finalized-detail">
+                                        <strong>Finalizado:</strong> {{ prog.fecha_finalizacion | date:'shortDate' }} (Motivo: {{ prog.motivo_finalizacion || 'N/A' }})
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <div class="no-programs">
+                    <i class="fas fa-search-minus"></i>
+                    <p>No se encontraron programas de diagnóstico para este historial.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Sección de Programas de Puerperio -->
+        <div class="card-section program-list-section">
+            <h3 class="card-title puerperio"><i class="fas fa-baby-carriage"></i> Programas de Puerperio</h3>
+            
+            @if (historialCompleto.programasPuerperio && historialCompleto.programasPuerperio.length > 0) {
+                <div class="program-list">
+                    @for (prog of historialCompleto.programasPuerperio; track prog.id_programapuerperio) {
+                        <div class="program-item puerperio-item">
+                            <div class="program-header">
+                                <span class="program-id">PP ID: {{ prog.id_programapuerperio }}</span>
+                                <span [class]="prog.estado === 'A' ? 'status-badge active' : 'status-badge finalized'">
+                                    {{ getPuerperioStatus(prog.estado) }}
+                                </span>
+                            </div>
+                            <div class="program-body">
+                                <p><strong>Inicio:</strong> {{ prog.fecha_inicio | date:'shortDate' }}</p>
+                                <p><strong>Tipo de Parto:</strong> {{ prog.tipo_parto }}</p>
+                                <p class="span-full"><strong>Complicación:</strong> {{ prog.complicacion || 'No registrada' }}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <div class="no-programs">
+                    <i class="fas fa-search-minus"></i>
+                    <p>No se encontraron programas de puerperio para este historial.</p>
+                </div>
+            }
+        </div>
+    }
+
+</section>

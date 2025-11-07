@@ -29,7 +29,7 @@ export interface ProgramaPuerperio {
   tipo_parto: TipoParto;
   observacion: string | null;
   complicacion: string | null;
-  estado: Estado;
+  estado: "A"| "F";
   fecha_finalizacion: string | null; // ISO Date
   motivo_finalizacion: MotivoFinPuerperio | null;
   motivo_otros: string | null;

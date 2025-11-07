@@ -13,8 +13,11 @@ interface Historialmedico extends PacienteData {}
   selector: 'app-listado-historialmedico',
   imports: [FormsModule, CommonModule, RouterLink, Paginacion],
   templateUrl: './listado-historialmedico.html',
-  styleUrl: './listado-historialmedico.css',
-  // Es necesario que PacienteService sea provisto aquí si es standalone
+ 
+  styleUrls: [
+    '../../../../styles/styleListadoCRUD.css',
+    './listado-historialmedico.css',
+  ],
 })
 export class ListadoHistorialmedico implements OnInit {
   historialData: Historialmedico[] = [];

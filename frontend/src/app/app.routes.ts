@@ -56,6 +56,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'historialmedico/paciente/:id_paciente',
+    component: ProgramasHistorialmedico,
+    canActivate: [authGuard],
+  },
+  {
     path: 'diagnostico',
     component: ProgramaDiagnosticoListComponent,
     canActivate: [authGuard],

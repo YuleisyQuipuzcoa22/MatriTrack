@@ -55,7 +55,7 @@ import { ControlPuerperioModule } from './modules/control-puerperio/control-puer
         ],
         synchronize: true,
         logging: false,
-        timezone: '-05:00',
+        timezone: '+00:00',
       }),
       inject: [ConfigService],
     }),

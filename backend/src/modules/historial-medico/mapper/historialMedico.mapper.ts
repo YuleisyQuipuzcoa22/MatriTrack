@@ -11,6 +11,9 @@ export class HistorialMedicoMapper {
       alergia: historial.alergia,
       tipo_sangre: historial.tipo_sangre,
       fecha_iniciohistorial: historial.fecha_iniciohistorial,
+      // Agregando las colecciones de programas
+      programasDiagnostico: historial.programasDiagnostico, // Se incluye si fue cargada la relación
+      programasPuerperio: historial.programasPuerperio, // Se incluye si fue cargada la relación
     };
   }
 

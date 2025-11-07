@@ -109,6 +109,7 @@ export class ControlPuerperioService {
     }
 
     const actualizado = ControlPuerperioMapper.updateEntity(control, dto);
+
     return await this.repo.save(actualizado);
   }
 

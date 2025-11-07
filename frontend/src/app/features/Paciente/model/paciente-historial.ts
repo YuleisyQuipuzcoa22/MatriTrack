@@ -1,10 +1,5 @@
-export interface HistorialMedicoDetalle {
-  id_historialmedico: string;
-  antecedente_medico: string | null; 
-  alergia: string | null;             
-  tipo_sangre: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
-  fecha_iniciohistorial: string;
-}
+import { HistorialMedico } from "../../HistorialMedico/model/historial-medico";
+
 
 // Interfaz principal del Paciente
 export interface PacienteData {
@@ -20,5 +15,5 @@ export interface PacienteData {
   estado: 'A' | 'I';
   fecha_inhabilitacion: string | null;
   edad: number; 
-  historial_medico: HistorialMedicoDetalle; 
+  historial_medico: HistorialMedico; 
 }

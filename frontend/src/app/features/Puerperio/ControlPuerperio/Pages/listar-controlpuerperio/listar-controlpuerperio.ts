@@ -5,43 +5,60 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'; // RouterLink se mantiene por si lo usas
 import { ControlpuerperioService } from '../../service/controlpuerperio.service'; // <-- CORREGIDO
 import { ControlPuerperio } from '../../model/controlpuerperio.model'; // <-- CORREGIDO
+import { ProgramaPuerperio } from '../../../ProgramaPuerperio/model/programapuerperio.model';
+import { ProgramapuerperioService } from '../../../ProgramaPuerperio/service/programapuerperio.service';
 
 @Component({
   selector: 'app-listar-controlpuerperio',
   standalone: true,
-  imports: [CommonModule, FormsModule,], // <-- CORREGIDO: RouterLink se mantiene por si acaso
+  imports: [CommonModule, FormsModule], // <-- CORREGIDO: RouterLink se mantiene por si acaso
   templateUrl: './listar-controlpuerperio.html',
   styleUrls: ['./listar-controlpuerperio.css'],
 })
 export class ListarControlpuerperio implements OnInit {
   programaId: string | null = null;
+  nombrePaciente: string = '';
   controles: ControlPuerperio[] = []; // <-- CORREGIDO: Modelo correcto
   isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: ControlpuerperioService // <-- CORREGIDO: Servicio correcto
+    private service: ControlpuerperioService,
+    private programaService: ProgramapuerperioService
   ) {}
 
   ngOnInit(): void {
     this.programaId = this.route.snapshot.paramMap.get('id');
     if (this.programaId) {
       this.cargarControles(this.programaId);
+      this.obtenerPacientePrograma(this.programaId);
     }
   }
 
   cargarControles(programaId: string): void {
     this.isLoading = true;
     this.service.listarControlesPorPrograma(programaId).subscribe({
-      next: (data: ControlPuerperio[]) => { // <-- CORREGIDO: Tipo de dato
+      next: (data: ControlPuerperio[]) => {
+        // <-- CORREGIDO: Tipo de dato
         this.controles = data;
+
         this.isLoading = false;
       },
-      error: (err: any) => { // <-- CORREGIDO: Tipado
+      error: (err: any) => {
+        // <-- CORREGIDO: Tipado
         console.error('Error al cargar controles:', err);
         alert('Error al cargar controles: ' + (err.error?.message || 'Error de servidor'));
         this.isLoading = false;
+      },
+    });
+  }
+  private obtenerPacientePrograma(programaId: string): void {
+    this.programaService.getProgramaById(programaId).subscribe({
+      next: (programa: ProgramaPuerperio) => {
+        if (programa.paciente) {
+          this.nombrePaciente = programa.paciente.nombre + ' ' + programa.paciente.apellido;
+        }
       },
     });
   }
@@ -58,27 +75,13 @@ export class ListarControlpuerperio implements OnInit {
 
   editarControl(cid: string): void {
     if (this.programaId) {
-      this.router.navigate([
-        '/puerperio',
-        this.programaId,
-        'controles',
-        'editar',
-        cid,
-      ]);
+      this.router.navigate(['/puerperio', this.programaId, 'controles', 'editar', cid]);
     }
   }
 
-  
-
   verAnalisis(cid: string): void {
     if (this.programaId) {
-      this.router.navigate([
-        '/puerperio',
-        this.programaId,
-        'controles',
-        cid,
-        'analisis',
-      ]);
+      this.router.navigate(['/puerperio', this.programaId, 'controles', cid, 'analisis']);
     }
   }
 }
