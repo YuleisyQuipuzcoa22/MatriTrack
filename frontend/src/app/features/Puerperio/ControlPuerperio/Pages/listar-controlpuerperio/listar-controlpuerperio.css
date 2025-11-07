@@ -1,62 +1,216 @@
 /* src/app/features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio.css */
 
-/* Fondo y Contenedor Principal (heredados de crear-editar-controlpuerperio.css) */
-/* Usamos las variables de _colores.css */
-
+/* Fondo y Contenedor Principal */
 .fondo {
   background-color: #f7f7f7;
   padding: 20px 0;
 }
+
 .card-container {
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
-  max-width: 1000px; /* Más ancho para el listado */
+  padding: 30px;
+  max-width: 1200px;
   margin: 0 auto;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
-.header .titulo {
-  color: var(--color-vino);
-  margin: 0 0 6px 0;
-}
-.subtitulo {
-  color: #666;
-  margin: 0 0 12px 0;
+
+/* =========================== */
+/* BREADCRUMBS */
+/* =========================== */
+.breadcrumb-nav {
+  margin-bottom: 1.5rem;
+  padding: 0;
 }
 
-/* Botones de Header (re-estilizados) */
+.breadcrumb {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.breadcrumb-item {
+  color: #666;
+}
+
+.breadcrumb-item a {
+  color: var(--color-vino);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--color-vino-oscuro);
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+  color: #999;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  color: #999;
+  padding: 0 0.5rem;
+}
+
+/* =========================== */
+/* HEADER MEJORADO */
+/* =========================== */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #fdf0f3 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #f0d5dd;
+  margin-bottom: 1rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.header-icon {
+  background: linear-gradient(135deg, var(--color-vino) 0%, var(--color-vino-oscuro) 100%);
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.3);
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header-badge {
+  background-color: var(--color-rosado);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  display: inline-block;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-title {
+  color: var(--color-vino);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-patient {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.header-patient i {
+  color: var(--color-vino);
+  font-size: 1.2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Botones del Header */
 .btn-agregar {
   background-color: var(--color-vino) !important;
   color: white !important;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 8px;
   font-weight: 700;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
 .btn-agregar:hover {
   background-color: var(--color-vino-oscuro) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(133, 14, 53, 0.3);
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.4);
 }
+
 .btn-volver {
-  background: transparent;
-  border: 1px solid var(--color-vino);
+  background: white;
+  border: 2px solid var(--color-vino);
   color: var(--color-vino);
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 8px;
   font-weight: 700;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
 .btn-volver:hover {
-  background: #fdf0f3;
-  color: var(--color-vino-oscuro);
+  background: var(--color-vino);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(133, 14, 53, 0.3);
 }
 
 /* =========================== */
-/* ESTILOS DEL ACORDEÓN (Nuevo) */
+/* SECCIÓN DE DESCRIPCIÓN */
 /* =========================== */
+.section-description {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-left: 4px solid var(--color-rosado);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
 
+.section-description i {
+  color: var(--color-rosado);
+  font-size: 1.2rem;
+}
+
+.section-description p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* =========================== */
+/* ESTILOS DEL ACORDEÓN */
+/* =========================== */
 .ctrl-accordion {
   margin-top: 1.5rem;
 }
@@ -67,9 +221,14 @@
   margin-bottom: 0.75rem;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Header del Acordeón (Visible siempre) */
+.ctrl-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header del Acordeón */
 .ctrl-card-header {
   display: flex;
   align-items: center;
@@ -85,7 +244,7 @@
   background: #f5f5f5;
 }
 
-/* Botón de expandir (ID y Fecha) */
+/* Botón de expandir */
 .ctrl-accordion-btn {
   flex: 1;
   background: none;
@@ -102,12 +261,38 @@
 }
 
 .ctrl-date-badge {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: #fff;
-  background-color: var(--color-rosado);
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 15px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.3s ease;
+}
+
+/* Badge de fecha de creación (azul) */
+.badge-creacion {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+}
+
+.badge-creacion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
+}
+
+/* Badge de fecha de modificación (naranja/amarillo) */
+.badge-modificacion {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+}
+
+.badge-modificacion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
 }
 
 .ctrl-chevron {
@@ -117,12 +302,11 @@
   margin-left: auto;
 }
 
-/* Rotar flecha cuando está expandido */
 .ctrl-accordion-btn[aria-expanded='true'] .ctrl-chevron {
   transform: rotate(180deg);
 }
 
-/* Acciones (Botones) */
+/* Acciones */
 .ctrl-actions {
   display: flex;
   align-items: center;
@@ -142,25 +326,31 @@
   cursor: pointer;
   font-size: 1.1rem;
 }
+
 .btn-edit-action {
   background-color: #ffc107;
   color: #856404;
 }
+
 .btn-edit-action:hover {
   background-color: #e0a800;
   color: #fff;
   transform: scale(1.1);
 }
+
 .btn-success-action {
-  background-color: #28a745;
+  width: auto;
+  font-size: 1.05rem;
+  background-color: #a616da;
   color: white;
 }
+
 .btn-success-action:hover {
-  background-color: #1e7e34;
+  background-color: #a60bb1;
   transform: scale(1.1);
 }
 
-/* Cuerpo del Acordeón (Colapsable) */
+/* Cuerpo del Acordeón */
 .ctrl-card-body {
   padding: 1.5rem 2rem;
   background: #fff;
@@ -175,6 +365,7 @@
   padding-bottom: 0.5rem;
   border-bottom: 1px dashed #e0e0e0;
 }
+
 .ctrl-info-grid .info-item:last-child {
   border-bottom: none;
 }
@@ -184,8 +375,54 @@
   font-weight: 600;
   font-size: 0.9rem;
 }
+
 .ctrl-info-grid .info-item p {
   color: #333;
   margin: 0;
   font-size: 1rem;
+}
+
+/* =========================== */
+/* RESPONSIVE */
+/* =========================== */
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .btn-agregar,
+  .btn-volver {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ctrl-accordion-btn {
+    flex-wrap: wrap;
+    font-size: 1rem;
+  }
+
+  .ctrl-date-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+  }
 }

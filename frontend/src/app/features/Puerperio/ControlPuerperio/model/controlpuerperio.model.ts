@@ -1,5 +1,35 @@
 // src/app/features/Puerperio/ControlPuerperio/model/controlpuerperio.model.ts
+/*asi esta que trae los datos el backend*/
 
+/* {
+      "involucion_uterina": null,
+      "cicatrizacion": null,
+      "estado_mamas_lactancia": null,
+      "estado_emocional": null,
+      "observacion": null,
+      "recomendacion": null,
+      "id_control_puerperio": "CP00033",
+      "id_programapuerperio": "PP00001",
+      "usuario_id_usuario": "OB0003",
+      "fecha_controlpuerperio": "2025-11-06T17:00:13.210Z",
+      "fecha_modificacion": "2025-11-06T17:00:13.210Z",
+      "peso": "66.00",
+      "talla": "1.62",
+      "presion_arterial": "120/80",
+      "usuario": {
+        "numero_colegiatura": "741852",
+        "id_usuario": "OB0003",
+        "dni": "74654129",
+        "nombre": "Sofía",
+        "apellido": "Vergara",
+        "rol": "Administrador",
+        "estado": "A",
+        "fecha_nacimiento": "2004-11-20",
+        "correo_electronico": "sofvergara@gmail.com",
+        "telefono": "904631017",
+        "direccion": "Av España 123"
+      }
+    },*/
 // Interfaz para el objeto ControlPuerperio (respuesta de la API)
 export interface ControlPuerperio {
   id_control_puerperio: string;

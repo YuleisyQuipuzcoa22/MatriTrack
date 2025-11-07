@@ -22,12 +22,11 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator'; // Imp
 
 // La ruta base ahora es 'programas-puerperio' para anidar los controles
 @Controller('programas-puerperio')
-@UseGuards(JwtAuthGuard, RolesGuard)
+//@UseGuards(JwtAuthGuard, RolesGuard) comentado MIENTRAS TANTO
 @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) // Roles base
 export class ControlPuerperioController {
   constructor(private readonly service: ControlPuerperioService) {}
 
-  // POST /programas-puerperio/:id_programa/controles
   @Post(':id_programa/controles')
   // --- CORREGIDO: Ahora ambos roles pueden crear ---
   @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) 

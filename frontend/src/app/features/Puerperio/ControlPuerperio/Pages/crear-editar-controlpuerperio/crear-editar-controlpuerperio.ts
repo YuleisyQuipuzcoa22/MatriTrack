@@ -1,13 +1,8 @@
 // src/app/features/Puerperio/ControlPuerperio/Pages/crear-editar-control-puerperio.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common'; // Importar DatePipe
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router'; 
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ControlpuerperioService } from '../../service/controlpuerperio.service';
 import {
   ControlPuerperio,
@@ -15,19 +10,17 @@ import {
   UpdateControlPuerperioDto,
 } from '../../model/controlpuerperio.model';
 import { Observable } from 'rxjs';
+import { ProgramapuerperioService } from '../../../ProgramaPuerperio/service/programapuerperio.service';
+import { ProgramaPuerperio } from '../../../ProgramaPuerperio/model/programapuerperio.model';
 
 @Component({
   selector: 'app-crear-editar-controlpuerperio',
   standalone: true,
   // --- CORRECCIÓN: Añadido DatePipe y ReactiveFormsModule ---
-  imports: [CommonModule, ReactiveFormsModule], 
+  imports: [CommonModule, ReactiveFormsModule],
   providers: [DatePipe], // Añadir DatePipe a providers
   templateUrl: './crear-editar-controlpuerperio.html',
-  // --- CORRECCIÓN: Añadidos los estilos base ---
-  styleUrls: [
-    '../../../../../../styles/form-base.css', 
-    './crear-editar-controlpuerperio.css'
-  ],
+  styleUrls: [ './crear-editar-controlpuerperio.css'],
 })
 export class CrearEditarControlpuerperio implements OnInit {
   programaId: string | null = null;
@@ -36,6 +29,7 @@ export class CrearEditarControlpuerperio implements OnInit {
   isEditMode = false;
   isLoading = false;
   errorMessage: string | null = null;
+  nombrePaciente: string = '';
 
   // Fecha de control (para modo edición)
   fechaCreacion: string | null = null;
@@ -45,7 +39,8 @@ export class CrearEditarControlpuerperio implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private service: ControlpuerperioService,
-    private datePipe: DatePipe // Inyectar DatePipe
+    private datePipe: DatePipe, // Inyectar DatePipe
+    private programaService: ProgramapuerperioService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +63,16 @@ export class CrearEditarControlpuerperio implements OnInit {
     if (this.isEditMode && this.controlId) {
       this.loadControlData(this.programaId, this.controlId);
     }
+    this.obtenerPacientePrograma(this.programaId)
+  }
+  private obtenerPacientePrograma(programaId:string): void {
+    this.programaService.getProgramaById(programaId).subscribe({
+      next: (programa: ProgramaPuerperio) => {
+        if (programa.paciente) {
+          this.nombrePaciente = programa.paciente.nombre + " "+ programa.paciente.apellido;
+        }
+      },
+    });
   }
 
   private initializeForm(): void {
@@ -76,11 +81,7 @@ export class CrearEditarControlpuerperio implements OnInit {
       // Campos requeridos
       peso: [
         null,
-        [
-          Validators.required,
-          Validators.min(30),
-          Validators.pattern(/^\d+(\.\d{1,2})?$/),
-        ],
+        [Validators.required, Validators.min(30), Validators.pattern(/^\d+(\.\d{1,2})?$/)],
       ],
       talla: [
         null,
@@ -91,13 +92,7 @@ export class CrearEditarControlpuerperio implements OnInit {
           Validators.pattern(/^\d+(\.\d{1,2})?$/),
         ],
       ],
-      presion_arterial: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{2,3}\/\d{2,3}$/),
-        ],
-      ],
+      presion_arterial: ['', [Validators.required, Validators.pattern(/^\d{2,3}\/\d{2,3}$/)]],
       // Campos opcionales
       involucion_uterina: ['', [Validators.maxLength(100)]],
       cicatrizacion: ['', [Validators.maxLength(100)]],
@@ -123,9 +118,12 @@ export class CrearEditarControlpuerperio implements OnInit {
           observacion: control.observacion || '',
           recomendacion: control.recomendacion || '',
         });
-        
+
         // Formatear la fecha para mostrarla
-        this.fechaCreacion = this.datePipe.transform(control.fecha_controlpuerperio, 'dd/MM/yyyy HH:mm');
+        this.fechaCreacion = this.datePipe.transform(
+          control.fecha_controlpuerperio,
+          'dd/MM/yyyy HH:mm'
+        );
         this.isLoading = false;
       },
       error: (err) => {
@@ -168,17 +166,10 @@ export class CrearEditarControlpuerperio implements OnInit {
 
     if (this.isEditMode && this.controlId) {
       // Actualizar
-      request$ = this.service.actualizarControl(
-        this.programaId,
-        this.controlId,
-        dto
-      );
+      request$ = this.service.actualizarControl(this.programaId, this.controlId, dto);
     } else {
       // Crear
-      request$ = this.service.crearControl(
-        this.programaId,
-        dto as CreateControlPuerperioDto
-      );
+      request$ = this.service.crearControl(this.programaId, dto as CreateControlPuerperioDto);
     }
 
     request$.subscribe({
@@ -189,8 +180,7 @@ export class CrearEditarControlpuerperio implements OnInit {
       },
       error: (err) => {
         console.error('Error al guardar:', err);
-        this.errorMessage =
-          err.error?.message || 'Error al guardar el control.';
+        this.errorMessage = err.error?.message || 'Error al guardar el control.';
         this.isLoading = false;
       },
     });
@@ -213,9 +203,11 @@ export class CrearEditarControlpuerperio implements OnInit {
 
     if (control.errors['required']) return 'Este campo es obligatorio.';
     if (control.errors['min']) return `El valor debe ser al menos ${control.errors['min'].min}.`;
-    if (control.errors['max']) return `El valor no puede ser mayor que ${control.errors['max'].max}.`;
+    if (control.errors['max'])
+      return `El valor no puede ser mayor que ${control.errors['max'].max}.`;
     if (control.errors['pattern']) return 'Formato incorrecto (Ej. 120/80).';
-    if (control.errors['maxlength']) return `Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
+    if (control.errors['maxlength'])
+      return `Máximo ${control.errors['maxlength'].requiredLength} caracteres.`;
 
     return 'Valor inválido.';
   }
