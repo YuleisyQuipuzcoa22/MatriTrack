@@ -24,7 +24,8 @@ import { QueryControlPuerperioDto } from './dto/query-control-puerperio.dto'; //
 
 // La ruta base ahora es 'programas-puerperio' para anidar los controles
 @Controller('programas-puerperio')
-//@UseGuards(JwtAuthGuard, RolesGuard) comentado MIENTRAS TANTO
+// ****** ESTA ES LA LÍNEA QUE FALTABA ******
+@UseGuards(JwtAuthGuard, RolesGuard) // <-- DESCOMENTAR ESTA LÍNEA
 @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA) // Roles base
 export class ControlPuerperioController {
   constructor(private readonly service: ControlPuerperioService) {}
