@@ -13,6 +13,7 @@ import { UpdateControlDiagnosticoDto } from './Dto/update-control-diagnostico.dt
 import { CreateControlDiagnosticoDto } from './Dto/create-control-diagnostico.dto';
 import { ControlDiagnosticoMapper } from './mapper/control-diagnostico.mapper';
 import { Estado } from 'src/enums/Estado';
+import { QueryControlDiagnosticoDto } from './Dto/query-control-diagnostico.dto';
 
 @Injectable()
 export class ControlDiagnosticoService {
@@ -21,7 +22,7 @@ export class ControlDiagnosticoService {
     private controlDiagnosticoRepository: Repository<ControlDiagnostico>,
 
     @InjectRepository(ProgramaDiagnostico)
-    private programaDiagnosticoRepository: Repository<ProgramaDiagnostico>,
+    private programaRepo: Repository<ProgramaDiagnostico>,
   ) {}
 
   // GENERAR ID AUTOMÁTICO (CD00001, CD00002, ...)
@@ -44,30 +45,97 @@ export class ControlDiagnosticoService {
   }
 
   // CREAR NUEVO CONTROL
- async create(id_programa: string, id_usuario: string, createDto: CreateControlDiagnosticoDto) {
-  return await this.controlDiagnosticoRepository.manager.transaction(async (manager) => {
-    const programa = await manager.findOne(ProgramaDiagnostico, { where: { id_programadiagnostico: id_programa } });
-    if (!programa) throw new NotFoundException(`Programa diagnóstico ${id_programa} no encontrado`);
-    if (programa.estado !== Estado.ACTIVO)
-      throw new BadRequestException(`El programa no está activo (${programa.estado})`);
+  async create(
+    id_programa: string,
+    id_usuario: string,
+    createDto: CreateControlDiagnosticoDto,
+  ) {
+    return await this.controlDiagnosticoRepository.manager.transaction(
+      async (manager) => {
+        const programa = await manager.findOne(ProgramaDiagnostico, {
+          where: { id_programadiagnostico: id_programa },
+        });
+        if (!programa)
+          throw new NotFoundException(
+            `Programa diagnóstico ${id_programa} no encontrado`,
+          );
+        if (programa.estado !== Estado.ACTIVO)
+          throw new BadRequestException(
+            `El programa no está activo (${programa.estado})`,
+          );
 
-    const id_control = await this.generateNextControlId();
-    const nuevoControl = ControlDiagnosticoMapper.toEntity(createDto, id_control, id_programa, id_usuario);
-    return await manager.save(ControlDiagnostico, nuevoControl);
-  });
-}
-    
-
-  // LISTAR TODOS LOS CONTROLES DE UN PROGRAMA
-  async findAllByPrograma(id_programa: string): Promise<ControlDiagnostico[]> {
-    // No verificamos si el programa existe, si no existe el array estará vacío
-    return await this.controlDiagnosticoRepository.find({
-      where: { id_programadiagnostico: id_programa },
-      relations: ['usuario'], // Para saber qué obstetra lo realizó
-      order: { fecha_controldiagnostico: 'DESC' },
-    });
+        const id_control = await this.generateNextControlId();
+        const nuevoControl = ControlDiagnosticoMapper.toEntity(
+          createDto,
+          id_control,
+          id_programa,
+          id_usuario,
+        );
+        return await manager.save(ControlDiagnostico, nuevoControl);
+      },
+    );
   }
 
+  // LISTAR TODOS LOS CONTROLES DE UN PROGRAMA
+async findAllByPrograma(id_programa: string, queryDto: QueryControlDiagnosticoDto) {
+  let {
+    page = 1,
+    limit = 10,
+    fechaInicio,
+    fechaFin,
+    order = 'DESC',
+  } = queryDto;
+
+  const pageN  = Math.max(1, Number(page)  || 1);
+  const limitN = Math.max(1, Math.min(100, Number(limit) || 10));
+  const skip   = (pageN - 1) * limitN;
+
+  const fi = fechaInicio ? new Date(`${fechaInicio}T00:00:00`) : undefined;
+  const ff = fechaFin    ? new Date(`${fechaFin}T23:59:59.999`) : undefined;
+
+  const programa = await this.programaRepo.findOne({
+    where: { id_programadiagnostico: id_programa },
+  });
+  if (!programa) {
+    throw new NotFoundException(`Programa diagnóstico con ID ${id_programa} no encontrado`);
+  }
+
+  const qb = this.controlDiagnosticoRepository
+    .createQueryBuilder('control')
+    .leftJoinAndSelect('control.usuario', 'usuario')
+    .where('control.id_programadiagnostico = :id_programa', { id_programa });
+
+  if (fi && ff) {
+    qb.andWhere('control.fecha_controldiagnostico BETWEEN :fi AND :ff', { fi, ff });
+  } else if (fi) {
+    qb.andWhere('control.fecha_controldiagnostico >= :fi', { fi });
+  } else if (ff) {
+    qb.andWhere('control.fecha_controldiagnostico <= :ff', { ff });
+  }
+
+  qb.orderBy('control.fecha_controldiagnostico', order as 'ASC'|'DESC')
+    .skip(skip)
+    .take(limitN);
+
+  console.log('Params:', { pageN, limitN, skip, fi, ff, order });
+  console.log('SQL:', qb.getSql());
+  console.log('SQL params:', qb.getParameters());
+
+  const [controles, total] = await qb.getManyAndCount();
+
+  return {
+    message: 'Controles obtenidos correctamente',
+    data: controles,
+    meta: {
+      total,
+      page: pageN,
+      limit: limitN,
+      totalPages: Math.ceil(total / limitN),
+      hasNextPage: pageN < Math.ceil(total / limitN),
+      hasPrevPage: pageN > 1,
+    },
+  };
+}
   // OBTENER UN CONTROL POR ID
   async findOne(id_control: string): Promise<ControlDiagnostico> {
     const control = await this.controlDiagnosticoRepository.findOne({

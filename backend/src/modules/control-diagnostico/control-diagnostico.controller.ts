@@ -7,14 +7,18 @@ import {
   Put,
   Body,
   Param,
-  Req, // Para obtener la información del usuario logueado (JWT)
+  Req, 
   HttpStatus,
   HttpCode,
-  UseGuards, // Usar si tienes guards de autenticación (JWT)
+  UseGuards,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ControlDiagnosticoService } from './control-diagnostico.service';
 import { CreateControlDiagnosticoDto } from './Dto/create-control-diagnostico.dto';
 import { UpdateControlDiagnosticoDto } from './Dto/update-control-diagnostico.dt';
+import { QueryControlDiagnosticoDto } from './Dto/query-control-diagnostico.dto';
+
 // import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'; // Ejemplo
 
 @Controller('programas-diagnostico')
@@ -52,12 +56,12 @@ export class ControlDiagnosticoController {
 
   // GET /programas-diagnostico/:id_programa/controles
 @Get(':id_programa/controles')
-async findAllByPrograma(@Param('id_programa') id_programa: string) {
-  const controles = await this.controlDiagnosticoService.findAllByPrograma(id_programa);
-  return {
-    message: `Controles del programa ${id_programa} obtenidos correctamente`,
-    data: controles,
-  };
+async findAllByPrograma(
+  @Param('id_programa') id_programa: string,
+  @Query(new ValidationPipe({transform: true})) query: QueryControlDiagnosticoDto
+) {
+  console.log('Query recibido:', query)
+  return await this.controlDiagnosticoService.findAllByPrograma(id_programa, query);
 }
 
   // GET /programas-diagnostico/:id_programa/controles/:id_control
@@ -70,7 +74,7 @@ async findAllByPrograma(@Param('id_programa') id_programa: string) {
 
     return {
       message: `Control ${id_control} del programa ${id_programa} obtenido correctamente`,
-      data: control, // 🔹 asegúrate de devolver { data: {...} }
+      data: control, 
     };
   }
 
