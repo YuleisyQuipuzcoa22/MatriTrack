@@ -244,6 +244,7 @@ async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta
   async login(loginDto: LoginDto) {
     const { dni, contrasena, recaptchaToken } = loginDto;
 
+    
     // Verificar reCAPTCHA
     if (!this.RECAPTCHA_SECRET) {
       throw new Error('Clave secreta reCAPTCHA no configurada en el servidor');
@@ -267,6 +268,7 @@ async listarPersonal(queryDto: QueryUsuarioDto): Promise<{ data: Usuario[], meta
         'Verificación reCAPTCHA fallida. Por favor, inténtelo de nuevo',
       );
     }
+      
     // Buscar usuario
     const usuario = await this.usuarioRepository
       //es como hacer un SELECT * FROM usuario WHERE dni = 'dni'
