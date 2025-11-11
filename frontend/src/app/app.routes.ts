@@ -18,23 +18,29 @@ import { CrearEditarProgramapuerperio } from './features/Puerperio/ProgramaPuerp
 import { ListarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio/listar-controlpuerperio';
 import { CrearEditarControlpuerperio } from './features/Puerperio/ControlPuerperio/Pages/crear-editar-controlpuerperio/crear-editar-controlpuerperio';
 
-import { AgregarDetalleAnalisis } from './features/DetalleAnalisis/agregar-detalle-analisis/agregar-detalle-analisis';
-import { EditarDetalleAnalisis } from './features/DetalleAnalisis/editar-detalle-analisis/editar-detalle-analisis';
-import { ListarDetalleAnalisis } from './features/DetalleAnalisis/listar-detalles-analisis/listar-detalles-analisis';
-import { ConsultaVerDetalles } from './features/DetalleAnalisis/consulta-ver-detalles/consulta-ver-detalles';
+
+import { ListarResultadoAnalisis } from './features/DetalleAnalisis/listar-resultado-analisis/listar-resultado-analisis';
+import { ConsultaVerResultados } from './features/DetalleAnalisis/consulta-ver-resultados/consulta-ver-resultados';
+
+
 import { ProgramasHistorialmedico } from './features/HistorialMedico/pages/programas-historialmedico/programas-historialmedico';
 import { CrearEditarProgDiagnostico } from './features/ProgramaDiagnostico/pages/crear-editar-prog-diagnostico/crear-editar-prog-diagnostico';
 
 import { ListarControles } from './features/ControlDiagnostico/pages/listar-controles/listar-controles';
 import { CrearEditarControlDiagnostico } from './features/ControlDiagnostico/pages/crear-editar-control/crear-editar-control';
-export const routes: Routes = [
-  // Redirige al login por defecto
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+import { DetalleProgramaHistorialmedico } from './features/HistorialMedico/pages/detalle-programa-historialmedico/detalle-programa-historialmedico';
 
-  // Ruta pública (login)
+
+
+import { CrearEditarResultadoAnalisis } from './features/DetalleAnalisis/crear-editar-resultado-analisis/crear-editar-resultado-analisis';
+
+
+export const routes: Routes = [
+
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: Login },
 
-  // --- RUTAS COMUNES (Obstetra y Admin) ---
+
   {
     path: 'pacientes',
     component: ListadoPacientes,
@@ -96,8 +102,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
 
-  // --- INICIO DE LA CORRECCIÓN ---
-  // Rutas que ahora aceptan AMBOS roles (Admin y Obstetra)
+  // --- RUTAS DE CONTROLES (AMBOS ROLES) ---
   {
     path: 'puerperio/:id/controles',
     component: ListarControlpuerperio,
@@ -113,28 +118,33 @@ export const routes: Routes = [
     component: CrearEditarControlpuerperio,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
-  // (Asumiendo que Admin también debe ver detalles de análisis)
+
   {
-    path: 'detalle-analisis/registrar',
-    component: AgregarDetalleAnalisis,
+    path: 'diagnostico/:id/control/:idControl/resultados', 
+    component: ListarResultadoAnalisis,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   {
-    path: 'detalle-analisis/:id',
-    component: EditarDetalleAnalisis,
+    path: 'puerperio/:id/control/:idControl/resultados',
+    component: ListarResultadoAnalisis,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+
+  {
+    path: 'resultado-analisis/registrar', 
+    component: CrearEditarResultadoAnalisis, 
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   {
-    path: 'detalles-analisis/:id',
-    component: ListarDetalleAnalisis,
+    path: 'resultado-analisis/:id', 
+    component: CrearEditarResultadoAnalisis,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
   {
-    path: 'consulta-detalles-analisis/:id',
-    component: ConsultaVerDetalles,
+    path: 'consulta-resultados-analisis/:id', 
+    component: ConsultaVerResultados, 
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
-  // --- FIN DE LA CORRECCIÓN ---
 
   // --- RUTAS SOLO DE ADMINISTRADOR ---
   {
@@ -158,11 +168,22 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['Administrador'])],
   },
 
-  // --- RUTAS DE HISTORIAL MÉDICO (Común) ---
+
   {
-    path: 'historialmedico/:id/programas',
+    path: 'historialmedico/paciente/:id_paciente', 
     component: ProgramasHistorialmedico,
     canActivate: [authGuard],
+  },
+
+  {
+    path: 'diagnostico/detalle/:id',
+    component: DetalleProgramaHistorialmedico,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
+  },
+  {
+    path: 'puerperio/detalle/:id',
+    component: DetalleProgramaHistorialmedico,
+    canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
 
   {
@@ -180,6 +201,7 @@ export const routes: Routes = [
     component: CrearEditarControlDiagnostico,
     canActivate: [authGuard, roleGuard(['Obstetra', 'Administrador'])],
   },
+
 
   // --- RUTAS GENÉRICAS ---
   { path: 'no-autorizado', component: NoAutorizado },

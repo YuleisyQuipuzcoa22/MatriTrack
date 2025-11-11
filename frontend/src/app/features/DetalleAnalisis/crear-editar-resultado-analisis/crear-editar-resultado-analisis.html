@@ -1,0 +1,123 @@
+<div class="agregar-root">
+  <div class="header-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h2 class="mb-4">
+            <i class="bi bi-pencil-square"></i>
+            {{ isEditMode ? 'Editar Resultado de Análisis' : 'Registrar Nuevo Resultado' }}
+          </h2>
+          @if(isEditMode && idResultado){
+            <h5 class="text-muted fw-normal mt-2">
+              Editando ID: <strong>{{ idResultado }}</strong>
+            </h5>
+          }
+          @if(!isEditMode && idControl){
+            <h5 class="text-muted fw-normal mt-2">
+              Para el Control: <strong>{{ idControl }}</strong> ({{ tipoControl }})
+            </h5>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card p-4 shadow-sm">
+      
+      @if (isLoading) {
+        <div class="text-center p-5">
+          <div class="spinner-border" role="status" style="color: #850e35;">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2">Cargando datos del resultado...</p>
+        </div>
+      }
+
+      @if (!isLoading) {
+        <form [formGroup]="resultadoForm" (ngSubmit)="guardar()">
+
+          @if (errorMessage) {
+            <div class="alert alert-danger text-center">{{ errorMessage }}</div>
+          }
+
+          <div class="mb-3">
+            <label class="form-label" for="tipoAnalisis">Tipo de Análisis *</label>
+            <select class="form-select" id="tipoAnalisis" formControlName="id_analisis" [class.is-invalid]="isInvalid('id_analisis')">
+              <option value="" disabled>Seleccionar...</option>
+              @for (tipo of tiposDeAnalisis; track tipo.id_analisis) {
+                <option [value]="tipo.id_analisis">{{ tipo.nombre_analisis }}</option>
+              }
+              @if (tiposDeAnalisis.length === 0) {
+                <option disabled>Cargando tipos de análisis...</option>
+              }
+            </select>
+            @if (isInvalid('id_analisis')) {
+              <small class="text-danger">{{ getErrorMessage('id_analisis') }}</small>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="fechaRealizacion">Fecha de Realización *</label>
+            <input type="date" class="form-control" id="fechaRealizacion" formControlName="fecha_realizacion" [class.is-invalid]="isInvalid('fecha_realizacion')">
+            @if (isInvalid('fecha_realizacion')) {
+              <small class="text-danger">{{ getErrorMessage('fecha_realizacion') }}</small>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="laboratorio">Laboratorio *</label>
+            <input type="text" class="form-control" id="laboratorio" placeholder="Nombre del laboratorio" formControlName="laboratorio" [class.is-invalid]="isInvalid('laboratorio')">
+            @if (isInvalid('laboratorio')) {
+              <small class="text-danger">{{ getErrorMessage('laboratorio') }}</small>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="pdfFile">
+              {{ isEditMode ? 'Reemplazar PDF (Opcional, máx 5MB)' : 'Adjuntar PDF (Opcional, máx 5MB)' }}
+            </label>
+            @if (isEditMode && existingPdfName) {
+              <div class="alert alert-info py-2">
+                <i class="bi bi-paperclip"></i>
+                Archivo actual: <strong>{{ existingPdfName }}</strong>
+                <br>
+                <small>Subir un nuevo archivo reemplazará al anterior.</small>
+              </div>
+            }
+            <input type="file" class="form-control" id="pdfFile" 
+                   (change)="onFileSelected($event)" 
+                   accept="application/pdf">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label" for="resultado">Resultado *</label>
+            <textarea class="form-control" rows="3" id="resultado" formControlName="resultado" maxlength="1000" [class.is-invalid]="isInvalid('resultado')"></textarea>
+            <div class="form-text text-end text-muted">{{ resultadoForm.get('resultado')?.value?.length || 0 }} / 1000</div>
+            @if (isInvalid('resultado')) {
+              <small class="text-danger">{{ getErrorMessage('resultado') }}</small>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="observacion">Observaciones</label>
+            <textarea class="form-control" rows="2" id="observacion" formControlName="observacion" maxlength="500"></textarea>
+            <div class="form-text text-end text-muted">{{ resultadoForm.get('observacion')?.value?.length || 0 }} / 500</div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="isSaving">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving || resultadoForm.invalid">
+              @if (isSaving) {
+                <span class="spinner-border spinner-border-sm me-2"></span> Guardando...
+              } @else {
+                {{ isEditMode ? 'Guardar Cambios' : 'Guardar' }}
+              }
+            </button>
+          </div>
+
+        </form>
+      }
+    </div>
+  </div>
+</div>

@@ -56,4 +56,15 @@ export class AnalisisService {
       .patch<ApiResponse<Analisis>>(`${this.apiUrl}/${id}`, {})
       .pipe(map((response) => response.data));
   }
+
+  listarTodosAnalisis(): Observable<Analisis[]> {
+    const params = new HttpParams()
+      .set('limit', 1000) // Un límite alto para traer todos
+      .set('estado', 'A');  // Solo análisis activos
+      
+    return this.http.get<PaginatedApiResponse<Analisis>>(this.apiUrl, { params }).pipe(
+      map(response => response.data) 
+    );
+  }
+
 }

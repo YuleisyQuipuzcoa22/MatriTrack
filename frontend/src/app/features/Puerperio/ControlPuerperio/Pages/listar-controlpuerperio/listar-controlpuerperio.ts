@@ -1,18 +1,17 @@
-// src/app/features/Puerperio/ControlPuerperio/Pages/listar-controlpuerperio.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ControlpuerperioService, ControlPuerperioFilters } from '../../service/controlpuerperio.service'; // 1. Importar Filtros
+import { ControlpuerperioService, ControlPuerperioFilters } from '../../service/controlpuerperio.service'; 
 import { ControlPuerperio } from '../../model/controlpuerperio.model';
 import { ProgramaPuerperio } from '../../../ProgramaPuerperio/model/programapuerperio.model';
 import { ProgramapuerperioService } from '../../../ProgramaPuerperio/service/programapuerperio.service';
-import { Paginacion } from '../../../../../components/paginacion/paginacion'; // 2. Importar Paginacion
+import { Paginacion } from '../../../../../components/paginacion/paginacion'; 
 
 @Component({
   selector: 'app-listar-controlpuerperio',
   standalone: true,
-  imports: [CommonModule, FormsModule, Paginacion], // 3. Añadir Paginacion
+  imports: [CommonModule, FormsModule, Paginacion], 
   templateUrl: './listar-controlpuerperio.html',
   styleUrls: ['./listar-controlpuerperio.css'],
 })
@@ -22,14 +21,13 @@ export class ListarControlpuerperio implements OnInit {
   controles: ControlPuerperio[] = [];
   isLoading = false;
 
-  // 4. Añadir propiedades de Paginación y Filtros
   currentPage = 1;
   pageSize = 10; // Empezar con 10
   totalItems = 0;
   totalPages = 0;
 
-  filtroFechaInicio: string = ''; // Usar string vacío
-  filtroFechaFin: string = '';   // Usar string vacío
+  filtroFechaInicio: string = ''; 
+  filtroFechaFin: string = '';   
   hayFiltroActivo = false;
 
   constructor(
@@ -42,12 +40,11 @@ export class ListarControlpuerperio implements OnInit {
   ngOnInit(): void {
     this.programaId = this.route.snapshot.paramMap.get('id');
     if (this.programaId) {
-      this.cargarControles(); // 5. Cargar controles
+      this.cargarControles(); 
       this.obtenerPacientePrograma(this.programaId);
     }
   }
 
-  // 6. Modificar cargarControles
   cargarControles(): void {
     if (!this.programaId) return;
 
@@ -88,7 +85,6 @@ export class ListarControlpuerperio implements OnInit {
     });
   }
 
-  // 7. Añadir nuevos métodos
   filtrarPorFecha(): void {
     if (this.filtroFechaInicio && this.filtroFechaFin && this.filtroFechaInicio > this.filtroFechaFin) {
       alert('La fecha de inicio no puede ser posterior a la fecha de fin.');
@@ -138,7 +134,7 @@ export class ListarControlpuerperio implements OnInit {
 
   verAnalisis(cid: string): void {
     if (this.programaId) {
-      this.router.navigate(['/puerperio', this.programaId, 'controles', cid, 'analisis']);
+      this.router.navigate(['/puerperio', this.programaId, 'control', cid, 'resultados']);
     }
   }
 }

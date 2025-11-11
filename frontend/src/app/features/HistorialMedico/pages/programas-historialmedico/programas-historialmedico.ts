@@ -4,12 +4,12 @@ import { ListarProgramapuerperio } from '../../../Puerperio/ProgramaPuerperio/Pa
 import { HistorialMedicoCompleto } from '../../model/historial-medico';
 import { HistorialmedicoService } from '../../services/historialmedico.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-programas-historialmedico',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './programas-historialmedico.html',
   styleUrl: './programas-historialmedico.css'
 })
@@ -26,13 +26,11 @@ export class ProgramasHistorialmedico implements OnInit {
 
   constructor(
     private historialMedicoService: HistorialmedicoService,
-    private route: ActivatedRoute // Inyectamos ActivatedRoute para obtener la URL
+    private route: ActivatedRoute 
   ) {}
 
   ngOnInit(): void {
-    // 1. Obtener el ID del paciente de la ruta
-    // Usamos paramMap.get('id_paciente') porque asumo que tu ruta es algo como:
-    // path: 'historial/:id_paciente'
+    // obtenemos el ID del paciente de la ruta
     this.route.paramMap.subscribe(params => {
       this.idPaciente = params.get('id_paciente');
 
