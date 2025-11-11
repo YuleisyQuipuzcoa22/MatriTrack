@@ -31,7 +31,7 @@ export class ControlPuerperio {
 
   // Relación Many-to-One con Usuario (obstetra que realiza el control)
   @ManyToOne(() => Usuario)
-  @JoinColumn({ name: 'usuario_id_usuario' })
+  @JoinColumn({ name: 'id_usuario' })
   usuario?: Usuario;
 
   // FK explícita para Usuario
