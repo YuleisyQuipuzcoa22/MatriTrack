@@ -44,12 +44,20 @@
       <div class="collapse submenu" id="submenu-home">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/diagnostico" [ngClass]="{ active: isDiagnosticoSubActive }">
+            <a
+              class="nav-link"
+              routerLink="/diagnostico"
+              [ngClass]="{ active: isDiagnosticoSubActive }"
+            >
               <span class="link-text">Diagnóstico</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/puerperio" [ngClass]="{ active: isPuerperioSubActive }">
+            <a
+              class="nav-link"
+              routerLink="/puerperio"
+              [ngClass]="{ active: isPuerperioSubActive }"
+            >
               <span class="link-text">Puerperio</span>
             </a>
           </li>
@@ -62,13 +70,14 @@
         routerLink="/historialmedico"
         [ngClass]="{ active: isHistorialActive }"
       >
-        <i class="bi bi-file-earmark-medical-fill  fs-5 me-3"></i>
+        <i class="bi bi-file-earmark-medical-fill fs-5 me-3"></i>
         <span class="link-text"
           >Consultar <br />
           Historial Médico</span
         >
       </a>
     </li>
+    @if(isAdministrador){
     <li class="nav-item">
       <a
         class="nav-link d-flex align-items-center"
@@ -89,6 +98,8 @@
         <span class="link-text">Análisis</span>
       </a>
     </li>
+
+    }
   </ul>
 
   <div class="user-section dropup position-absolute bottom-0 w-100">

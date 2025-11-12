@@ -2,7 +2,7 @@ import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { SidebarService } from './sidebar.service'; 
+import { SidebarService } from './sidebar.service';
 import { AuthService } from '../../features/UsuarioObstetra/services/auth.service';
 
 @Component({
@@ -22,6 +22,8 @@ export class Sidebar implements OnInit {
   userLastName: string = '';
   userRole: string = 'Cargando...';
   userInitials: string = '??';
+
+  isAdministrador: boolean = false;
 
   constructor(
     private router: Router,
@@ -56,35 +58,34 @@ export class Sidebar implements OnInit {
       this.userFirstName = firstName;
       this.userLastName = lastName;
       this.userInitials = this.getInitials(firstName, lastName);
-    } 
-    
-    if (role) {
-        this.userRole = role;
     }
-    
+
+    if (role) {
+      this.userRole = role;
+      this.isAdministrador = role === 'Administrador';
+    }
+
     if (!firstName || !lastName || !role) {
-      
       console.warn('Faltan datos, aun no se inicia sesión o hay un problema:)');
     }
   }
-  
 
   checkActiveLinks(url: string): void {
-    
     // Lógica para "Historial Médico" (Activo si es /historialmedico O /.../detalle/...)
-    const esHistorial = url.startsWith('/historialmedico') || 
-                        url.includes('/diagnostico/detalle') || 
-                        url.includes('/puerperio/detalle');
+    const esHistorial =
+      url.startsWith('/historialmedico') ||
+      url.includes('/diagnostico/detalle') ||
+      url.includes('/puerperio/detalle');
     this.isHistorialActive = esHistorial;
 
     // Lógica para el menú principal "Programas" (Activo si NO es historial)
-    const esPrograma = (url.startsWith('/diagnostico') || url.startsWith('/puerperio')) 
-                       && !url.includes('/detalle');
+    const esPrograma =
+      (url.startsWith('/diagnostico') || url.startsWith('/puerperio')) && !url.includes('/detalle');
     this.isProgramasActive = esPrograma;
 
     // Lógica para el SUBMENÚ "Diagnóstico"
     this.isDiagnosticoSubActive = url.startsWith('/diagnostico') && !url.includes('/detalle');
-    
+
     // Lógica para el SUBMENÚ "Puerperio"
     this.isPuerperioSubActive = url.startsWith('/puerperio') && !url.includes('/detalle');
   }
