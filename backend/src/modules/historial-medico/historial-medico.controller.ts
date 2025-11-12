@@ -1,4 +1,3 @@
-// historial-medico.controller.ts
 import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { HistorialMedicoService } from './historial-medico.service';
 import { ResponseHistorialMedicoDto } from './Dto/response-historialMedico.dto';

@@ -79,7 +79,7 @@ export class DetalleProgramaHistorialmedico implements OnInit {
     
     if (tipo === 'diagnostico') {
       obsPrograma$ = this.progDiagnosticoService.getProgramaById(id).pipe(map(p => ({ ...p, tipo: 'diagnostico' } as ProgramaUnion)));
-      obsControles$ = this.ctrlDiagnosticoService.listarControlesPorPrograma(id);
+      obsControles$ = this.ctrlDiagnosticoService.listarControlesPorPrograma(id).pipe(map(response => response.data));
     } else {
       obsPrograma$ = this.progPuerperioService.getProgramaById(id).pipe(map(p => ({ ...p, tipo: 'puerperio' } as ProgramaUnion)));
       obsControles$ = this.ctrlPuerperioService.listarControlesPorPrograma(id, {}).pipe(map(response => response.data));
@@ -118,7 +118,7 @@ export class DetalleProgramaHistorialmedico implements OnInit {
   getControlFecha(control: ControlUnion): string {
      return (control as ControlDiagnostico).fecha_controldiagnostico || (control as ControlPuerperio).fecha_controlpuerperio;
   }
-  
+  /*no usado*/
   editarControl(control: ControlUnion): void {
     if (!this.programa) return;
     const controlId = this.getControlId(control);

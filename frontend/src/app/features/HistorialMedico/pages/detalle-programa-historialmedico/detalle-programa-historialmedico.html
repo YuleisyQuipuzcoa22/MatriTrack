@@ -1,6 +1,5 @@
 <div class="detalle-programa-root">
   <div class="container py-4">
-
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="titulo-pagina">Detalle del Programa</h2>
       <button class="btn-volver" (click)="volverAHistorial()">
@@ -10,152 +9,201 @@
     </div>
 
     @if (isLoading) {
-      <div class="text-center p-5">
-        <div class="spinner-border" role="status" style="color: #850e35;">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-2">Cargando detalles del programa...</p>
+    <div class="text-center p-5">
+      <div class="spinner-border" role="status" style="color: #850e35">
+        <span class="visually-hidden">Cargando...</span>
       </div>
-    }
+      <p class="mt-2">Cargando detalles del programa...</p>
+    </div>
+    } @if (errorMessage && !isLoading) {
+    <div class="alert alert-danger text-center">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMessage }}
+    </div>
+    } @if (!isLoading && programa) {
+    <div
+      class="card-section header-card"
+      [class.diagnostico]="programa.tipo === 'diagnostico'"
+      [class.puerperio]="programa.tipo === 'puerperio'"
+    >
+      <h3 class="card-title">
+        @if(programa.tipo === 'diagnostico'){
+        <i class="bi bi-clipboard-heart-fill"></i> Programa Diagnóstico } @else {
+        <i class="bi bi-folder2-open"></i> Programa Puerperio }
+      </h3>
+      <div class="detail-grid">
+        <p>
+          <strong>Paciente:</strong> {{ programa.paciente?.nombre }}
+          {{ programa.paciente?.apellido }}
+        </p>
+        <p><strong>DNI Paciente:</strong> {{ programa.paciente?.dni }}</p>
+        <p>
+          <strong>ID Programa:</strong>
+          {{ $any(programa).id_programadiagnostico || $any(programa).id_programapuerperio }}
+        </p>
+        <p><strong>Fecha Inicio:</strong> {{ programa.fecha_inicio | date : 'dd/MM/yyyy' }}</p>
 
-    @if (errorMessage && !isLoading) {
-      <div class="alert alert-danger text-center">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        {{ errorMessage }}
+        @if(programa.tipo === 'diagnostico'){
+        <p><strong>Gestación N°:</strong> {{ programa.numero_gestacion }}</p>
+        <p><strong>FPP:</strong> {{ programa.fecha_probableparto | date : 'dd/MM/yyyy' }}</p>
+        <p class="span-full">
+          <strong>Factor de Riesgo:</strong> {{ programa.factor_riesgo || 'No registrado' }}
+        </p>
+        } @if(programa.tipo === 'puerperio'){
+        <p><strong>Tipo de Parto:</strong> {{ programa.tipo_parto }}</p>
+        <p class="span-full">
+          <strong>Complicación:</strong> {{ programa.complicacion || 'No registrado' }}
+        </p>
+        }
+        <p class="span-full">
+          <strong>Observación:</strong> {{ programa.observacion || 'No registrado' }}
+        </p>
       </div>
-    }
+    </div>
 
-    @if (!isLoading && programa) {
-      <div class="card-section header-card" [class.diagnostico]="programa.tipo === 'diagnostico'" [class.puerperio]="programa.tipo === 'puerperio'">
-        <h3 class="card-title">
-          @if(programa.tipo === 'diagnostico'){
-            <i class="bi bi-clipboard-heart-fill"></i> Programa Diagnóstico
-          } @else {
-            <i class="bi bi-folder2-open"></i> Programa Puerperio
-          }
-        </h3>
-        <div class="detail-grid">
-          <p><strong>Paciente:</strong> {{ programa.paciente?.nombre }} {{ programa.paciente?.apellido }}</p>
-          <p><strong>DNI Paciente:</strong> {{ programa.paciente?.dni }}</p>
-         <p><strong>ID Programa:</strong> {{ $any(programa).id_programadiagnostico || $any(programa).id_programapuerperio }}</p>
-          <p><strong>Fecha Inicio:</strong> {{ programa.fecha_inicio | date:'dd/MM/yyyy' }}</p>
-          
-          @if(programa.tipo === 'diagnostico'){
-            <p><strong>Gestación N°:</strong> {{ programa.numero_gestacion }}</p>
-            <p><strong>FPP:</strong> {{ programa.fecha_probableparto | date:'dd/MM/yyyy' }}</p>
-            <p class="span-full"><strong>Factor de Riesgo:</strong> {{ programa.factor_riesgo || 'No registrado' }}</p>
-          }
-          @if(programa.tipo === 'puerperio'){
-            <p><strong>Tipo de Parto:</strong> {{ programa.tipo_parto }}</p>
-            <p class="span-full"><strong>Complicación:</strong> {{ programa.complicacion || 'No registrado' }}</p>
-          }
-          <p class="span-full"><strong>Observación:</strong> {{ programa.observacion || 'No registrado' }}</p>
-        </div>
-      </div>
+    <div class="tabs-section">
+      <ul class="nav nav-tabs" id="detalleTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="controles-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#controles"
+            type="button"
+            role="tab"
+            aria-controls="controles"
+            aria-selected="true"
+          >
+            <i class="bi bi-clipboard2-pulse-fill me-2"></i>
+            Controles ({{ controles.length }})
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="analisis-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#analisis"
+            type="button"
+            role="tab"
+            aria-controls="analisis"
+            aria-selected="false"
+          >
+            <i class="bi bi-file-earmark-medical me-2"></i>
+            Análisis del Programa ({{ analisis.length }})
+          </button>
+        </li>
+      </ul>
 
-      <div class="tabs-section">
-        <ul class="nav nav-tabs" id="detalleTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="controles-tab" data-bs-toggle="tab" data-bs-target="#controles" type="button" role="tab" aria-controls="controles" aria-selected="true">
-              <i class="bi bi-clipboard2-pulse-fill me-2"></i>
-              Controles ({{ controles.length }})
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="analisis-tab" data-bs-toggle="tab" data-bs-target="#analisis" type="button" role="tab" aria-controls="analisis" aria-selected="false">
-              <i class="bi bi-file-earmark-medical me-2"></i>
-              Análisis del Programa ({{ analisis.length }})
-            </button>
-          </li>
-        </ul>
-
-        <div class="tab-content" id="detalleTabsContent">
-          <div class="tab-pane fade show active" id="controles" role="tabpanel" aria-labelledby="controles-tab">
-            @if (controles.length > 0) {
-              <div class="ctrl-accordion">
-                @for (c of controles; track getControlId(c); let i = $index) {
-                  <div class="ctrl-card">
-                    <div class="ctrl-card-header" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + i">
-                      <button class="ctrl-accordion-btn" type="button" [attr.aria-expanded]="i === 0 ? 'true' : 'false'">
-                        <i class="bi bi-clipboard2-pulse-fill fs-5"></i>
-                        {{ getControlId(c) }}
-                        <span class="ctrl-date-badge">
-                          {{ getControlFecha(c) | date:'dd/MM/yyyy HH:mm' }}
-                        </span>
-                        <i class="bi bi-chevron-down ctrl-chevron"></i>
-                      </button>
-                      <div class="ctrl-actions">
-                        <button class="btn-action btn-edit-action" title="Editar Control" (click)="editarControl(c); $event.stopPropagation()">
-                          <i class="bi bi-pencil-square"></i>
-                        </button>
-                         <button class="btn-action btn-analisis-action" title="Ver Análisis del Control" (click)="verAnalisisControl(c); $event.stopPropagation()">
-                          <i class="bi bi-file-earmark-medical"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div [id]="'collapse-' + i" class="accordion-collapse collapse" [class.show]="i === 0">
-                      <div class="ctrl-card-body">
-                         @if(programa.tipo === 'diagnostico'){
-                                <p><strong>Semana Gestación:</strong> {{ $any(c).semana_gestacion }}</p>
-                            }
-                        <p><strong>Peso:</strong> {{ c.peso }} kg | <strong>Talla:</strong> {{ c.talla }} m | <strong>P.A:</strong> {{c.presion_arterial}}</p>
-                        <p><strong>Observación:</strong> {{ c.observacion || 'Sin registro' }}</p>
-                      </div>
-                    </div>
-                  </div>
-                }
-              </div>
-            } @else {
-              <div class="no-results-tab">
-                <i class="bi bi-clipboard-x"></i>
-                <p>No se encontraron controles para este programa.</p>
+      <div class="tab-content" id="detalleTabsContent">
+        <div
+          class="tab-pane fade show active"
+          id="controles"
+          role="tabpanel"
+          aria-labelledby="controles-tab"
+        >
+          @if (controles.length > 0) {
+          <div class="ctrl-accordion">
+            @for (c of controles; track getControlId(c); let i = $index) {
+            <div class="ctrl-card">
+              <div
+                class="ctrl-card-header"
+                data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapse-' + i"
+              >
+                <button
+                  class="ctrl-accordion-btn"
+                  type="button"
+                  [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
+                >
+                  <i class="bi bi-clipboard2-pulse-fill fs-5"></i>
+                  {{ getControlId(c) }}
+                  <span class="ctrl-date-badge">
+                    {{ getControlFecha(c) | date : 'dd/MM/yyyy HH:mm' }}
+                  </span>
+                  <i class="bi bi-chevron-down ctrl-chevron"></i>
+                </button>
+                <div class="ctrl-actions">
+                  <button
+                    class="btn-action btn-analisis-action"
+                    title="Ver Análisis del Control"
+                    (click)="verAnalisisControl(c); $event.stopPropagation()"
+                  >
+                    <i class="bi bi-file-earmark-medical">Ver análisis</i>
+                  </button>
                 </div>
+              </div>
+              <div
+                [id]="'collapse-' + i"
+                class="accordion-collapse collapse"
+                [class.show]="i === 0"
+              >
+                <div class="ctrl-card-body">
+                  @if(programa.tipo === 'diagnostico'){
+                  <p><strong>Semana Gestación:</strong> {{ $any(c).semana_gestacion }}</p>
+                  }
+                  <p>
+                    <strong>Peso:</strong> {{ c.peso }} kg | <strong>Talla:</strong> {{ c.talla }} m
+                    | <strong>P.A:</strong> {{ c.presion_arterial }}
+                  </p>
+                  <p><strong>Observación:</strong> {{ c.observacion || 'Sin registro' }}</p>
+                </div>
+              </div>
+            </div>
             }
           </div>
+          } @else {
+          <div class="no-results-tab">
+            <i class="bi bi-clipboard-x"></i>
+            <p>No se encontraron controles para este programa.</p>
+          </div>
+          }
+        </div>
 
-          <div class="tab-pane fade" id="analisis" role="tabpanel" aria-labelledby="analisis-tab">
-            @if (analisis.length > 0) {
-              <div class="analisis-grid">
-                @for (res of analisis; track res.id_resultado_analisis) {
-                  <div class="analisis-card tile-card">
-                    <div class="card-body-custom">
-                      <h6 class="analisis-name">
-                        <i class="bi bi-folder2-open"></i>
-                        {{ res.analisis?.nombre_analisis || 'Análisis' }}
-                        
-                      </h6>
-                      <span class="analisis-id">#{{ res.id_resultado_analisis }}</span>
-                      <div class="info-item">
-                        <i class="bi bi-calendar-event"></i>
-                        <strong>F. Realización:</strong>
-                        <span class="ms-2">{{ res.fecha_realizacion | date: 'dd/MM/yyyy' }}</span>
-                      </div>
-                      <div class="info-item">
-                        <i class="bi bi-building"></i>
-                        <strong>Laboratorio:</strong>
-                        <span class="ms-2">{{ res.laboratorio }}</span>
-                      </div>
-                    </div>
-                    <div class="card-footer-custom">
-                      <a [routerLink]="['/consulta-resultados-analisis', res.id_resultado_analisis]" class="btn-action-full btn-info-action">
-                        <i class="bi bi-info-circle-fill me-2"></i>
-                        Ver Detalles
-                      </a>
-                    </div>
-                  </div>
-                }
+        <div class="tab-pane fade" id="analisis" role="tabpanel" aria-labelledby="analisis-tab">
+          @if (analisis.length > 0) {
+          <div class="analisis-grid">
+            @for (res of analisis; track res.id_resultado_analisis) {
+            <div class="analisis-card tile-card">
+              <div class="card-body-custom">
+                <h6 class="analisis-name">
+                  <i class="bi bi-folder2-open"></i>
+                  {{ res.analisis?.nombre_analisis || 'Análisis' }}
+                </h6>
+                <span class="analisis-id">#{{ res.id_resultado_analisis }}</span>
+                <div class="info-item">
+                  <i class="bi bi-calendar-event"></i>
+                  <strong>F. Realización:</strong>
+                  <span class="ms-2">{{ res.fecha_realizacion | date : 'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-item">
+                  <i class="bi bi-building"></i>
+                  <strong>Laboratorio:</strong>
+                  <span class="ms-2">{{ res.laboratorio }}</span>
+                </div>
               </div>
-            } @else {
-              <div class="no-results-tab">
-                <i class="bi bi-file-earmark-slides"></i>
-                <p>No se encontraron análisis para este programa.</p>
-                <p class="text-muted small">Recuerda que los análisis se agregan desde un control.</p>
+              <div class="card-footer-custom">
+                <a
+                  [routerLink]="['/consulta-resultados-analisis', res.id_resultado_analisis]"
+                  class="btn-action-full btn-info-action"
+                >
+                  <i class="bi bi-info-circle-fill me-2"></i>
+                  Ver Detalles
+                </a>
               </div>
+            </div>
             }
           </div>
+          } @else {
+          <div class="no-results-tab">
+            <i class="bi bi-file-earmark-slides"></i>
+            <p>No se encontraron análisis para este programa.</p>
+            <p class="text-muted small">Recuerda que los análisis se agregan desde un control.</p>
+          </div>
+          }
         </div>
       </div>
+    </div>
     }
-
   </div>
 </div>

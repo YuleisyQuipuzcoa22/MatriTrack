@@ -33,8 +33,12 @@
 .header-card {
   border-left: 5px solid #850e35;
 }
-.header-card.diagnostico { border-left-color: #17a2b8; }
-.header-card.puerperio { border-left-color: #28a745; }
+.header-card.diagnostico {
+  border-left-color: #17a2b8;
+}
+.header-card.puerperio {
+  border-left-color: #28a745;
+}
 
 .card-title {
   font-size: 1.5rem;
@@ -46,8 +50,12 @@
   align-items: center;
   gap: 0.75rem;
 }
-.header-card.diagnostico .card-title { color: #17a2b8; }
-.header-card.puerperio .card-title { color: #28a745; }
+.header-card.diagnostico .card-title {
+  color: #17a2b8;
+}
+.header-card.puerperio .card-title {
+  color: #28a745;
+}
 
 .detail-grid {
   display: grid;
@@ -113,30 +121,155 @@
 }
 
 /* --- Estilos Reutilizados (Controles y Análisis) --- */
-.ctrl-card { border: 1px solid #e0e0e0; border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; }
-.ctrl-card-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; background: #fafafa; border-bottom: 1px solid #eee; cursor: pointer; }
-.ctrl-accordion-btn { flex: 1; background: none; border: none; display: flex; align-items: center; gap: 1rem; font-size: 1.1rem; font-weight: 600; color: var(--color-vino-claro); text-align: left; }
-.ctrl-date-badge { font-size: 0.9rem; font-weight: 500; color: #fff; background-color: var(--color-rosado); padding: 0.25rem 0.75rem; border-radius: 15px; }
-.ctrl-chevron { color: var(--color-rosado); transition: transform 0.3s ease; }
-.ctrl-accordion-btn[aria-expanded='true'] .ctrl-chevron { transform: rotate(180deg); }
-.ctrl-actions { display: flex; align-items: center; gap: 0.5rem; }
-.btn-action { border: none; width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; cursor: pointer; }
-.btn-edit-action { background-color: #ffc107; color: #856404; }
-.btn-edit-action:hover { background-color: #e0a800; color: #fff; }
-.btn-analisis-action { background-color: #17a2b8; color: white; }
-.btn-analisis-action:hover { background-color: #138496; }
-.ctrl-card-body { padding: 1.25rem 1.5rem; background: #fff; border-top: 1px solid #eee; }
+.ctrl-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+.ctrl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.ctrl-accordion-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-vino-claro);
+  text-align: left;
+}
+.ctrl-date-badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--color-rosado);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+}
+.ctrl-chevron {
+  color: var(--color-rosado);
+  transition: transform 0.3s ease;
+}
+.ctrl-accordion-btn[aria-expanded='true'] .ctrl-chevron {
+  transform: rotate(180deg);
+}
+.ctrl-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-action {
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.btn-edit-action {
+  background-color: #ffc107;
+  color: #856404;
+}
+.btn-edit-action:hover {
+  background-color: #e0a800;
+  color: #fff;
+}
+.btn-analisis-action {
+  background-color: #17a2b8;
+  color: white;
+  width: auto;
+}
+.btn-analisis-action:hover {
+  background-color: #138496;
+}
+.ctrl-card-body {
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
 
-.analisis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-.analisis-card { background: white; border-radius: 0.75rem; border: 1px solid #e9ecef; transition: all 0.25s ease; overflow: hidden; }
-.analisis-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(133, 14, 53, 0.1); }
-.card-body-custom { padding: 1rem 1.2rem; }
-.analisis-name { color: #850e35; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem; }
-.analisis-id { color: #6c757d; font-size: 0.85rem; font-weight: 500; }
-.info-item { display: flex; align-items: center; padding: 0.4rem 0; color: #495057; font-size: 0.9rem; }
-.info-item i { color: #ee6983; width: 20px; margin-right: 0.5rem; }
-.info-item strong { color: #212529; }
-.card-footer-custom { background-color: #f8f9fa; padding: 0.75rem; border-top: 1px solid #e9ecef; }
-.btn-action-full { display: block; width: 100%; text-align: center; text-decoration: none; border: none; padding: 0.6rem 1rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; }
-.btn-info-action { background-color: #850e35; color: white; }
-.btn-info-action:hover { background-color: #670727; }
+.analisis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.analisis-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  display: flex; /* La tarjeta es un contenedor flexible */
+  flex-direction: column; /* Apila los hijos (body y footer) verticalmente */
+}
+.analisis-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(133, 14, 53, 0.1);
+}
+.card-body-custom {
+  padding: 1rem 1.2rem;
+  flex-grow: 1;
+}
+.analisis-name {
+  color: #850e35;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+}
+.analisis-id {
+  color: #6c757d;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0;
+  color: #495057;
+  font-size: 0.9rem;
+}
+.info-item i {
+  color: #ee6983;
+  width: 20px;
+  margin-right: 0.5rem;
+}
+.info-item strong {
+  color: #212529;
+}
+.card-footer-custom {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-top: 1px solid #e9ecef;
+}
+.btn-action-full {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.btn-info-action {
+  background-color: #850e35;
+  color: white;
+}
+.btn-info-action:hover {
+  background-color: #670727;
+}

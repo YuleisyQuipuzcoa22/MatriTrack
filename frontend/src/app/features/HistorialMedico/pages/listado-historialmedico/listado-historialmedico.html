@@ -168,7 +168,7 @@
         }
         <div class="info-row">
           <strong>Fecha de inicio historial:</strong>
-          {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial }}
+          {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial | date : 'dd/MM/yyyy HH:mm' }}
         </div>
         <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
         <div class="info-row">

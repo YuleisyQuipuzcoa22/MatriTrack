@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProgramaDiagnosticoListComponent } from '../../../ProgramaDiagnostico/pages/programa-diagnostico-list.component/list-programadiagnostico';
-import { ListarProgramapuerperio } from '../../../Puerperio/ProgramaPuerperio/Pages/listar-programapuerperio/listar-programapuerperio';
 import { HistorialMedicoCompleto } from '../../model/historial-medico';
 import { HistorialmedicoService } from '../../services/historialmedico.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-programas-historialmedico',
