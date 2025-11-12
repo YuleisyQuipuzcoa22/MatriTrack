@@ -2,6 +2,7 @@ import { TipoSangre } from 'src/enums/TipoSangre';
 import { CreateHistorialMedicoDto } from '../Dto/create-historialMedico.dto';
 import { ResponseHistorialMedicoDto } from '../Dto/response-historialMedico.dto';
 import { HistorialMedico } from '../model/historial_medico.entity';
+import { UpdateHistorialMedicoDto } from '../Dto/updateHistorialMedico.dto';
 
 export class HistorialMedicoMapper {
   static toResponseDto(historial: HistorialMedico): ResponseHistorialMedicoDto {
@@ -30,4 +31,20 @@ export class HistorialMedicoMapper {
     historial.tipo_sangre = createDto.tipo_sangre || TipoSangre.O_POSITIVO;
     return historial;
   }
+
+  static updateEntity(
+  historial: HistorialMedico,
+  updateDto: UpdateHistorialMedicoDto,
+): HistorialMedico {
+  if (updateDto.antecedente_medico !== undefined) {
+    historial.antecedente_medico = updateDto.antecedente_medico || null;
+  }
+  if (updateDto.alergia !== undefined) {
+    historial.alergia = updateDto.alergia || null;
+  }
+  if (updateDto.tipo_sangre !== undefined) {
+    historial.tipo_sangre = updateDto.tipo_sangre;
+  }
+  return historial;
+}
 }

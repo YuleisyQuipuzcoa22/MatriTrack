@@ -3,7 +3,7 @@ import { ProgramaDiagnosticoService } from '../../ProgramaDiagnostico/services/p
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../../../../core/API_Response-interfaces/api-response.model';
-import { HistorialMedicoCompleto } from '../model/historial-medico';
+import { HistorialMedico, HistorialMedicoCompleto } from '../model/historial-medico';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,20 @@ export class HistorialmedicoService {
 
     return this.http
       .get<ApiResponse<HistorialMedicoCompleto>>(url)
+      .pipe(map((response) => response.data));
+  }
+
+  updateHistorialMedico(
+    idHistorial: string,
+    data: {
+      antecedente_medico?: string;
+      alergia?: string;
+      tipo_sangre?: string;
+    }
+  ): Observable<HistorialMedico> {
+    const url = `${this.apiUrl}/${idHistorial}`;
+    return this.http
+      .put<ApiResponse<HistorialMedico>>(url, data)
       .pipe(map((response) => response.data));
   }
 }
