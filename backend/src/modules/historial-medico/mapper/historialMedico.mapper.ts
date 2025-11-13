@@ -5,16 +5,28 @@ import { HistorialMedico } from '../model/historial_medico.entity';
 
 export class HistorialMedicoMapper {
   static toResponseDto(historial: HistorialMedico): ResponseHistorialMedicoDto {
-    return {
+    
+    const response: ResponseHistorialMedicoDto = {
       id_historialmedico: historial.id_historialmedico,
       antecedente_medico: historial.antecedente_medico,
       alergia: historial.alergia,
       tipo_sangre: historial.tipo_sangre,
       fecha_iniciohistorial: historial.fecha_iniciohistorial,
-      // Agregando las colecciones de programas
-      programasDiagnostico: historial.programasDiagnostico, // Se incluye si fue cargada la relación
-      programasPuerperio: historial.programasPuerperio, // Se incluye si fue cargada la relación
+      programasDiagnostico: historial.programasDiagnostico,
+      programasPuerperio: historial.programasPuerperio,
     };
+    
+
+    if (historial.paciente) {
+      response.paciente = {
+        id_paciente: historial.paciente.id_paciente,
+        nombre: historial.paciente.nombre,
+        apellido: historial.paciente.apellido,
+        dni: historial.paciente.dni,
+      };
+    }
+
+    return response;
   }
 
   static toEntity(

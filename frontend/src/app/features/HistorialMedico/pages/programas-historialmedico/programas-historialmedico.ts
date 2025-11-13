@@ -17,6 +17,9 @@ export class ProgramasHistorialmedico implements OnInit {
   idPaciente: string | null = null;
   idHistorial: string | null = null;
 
+  //nombre a mostrar 
+  nombrePaciente: string = 'Cargando...';
+
   // Control de interfaz
   isLoading: boolean = true;
   error: string | null = null;
@@ -36,6 +39,7 @@ export class ProgramasHistorialmedico implements OnInit {
       } else {
         this.error = 'ID de Paciente no encontrado en la ruta.';
         this.isLoading = false;
+        this.nombrePaciente= 'Error'
       }
     });
   }
@@ -48,6 +52,14 @@ export class ProgramasHistorialmedico implements OnInit {
       next: (data) => {
         this.historialCompleto = data;
         this.idHistorial = data.id_historialmedico;
+
+        if (data.paciente) {
+          this.nombrePaciente = `${data.paciente.nombre} ${data.paciente.apellido}`;
+        } else {
+          this.nombrePaciente = 'Paciente no encontrado';
+        }
+
+        
         this.isLoading = false;
       },
       error: (err) => {

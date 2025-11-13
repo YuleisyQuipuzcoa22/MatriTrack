@@ -31,7 +31,7 @@ export class HistorialMedicoService {
   async findByPacienteId(id_paciente: string): Promise<ResponseHistorialMedicoDto> {
     const historial = await this.historialMedicoRepository.findOne({
       where: { id_paciente },
-      relations: ['programasDiagnostico', 'programasPuerperio'],
+      relations: ['programasDiagnostico', 'programasPuerperio', 'paciente'],
     });
 
     if (!historial) {

@@ -2,7 +2,7 @@
     <h2>Historial Médico Detallado</h2>
     
     <div class="header-info">
-        <p>Paciente ID: <strong>{{ idPaciente || 'Cargando...' }}</strong></p>
+       <p>Paciente: <strong>{{ nombrePaciente }}</strong></p>
         @if (historialCompleto) {
             <p>Historial ID: <strong>{{ historialCompleto.id_historialmedico }}</strong></p>
         }
