@@ -1,7 +1,16 @@
-// historial-medico.controller.ts
-import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Put,
+} from '@nestjs/common';
 import { HistorialMedicoService } from './historial-medico.service';
 import { ResponseHistorialMedicoDto } from './Dto/response-historialMedico.dto';
+import { UpdateHistorialMedicoDto } from './Dto/updateHistorialMedico.dto';
 
 @Controller('historial-medico')
 export class HistorialMedicoController {
@@ -37,6 +46,22 @@ export class HistorialMedicoController {
       await this.historialMedicoService.findByPacienteId(id_paciente);
     return {
       message: 'Historial médico obtenido exitosamente',
+      data: historial,
+    };
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('id') id: string,
+    @Body() updateHistorialMedicoDto: UpdateHistorialMedicoDto,
+  ) {
+    const historial = await this.historialMedicoService.update(
+      id,
+      updateHistorialMedicoDto,
+    );
+    return {
+      message: 'Historial médico actualizado exitosamente',
       data: historial,
     };
   }

@@ -106,6 +106,13 @@ export class ListarControles implements OnInit {
     this.router.navigate(['/diagnostico']);
   }
 
+  verAnalisis(controlId: string): void {
+    if (this.programaId) {
+      this.router.navigate(['/diagnostico', this.programaId, 'control', controlId, 'resultados']);
+    }
+  }
+
+
   crearControl(): void {
     if (this.programaId)
       this.router.navigate(['/diagnostico', this.programaId, 'controles', 'crear']);
@@ -114,11 +121,6 @@ export class ListarControles implements OnInit {
   editarControl(cid: string): void {
     if (this.programaId)
       this.router.navigate(['/diagnostico', this.programaId, 'controles', 'editar', cid]);
-  }
-
-  verAnalisis(cid: string): void {
-    if (this.programaId)
-      this.router.navigate(['/diagnostico', this.programaId, 'controles', cid, 'analisis']);
   }
 
 }

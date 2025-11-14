@@ -123,6 +123,9 @@ h2 {
     overflow: hidden;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+    text-decoration: none; 
+    color: inherit;
 }
 
 .program-item:hover {

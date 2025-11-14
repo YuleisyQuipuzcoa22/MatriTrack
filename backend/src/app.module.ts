@@ -1,4 +1,3 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,16 +21,15 @@ import { ControlDiagnosticoModule } from './modules/control-diagnostico/control-
 import { AnalisisModule } from './modules/analisis/analisis.module';
 import { ProgramaPuerperioModule } from './modules/programa-puerperio/programa-puerperio.module';
 import { ControlPuerperioModule } from './modules/control-puerperio/control-puerperio.module';
+import { ResultadoAnalisisModule } from './modules/resultado-analisis/resultado-analisis.module';
 
 @Module({
   imports: [
-    // 1. PRIMERO: Cargar variables de entorno
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // 2. SEGUNDO: Usar las variables con ConfigService
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -51,7 +49,6 @@ import { ControlPuerperioModule } from './modules/control-puerperio/control-puer
           ControlPuerperio,
           Analisis,
           ResultadoAnalisis,
-          // Agrega cualquier otra entidad aquí, por ejemplo: Usuario
         ],
         synchronize: true,
         logging: false,
@@ -60,7 +57,6 @@ import { ControlPuerperioModule } from './modules/control-puerperio/control-puer
       inject: [ConfigService],
     }),
 
-    //AQUI SE DEBEN REGISTRAR LOS MODULOS
 
     AuthModule,
     UsuarioModule,
@@ -71,6 +67,7 @@ import { ControlPuerperioModule } from './modules/control-puerperio/control-puer
     AnalisisModule,
     ProgramaPuerperioModule,
     ControlPuerperioModule,
+    ResultadoAnalisisModule
   ],
   controllers: [AppController],
   providers: [AppService],

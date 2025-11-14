@@ -7,6 +7,13 @@ export interface HistorialMedico {
   alergia: string | null;
   tipo_sangre: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   fecha_iniciohistorial: string;
+
+  paciente?: {
+    id_paciente: string;
+    nombre: string;
+    apellido: string;
+    dni: string;
+  };
 }
 
 export interface HistorialMedicoCompleto extends HistorialMedico {

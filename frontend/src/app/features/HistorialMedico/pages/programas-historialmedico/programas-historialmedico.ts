@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ProgramaDiagnosticoListComponent } from '../../../ProgramaDiagnostico/pages/programa-diagnostico-list.component/list-programadiagnostico';
-import { ListarProgramapuerperio } from '../../../Puerperio/ProgramaPuerperio/Pages/listar-programapuerperio/listar-programapuerperio';
 import { HistorialMedicoCompleto } from '../../model/historial-medico';
 import { HistorialmedicoService } from '../../services/historialmedico.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-programas-historialmedico',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './programas-historialmedico.html',
   styleUrl: './programas-historialmedico.css'
 })
@@ -20,19 +17,20 @@ export class ProgramasHistorialmedico implements OnInit {
   idPaciente: string | null = null;
   idHistorial: string | null = null;
 
+  //nombre a mostrar 
+  nombrePaciente: string = 'Cargando...';
+
   // Control de interfaz
   isLoading: boolean = true;
   error: string | null = null;
 
   constructor(
     private historialMedicoService: HistorialmedicoService,
-    private route: ActivatedRoute // Inyectamos ActivatedRoute para obtener la URL
+    private route: ActivatedRoute 
   ) {}
 
   ngOnInit(): void {
-    // 1. Obtener el ID del paciente de la ruta
-    // Usamos paramMap.get('id_paciente') porque asumo que tu ruta es algo como:
-    // path: 'historial/:id_paciente'
+    // obtenemos el ID del paciente de la ruta
     this.route.paramMap.subscribe(params => {
       this.idPaciente = params.get('id_paciente');
 
@@ -41,6 +39,7 @@ export class ProgramasHistorialmedico implements OnInit {
       } else {
         this.error = 'ID de Paciente no encontrado en la ruta.';
         this.isLoading = false;
+        this.nombrePaciente= 'Error'
       }
     });
   }
@@ -53,6 +52,14 @@ export class ProgramasHistorialmedico implements OnInit {
       next: (data) => {
         this.historialCompleto = data;
         this.idHistorial = data.id_historialmedico;
+
+        if (data.paciente) {
+          this.nombrePaciente = `${data.paciente.nombre} ${data.paciente.apellido}`;
+        } else {
+          this.nombrePaciente = 'Paciente no encontrado';
+        }
+
+        
         this.isLoading = false;
       },
       error: (err) => {

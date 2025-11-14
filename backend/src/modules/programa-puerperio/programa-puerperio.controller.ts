@@ -73,7 +73,7 @@ export class ProgramaPuerperioController {
   }
 
   @Put(':id')
-  @Roles(RolUsuario.OBSTETRA)
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA)
   @HttpCode(HttpStatus.OK)
   async actualizar(
     @Param('id') id: string,
@@ -84,7 +84,7 @@ export class ProgramaPuerperioController {
   }
 
   @Patch(':id/finalizar')
-  @Roles(RolUsuario.OBSTETRA)
+  @Roles(RolUsuario.ADMINISTRADOR, RolUsuario.OBSTETRA)
   @HttpCode(HttpStatus.OK)
   async finalizar(
     @Param('id') id: string,

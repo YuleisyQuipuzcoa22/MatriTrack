@@ -14,11 +14,9 @@ import { ControlDiagnostico } from 'src/modules/control-diagnostico/model/contro
 
 @Entity('resultado_analisis')
 export class ResultadoAnalisis {
-  // PK: char(7)
   @PrimaryColumn({ type: 'char', length: 7 })
   id_resultado_analisis!: string;
 
-  // FK para ControlMedicoDiagnostico (puede ser NULL)
 
   @Column({ type: 'char', length: 7, nullable: true })
   id_control_diagnostico: string | null = null;
@@ -27,7 +25,6 @@ export class ResultadoAnalisis {
   @JoinColumn({ name: 'id_control_diagnostico' })
   controlMedicoDiagnostico?: ControlDiagnostico;
 
-  // FK para ControlMedicoPuerperio (puede ser NULL)
   @Column({ type: 'char', length: 7, nullable: true })
   id_control_puerperio: string | null = null;
 
@@ -35,21 +32,18 @@ export class ResultadoAnalisis {
   @JoinColumn({ name: 'id_control_puerperio' })
   controlMedicoPuerperio?: ControlPuerperio;
 
-  // FK para Analisis (obligatorio)
   @Column({ type: 'char', length: 6, nullable: false })
   id_analisis!: string;
   @ManyToOne(() => Analisis)
   @JoinColumn({ name: 'id_analisis' })
   analisis!: Analisis;
 
-  // Fechas
   @CreateDateColumn({ type: 'datetime' })
   fecha_registro!: Date;
 
   @Column({ type: 'date', nullable: false })
   fecha_realizacion!: Date;
 
-  // Datos del análisis
   @Column({ type: 'varchar', length: 150, nullable: false })
   laboratorio!: string;
 
@@ -58,4 +52,8 @@ export class ResultadoAnalisis {
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   observacion: string | null = null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  ruta_pdf: string | null = null;
+
 }

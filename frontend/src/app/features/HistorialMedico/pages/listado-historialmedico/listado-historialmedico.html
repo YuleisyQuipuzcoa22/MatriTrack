@@ -68,6 +68,14 @@
     {{ conteoResultados }} historial(es) médico(s) encontrado(s)
   </p>
 
+  @if (isLoading) {
+  <div class="text-center p-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando historiales médicos...</p>
+  </div>
+  } @if(!isLoading){
   <!-- GRID DE CARDS -->
   <!-- En lugar de las cards, usa esto -->
   <div class="historiales-table-container">
@@ -80,7 +88,10 @@
     <div class="historial-row">
       <div class="historial-info">
         <div class="info-col">
-          <span class="info-label">Paciente</span>
+          <span class="info-label"
+            >Historial médico #{{ historial.historial_medico.id_historialmedico }}</span
+          >
+
           <span class="info-value primary">
             <i class="bi bi-person-circle"></i>
             {{ historial.nombre }} {{ historial.apellido }}
@@ -99,7 +110,7 @@
           <span class="info-value">{{ historial.telefono }}</span>
         </div>
         <div class="info-col">
-          <span class="info-label">Estado</span>
+          
           <span [ngClass]="getEstadoClase(historial.estado)">
             {{ getEstadoTexto(historial.estado) }}
           </span>
@@ -114,13 +125,6 @@
           data-bs-target="#modalInfo"
         >
           <i class="bi bi-info-circle-fill"></i>
-        </button>
-        <button
-          class="btn-action btn-edit-action"
-          title="Editar"
-          [routerLink]="['editar', historial.id_paciente]"
-        >
-          <i class="bi bi-pencil-square"></i>
         </button>
 
         <button
@@ -141,6 +145,8 @@
     </div>
     }
   </div>
+
+  }
 </div>
 
 <!-- MODAL -->
@@ -168,7 +174,9 @@
         }
         <div class="info-row">
           <strong>Fecha de inicio historial:</strong>
-          {{ pacienteSeleccionado.historial_medico.fecha_iniciohistorial }}
+          {{
+            pacienteSeleccionado.historial_medico.fecha_iniciohistorial | date : 'dd/MM/yyyy HH:mm'
+          }}
         </div>
         <div class="info-row"><strong>DNI:</strong> {{ pacienteSeleccionado.dni }}</div>
         <div class="info-row">
@@ -195,6 +203,111 @@
           <strong>Tipo de sangre:</strong>
           {{ pacienteSeleccionado.historial_medico.tipo_sangre || 'No especificado' }}
         </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR HISTORIAL MÉDICO -->
+<div class="modal fade" id="modalEditarHistorial" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      @if (historialEditando) {
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-pencil-square me-2"></i>
+          Editar Historial Médico
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          (click)="cancelarEdicion()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Antecedentes Médicos -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-clipboard2-pulse me-2"></i>
+              Antecedentes Médicos
+            </label>
+            <textarea
+              class="form-control"
+              rows="3"
+              maxlength="500"
+              placeholder="Ingrese antecedentes médicos..."
+              [(ngModel)]="historialEditando.antecedente_medico"
+              name="antecedente_medico"
+            ></textarea>
+            <small class="form-text text-muted">
+              {{ historialEditando.antecedente_medico.length || 0 }}/500 caracteres
+            </small>
+          </div>
+
+          <!-- Alergias -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Alergias
+            </label>
+            <textarea
+              class="form-control"
+              rows="3"
+              maxlength="500"
+              placeholder="Ingrese alergias conocidas..."
+              [(ngModel)]="historialEditando.alergia"
+              name="alergia"
+            ></textarea>
+            <small class="form-text text-muted">
+              {{ historialEditando.alergia.length || 0 }}/500 caracteres
+            </small>
+          </div>
+
+          <!-- Tipo de Sangre -->
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-droplet-fill me-2"></i>
+              Tipo de Sangre
+            </label>
+            <select
+              class="form-select"
+              [(ngModel)]="historialEditando.tipo_sangre"
+              name="tipo_sangre"
+              required
+            >
+              @for (tipo of tiposSangre; track tipo) {
+              <option [value]="tipo">{{ tipo }}</option>
+              }
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="cancelarEdicion()"
+          [disabled]="isGuardando"
+        >
+          <i class="bi bi-x-circle me-1"></i>
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="guardarCambiosHistorial()"
+          [disabled]="isGuardando"
+        >
+          @if (isGuardando) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Guardando... } @else {
+          <i class="bi bi-check-circle me-1"></i>
+          Guardar Cambios }
+        </button>
       </div>
       }
     </div>
