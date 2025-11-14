@@ -10,7 +10,6 @@ export class PacienteMapper {
     incluirHistorial = false,
   ): ResponsePacienteDto {
     const responseDto: ResponsePacienteDto = {
-      //atributo response: atributo entidad
       id_paciente: paciente.id_paciente,
       nombre: paciente.nombre,
       apellido: paciente.apellido,

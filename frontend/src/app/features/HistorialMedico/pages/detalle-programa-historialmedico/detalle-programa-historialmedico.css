@@ -273,3 +273,40 @@
 .btn-info-action:hover {
   background-color: #670727;
 }
+
+/* Estilos para el grid de detalles dentro del acordeón de control */
+.ctrl-info-grid .info-item {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.ctrl-info-grid .info-item:last-child {
+  border-bottom: none;
+}
+
+.ctrl-info-grid .info-item strong {
+  color: var(--color-vino); /* Asumiendo que tienes esta variable CSS */
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.ctrl-info-grid .info-item p {
+  color: #333;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Botón "Ver Análisis" en el acordeón de control */
+.btn-analisis-action {
+  background-color: #17a2b8; /* Color azul/verde */
+  color: white;
+}
+
+.btn-analisis-action:hover {
+  background-color: #138496; /* Color más oscuro */
+}
