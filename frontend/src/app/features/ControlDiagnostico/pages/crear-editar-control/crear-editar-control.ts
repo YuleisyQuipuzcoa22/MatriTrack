@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ControldiagnosticoService } from '../../service/controldiagnostico.service';
+import { ProgramaDiagnosticoService } from '../../../ProgramaDiagnostico/services/programadiagnostico.service';
 import {
   ControlDiagnostico,
   CreateControlDiagnosticoDto,
@@ -25,7 +26,7 @@ export class CrearEditarControlDiagnostico implements OnInit {
   isEditMode = false;
   isLoading = false;
   errorMessage: string | null = null;
-
+  pacienteNombre: string | null = null;
   fechaCreacion: string | null = null;
 
   constructor(
@@ -33,10 +34,13 @@ export class CrearEditarControlDiagnostico implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private service: ControldiagnosticoService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private programaService: ProgramaDiagnosticoService,
+
   ) {}
 
   ngOnInit(): void {
+
     this.programaId = this.route.snapshot.paramMap.get('id');
     this.controlId = this.route.snapshot.paramMap.get('cid');
     this.isEditMode = !!this.controlId;
@@ -46,11 +50,26 @@ export class CrearEditarControlDiagnostico implements OnInit {
       return;
     }
 
+    this.cargarDatosPrograma(this.programaId);
+
+
     this.initializeForm();
 
     if (this.isEditMode && this.controlId) {
       this.loadControlData(this.programaId, this.controlId);
     }
+  }
+  private cargarDatosPrograma(id_programa:string){
+    this.programaService.getProgramaById(id_programa).subscribe({
+    next: (programa) => {
+      if (programa.paciente) {
+        this.pacienteNombre = `${programa.paciente.nombre} ${programa.paciente.apellido}`;
+      }
+    },
+    error: (err) => {
+      console.error("Error cargando datos del programa:", err);
+    }
+  });
   }
 
   private initializeForm(): void {
@@ -71,14 +90,19 @@ export class CrearEditarControlDiagnostico implements OnInit {
     this.service.obtenerControl(programaId, controlId).subscribe({
       next: (control) => {
         this.controlForm.patchValue(control);
+
         this.fechaCreacion = this.datePipe.transform(control.fecha_controldiagnostico, 'dd/MM/yyyy HH:mm', '-0500');
         this.isLoading = false;
+
       },
       error: (err) => {
         console.error('Error al cargar control:', err);
         this.errorMessage = 'No se pudo cargar el control para edición.';
         this.isLoading = false;
+
+        
       },
+      
     });
   }
 

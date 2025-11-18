@@ -5,6 +5,7 @@ import { ControldiagnosticoService, ControlDiagnosticoFilters } from '../../serv
 import { ControlDiagnostico } from '../../model/controldiagnostico.model';
 import { Paginacion } from '../../../../components/paginacion/paginacion';
 import { FormsModule } from '@angular/forms';
+import { ProgramaDiagnosticoService } from '../../../ProgramaDiagnostico/services/programadiagnostico.service';
 @Component({
   selector: 'app-listar-controles',
   imports: [CommonModule, Paginacion, FormsModule],
@@ -23,20 +24,41 @@ export class ListarControles implements OnInit {
   filtroFechaInicio = '';
   filtroFechaFin = '';
   hayFiltroActivo = false;
+  nombrePaciente: string=''
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private service: ControldiagnosticoService
+    private service: ControldiagnosticoService,
+    private programaService: ProgramaDiagnosticoService 
+
   ) {}
 
 
   ngOnInit(): void {
       this.programaId = this.route.snapshot.paramMap.get('id');
-      if(this.programaId) this.cargarControles();
+      
+      if(this.programaId) {
+        this.cargarDatosPrograma(this.programaId); 
+        this.cargarControles();
+
+      }
     
   }
 
+  
+cargarDatosPrograma(id_programa:string):void{
+  this.programaService.getProgramaById(id_programa).subscribe({
+    next:(programa)=>{
+      if(programa.paciente){
+        this.nombrePaciente =`${programa.paciente.nombre} ${programa.paciente.apellido}`;
+      }
+    },
+    error:(err)=>{
+      console.error('ERROR OBTENIENDO PACIENTE', err)
+    }
+  })
+}
 
  cargarControles(): void {
     if (!this.programaId) return;
