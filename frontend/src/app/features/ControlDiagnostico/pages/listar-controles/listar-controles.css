@@ -7,7 +7,7 @@
   background: #fff;
   border-radius: 12px;
   padding: 20px;
-  max-width: 950px;
+  max-width: 1230px;
   margin: 0 auto;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
@@ -16,13 +16,68 @@
   color: var(--color-vino);
   margin-bottom: 6px;
 }
+.header-patient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+.diagnostico-header {
+  background: linear-gradient(90deg, #fff5f7, #fff);
+  border: 1px solid #f4cdd4;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.icon-box {
+  width: 70px;
+  height: 70px;
+  background-color: #850e35;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-box i {
+  color: white;
+  font-size: 2rem;
+}
+
+.header-badge {
+  background-color: #e67385;
+  color: white;
+  font-weight: 600;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #850e35;
+  margin: 5px 0;
+}
+
+.header-patient {
+  font-size: 1.1rem;
+  color: #850e35;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
 
 .subtitulo {
   color: #666;
   margin-bottom: 12px;
 }
 
-/* Botones */
 .btn-agregar {
   background-color: var(--color-vino);
   color: white;
@@ -54,7 +109,6 @@
   color: var(--color-vino-oscuro);
 }
 
-/* Acordeón */
 .ctrl-card {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
@@ -102,7 +156,6 @@
   transform: rotate(180deg);
 }
 
-/* Acciones */
 .ctrl-actions {
   display: flex;
   align-items: center;

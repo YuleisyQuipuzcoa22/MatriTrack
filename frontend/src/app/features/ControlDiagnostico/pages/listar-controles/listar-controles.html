@@ -1,19 +1,31 @@
 <div class="fondo d-flex justify-content-center align-items-start min-vh-100 py-4">
   <div class="card-container w-100">
-    <div class="header d-flex justify-content-between align-items-center flex-wrap gap-2">
-      <div>
-        <h3 class="titulo">Controles Diagnóstico - Programa {{ programaId }}</h3>
-        <p class="subtitulo">Listado de controles médicos registrados.</p>
-      </div>
-      <div>
-        <button class="btn btn-agregar me-2" (click)="crearControl()">
-          <i class="bi bi-plus-circle me-1"></i> Nuevo Control
-        </button>
-        <button class="btn-volver" (click)="volver()">← Volver</button>
+    <div class="diagnostico-header shadow-sm mb-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
+        <div class="d-flex align-items-center gap-3">
+          <div class="icon-box">
+            <i class="bi bi-clipboard2-pulse-fill"></i>
+          </div>
+          <div>
+            <div class="header-badge">PROGRAMA DIAGNÓSTICO</div>
+
+            <h2 class="header-title">{{ programaId }}</h2>
+            <div class="header-patient">
+              <i class="bi bi-person-circle"></i>
+              <span>{{ nombrePaciente }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+          <button class="btn-agregar" (click)="crearControl()">
+            <i class="bi bi-plus-circle me-1"></i> Nuevo Control
+          </button>
+
+          <button class="btn-volver" (click)="volver()">← Volver</button>
+        </div>
       </div>
     </div>
-
-        <div class="filters-section mt-4">
+    <div class="filters-section mt-4">
       <div class="filters-title">
         <span>
           <i class="bi bi-funnel-fill me-2"></i>
@@ -44,114 +56,115 @@
     </div>
 
     @if (isLoading) {
-      <div class="text-center p-5">
-        <div class="spinner-border" role="status" style="color: #850e35;">
-          <span class="visually-hidden">Cargando...</span>
+    <div class="text-center p-5">
+      <div class="spinner-border" role="status" style="color: #850e35">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando controles...</p>
+    </div>
+    } @if (isLoading) {
+    <div class="text-center p-5">
+      <div class="spinner-border" role="status" style="color: #850e35">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando controles...</p>
+    </div>
+    } @if (!isLoading && controles.length === 0) {
+    <div class="text-center p-4 alert alert-info mt-3">
+      <i class="bi bi-info-circle-fill fs-3 d-block mb-2"></i>
+      <p class="m-0">No hay controles registrados para este programa diagnóstico.</p>
+    </div>
+    } @if (!isLoading && controles.length > 0) {
+    <div class="ctrl-accordion" id="accordionControlesDiagnostico">
+      @for (c of controles; track c.id_control_diagnostico; let i = $index) {
+      <div class="ctrl-card">
+        <div
+          class="ctrl-card-header"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#collapse-' + i"
+        >
+          <button
+            class="ctrl-accordion-btn"
+            type="button"
+            [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
+            [attr.aria-controls]="'collapse-' + i"
+          >
+            <i class="bi bi-clipboard2-pulse-fill fs-5"></i>
+            {{ c.id_control_diagnostico }}
+            <span class="ctrl-date-badge">
+              {{ c.fecha_controldiagnostico | date : 'dd/MM/yyyy HH:mm' }}
+            </span>
+            <i class="bi bi-chevron-down ctrl-chevron"></i>
+          </button>
+
+          <div class="ctrl-actions">
+            <button
+              class="btn-action btn-edit-action"
+              title="Editar"
+              (click)="editarControl(c.id_control_diagnostico); $event.stopPropagation()"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button
+              class="btn-action btn-success-action"
+              title="Ver Análisis"
+              (click)="verAnalisis(c.id_control_diagnostico); $event.stopPropagation()"
+            >
+              <i class="bi bi-file-earmark-medical"></i>
+            </button>
+          </div>
         </div>
-        <p class="mt-2">Cargando controles...</p>
-      </div>
-    }
 
-    @if (isLoading) {
-      <div class="text-center p-5">
-        <div class="spinner-border" role="status" style="color: #850e35;">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-2">Cargando controles...</p>
-      </div>
-    }
-
-    @if (!isLoading && controles.length === 0) {
-      <div class="text-center p-4 alert alert-info mt-3">
-        <i class="bi bi-info-circle-fill fs-3 d-block mb-2"></i>
-        <p class="m-0">No hay controles registrados para este programa diagnóstico.</p>
-      </div>
-    }
-
-    @if (!isLoading && controles.length > 0) {
-      <div class="ctrl-accordion" id="accordionControlesDiagnostico">
-        @for (c of controles; track c.id_control_diagnostico; let i = $index) {
-          <div class="ctrl-card">
-            
-            <div class="ctrl-card-header"
-                 data-bs-toggle="collapse" 
-                 [attr.data-bs-target]="'#collapse-' + i">
-
-              <button class="ctrl-accordion-btn" 
-                      type="button" 
-                      [attr.aria-expanded]="i === 0 ? 'true' : 'false'" 
-                      [attr.aria-controls]="'collapse-' + i">
-                <i class="bi bi-clipboard2-pulse-fill fs-5"></i>
-                {{ c.id_control_diagnostico }}
-                <span class="ctrl-date-badge">
-                  {{ c.fecha_controldiagnostico | date:'dd/MM/yyyy HH:mm' }}
-                </span>
-                <i class="bi bi-chevron-down ctrl-chevron"></i>
-              </button>
-
-              <div class="ctrl-actions">
-                <button class="btn-action btn-edit-action" 
-                        title="Editar" 
-                        (click)="editarControl(c.id_control_diagnostico); $event.stopPropagation()">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn-action btn-success-action" 
-                        title="Ver Análisis" 
-                        (click)="verAnalisis(c.id_control_diagnostico); $event.stopPropagation()">
-                  <i class="bi bi-file-earmark-medical"></i>
-                </button>
+        <div
+          [id]="'collapse-' + i"
+          class="accordion-collapse collapse"
+          [class.show]="i === 0"
+          data-bs-parent="#accordionControlesDiagnostico"
+        >
+          <div class="ctrl-card-body">
+            <div class="row ctrl-info-grid">
+              <div class="col-md-6">
+                <div class="info-item">
+                  <strong>Semana de gestación</strong>
+                  <p>{{ c.semana_gestacion || '-' }}</p>
+                </div>
+                <div class="info-item">
+                  <strong>Peso / Talla</strong>
+                  <p>{{ c.peso || '-' }} kg / {{ c.talla || '-' }} m</p>
+                </div>
+                <div class="info-item">
+                  <strong>Presión arterial</strong>
+                  <p>{{ c.presion_arterial || '-' }}</p>
+                </div>
+                <div class="info-item">
+                  <strong>Altura uterina</strong>
+                  <p>{{ c.altura_uterina || 'Sin registro' }} cm</p>
+                </div>
               </div>
-            </div>
-
-            <div [id]="'collapse-' + i" 
-                 class="accordion-collapse collapse" 
-                 [class.show]="i === 0" 
-                 data-bs-parent="#accordionControlesDiagnostico">
-              <div class="ctrl-card-body">
-                <div class="row ctrl-info-grid">
-                  <div class="col-md-6">
-                    <div class="info-item">
-                      <strong>Semana de gestación</strong>
-                      <p>{{ c.semana_gestacion || '-' }}</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Peso / Talla</strong>
-                      <p>{{ c.peso || '-' }} kg / {{ c.talla || '-' }} m</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Presión arterial</strong>
-                      <p>{{ c.presion_arterial || '-' }}</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Altura uterina</strong>
-                      <p>{{ c.altura_uterina || 'Sin registro' }} cm</p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="info-item">
-                      <strong>Frecuencia cardíaca fetal (FCF)</strong>
-                      <p>{{ c.fcf || 'Sin registro' }} lpm</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Observación</strong>
-                      <p>{{ c.observacion || 'Sin registro' }}</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Recomendación</strong>
-                      <p>{{ c.recomendacion || 'Sin registro' }}</p>
-                    </div>
-                    <div class="info-item">
-                      <strong>Registrado por</strong>
-                      <p>{{ c.usuario?.nombre }} {{ c.usuario?.apellido }}</p>
-                    </div>
-                  </div>
+              <div class="col-md-6">
+                <div class="info-item">
+                  <strong>Frecuencia cardíaca fetal (FCF)</strong>
+                  <p>{{ c.fcf || 'Sin registro' }} lpm</p>
+                </div>
+                <div class="info-item">
+                  <strong>Observación</strong>
+                  <p>{{ c.observacion || 'Sin registro' }}</p>
+                </div>
+                <div class="info-item">
+                  <strong>Recomendación</strong>
+                  <p>{{ c.recomendacion || 'Sin registro' }}</p>
+                </div>
+                <div class="info-item">
+                  <strong>Registrado por</strong>
+                  <p>{{ c.usuario?.nombre }} {{ c.usuario?.apellido }}</p>
                 </div>
               </div>
             </div>
-
           </div>
-        }
+        </div>
       </div>
+      }
+    </div>
     }
 
     <app-paginacion
@@ -162,6 +175,5 @@
       (pageChange)="irAPagina($event)"
       (sizeChange)="cambiarTamanoPagina($event)"
     ></app-paginacion>
-
   </div>
 </div>

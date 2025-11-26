@@ -1,13 +1,10 @@
-/*ESTRUCTURA GENERAL*/
 
 .fondo {
-  /* Degradado suave que contrasta con el sidebar vino */
   background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
   min-height: 100vh;
   padding: 20px;
 }
 
-/* Contenedor más ancho para formularios de 3 columnas */
 .card-container-wide {
   background-color: #fff;
   border-radius: 20px;
@@ -16,8 +13,8 @@
   padding: 35px 45px;
   box-shadow: 0 10px 40px rgba(133, 14, 53, 0.15);
   border: 1px solid rgba(133, 14, 53, 0.08);
-  margin: 30px auto; /* Centrar y añadir margen superior */
-  animation: fadeInUp 0.4s ease-out; /* Animación de carga */
+  margin: 30px auto;
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .header {
@@ -47,7 +44,6 @@
   object-fit: cover;
 }
 
-/* | FORMULARIO Y CAMPOS*/
 
 .section-title {
   color: var(--color-vino-claro);
@@ -60,7 +56,7 @@
 
 .mb-3 {
   margin-bottom: 1rem;
-  min-height: 88px; /* Altura mínima para alinear los campos con mensajes de error */
+  min-height: 88px; 
 }
 
 .label {
@@ -96,7 +92,6 @@
   outline: none;
 }
 
-/* Estilos para campos deshabilitados/solo lectura */
 .form-control:disabled,
 .form-control[readonly],
 .form-select[disabled] {
@@ -105,7 +100,6 @@
   opacity: 0.7;
 }
 
-/* Contenedor de validación con altura fija */
 .text-danger {
   font-size: 0.78rem;
   display: block;
@@ -115,14 +109,12 @@
   line-height: 1.2;
 }
 
-/* GRUPO DE CONTRASEÑA (Solo si se usa*/
 
 .password-group {
   min-height: 88px;
 }
 
 .password-input-wrapper {
-  /* El max-width se debe definir en el componente para responsive, pero lo mantengo */
   max-width: 500px;
   margin: 0 auto;
 }
@@ -155,13 +147,12 @@
   box-shadow: 0 4px 12px rgba(133, 14, 53, 0.3);
 }
 
-/*BOTONES DE ACCIÓN*/
 
 .button-group {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px; /* Estándarizado a 15px */
+  gap: 15px; 
   flex-wrap: wrap;
   margin-top: 30px;
 }
@@ -170,7 +161,7 @@
   background: linear-gradient(135deg, var(--color-vino) 0%, var(--color-vino-claro) 100%);
   color: white;
   border: none;
-  padding: 12px 35px; /* Estandarizado a 35px */
+  padding: 12px 35px; 
   font-size: 1rem;
   font-weight: 700;
   border-radius: 10px;
@@ -200,7 +191,6 @@
   padding: 12px 20px;
   transition: all 0.2s ease;
   border-radius: 8px;
-  /* Estandarizado para que todos tengan un borde sutil, como en los formularios de Paciente */
   border: 1px solid rgba(133, 14, 53, 0.2);
 }
 
@@ -210,7 +200,6 @@
   background-color: rgba(133, 14, 53, 0.05);
 }
 
-/* FEEDBACK Y ALERTA*/
 
 .alert {
   border-radius: 10px;
@@ -230,7 +219,6 @@
   color: #2a7;
 }
 
-/* Loading spinner */
 .spinner-border,
 .spinner-border-sm {
   width: 1.2rem;
@@ -245,9 +233,7 @@
   margin-right: 8px;
 }
 
-/*RESPONSIVE DESIGN (Media Queries)Estandarizado para todos los formularios.*/
 
-/* Mejorar el espaciado entre filas */
 .row {
   margin-left: -8px;
   margin-right: -8px;
@@ -269,7 +255,6 @@
     width: 750px;
   }
 
-  /* En tablets, volver a 2 columnas */
   .col-lg-4,
   .col-lg-8,
   .col-md-6 {
@@ -277,7 +262,6 @@
     max-width: 50%;
   }
 
-  /* Las columnas más grandes ocupan el 100% en tablets para no ser aplastadas */
   .col-lg-8 {
     flex: 0 0 100%;
     max-width: 100%;
@@ -304,7 +288,6 @@
     min-height: 85px;
   }
 
-  /* En móvil, 1 columna */
   .col-lg-4,
   .col-lg-8,
   .col-md-6 {
@@ -322,7 +305,6 @@
   }
 }
 
-/*  ANIMACIONES*/
 
 @keyframes fadeInUp {
   from {
